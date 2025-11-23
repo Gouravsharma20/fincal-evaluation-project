@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const { isAdmin } = require("../middleware/authMiddleware");
 
 const userSchema = mongoose.Schema(
   {
@@ -40,23 +41,45 @@ const userSchema = mongoose.Schema(
       ipAddress: String,
       userAgent: String,
       success: Boolean
-    }]
+    }],
+    isAdmin: {
+      type: Boolean,
+      default: false
+    },
+    teamId: { // ADDED: keep teamId on user (since your signup sets it)
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Team",
+      default: null
+    }
   },
   { timestamps: true }
 );
 
+
+// ------------------ ADDED: pre-save hook to hash password with pepper ------------------
+userSchema.pre("save", async function (next) {
+  try {
+    // only hash when password is new or modified
+    if (!this.isModified("password")) return next();
+
+    const pepper = process.env.PASSWORD_PEPPER || ""; // ADDED
+    const passwordWithPepper = this.password + pepper; // ADDED
+
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(passwordWithPepper, salt);
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+});
+
 // Static Registration Function
-userSchema.statics.register = async (name, email, password) => {
+userSchema.statics.register = async function (name, email, password) {
   const exists = await User.findOne({ email })
   if (exists) {
     throw Error("Email already exists")
   }
-  const pepper = process.env.PASSWORD_PEPPER
-  const passwordWithPepper = password + pepper;
-  const salt = await bcrypt.genSalt(10)
-  const hash = await bcrypt.hash(passwordWithPepper, salt)
-
-  const user = await User.create({ name, email, password: hash })
+  const user = await User.create({ name, email, password })
   return user;
 }
 
@@ -81,9 +104,10 @@ userSchema.statics.login = async function(email, password, ipAddress, userAgent)
     await user.save();
     throw new Error(`Account is locked please try again after ${remainingMinutes} minutes`)
   }
-  const pepper = process.env.PASSWORD_PEPPER;
+  const pepper = process.env.PASSWORD_PEPPER || "";
   const passwordWithPepper = password + pepper;
-  const isPasswordCorrect = await bcrypt.compare(passwordWithPepper, user.password)
+
+  const isPasswordCorrect = await bcrypt.compare(passwordWithPepper, user.password);
   if (!isPasswordCorrect) {
     const newFailedAttempts = user.failedLoginAttempts + 1;
     user.loginHistory.push({

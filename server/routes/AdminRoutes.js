@@ -5,10 +5,10 @@ const { requireAuth, isAdmin, isTeamMember } = require("../middleware/authMiddle
 const adminCtrl = require("../controllers/AdminControler");
 
 // admin (Gourav injected)
-router.get("/tickets", isAdmin, adminCtrl.listTickets);
-router.post("/tickets/:id/messages", isAdmin, adminCtrl.adminAddMessage);
-router.post("/tickets/:id/assign", isAdmin, adminCtrl.assignTicket);
-router.patch("/tickets/:id/resolve", isAdmin, adminCtrl.resolveTicket);
+router.get("/tickets", requireAuth, isAdmin, adminCtrl.listTickets);
+router.post("/tickets/:id/messages", requireAuth , isAdmin, adminCtrl.adminAddMessage);
+router.post("/tickets/:id/assign", requireAuth , isAdmin, adminCtrl.assignTicket);
+router.patch("/tickets/:id/resolve", requireAuth, isAdmin, adminCtrl.resolveTicket);
 
 // team members
 router.post("/team/tickets/:id/messages", requireAuth, isTeamMember, adminCtrl.teamAddMessage);

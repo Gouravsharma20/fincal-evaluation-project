@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/UserModel"); // your existing model
 const adminConst = require('../constants/admin');
 
+const bcrypt = require("bcryptjs");
+
 const JWT_SECRET = process.env.JWT_SECRET || "replace_this_with_a_strong_secret";
 const JWT_EXPIRES_IN = "7d";
 
@@ -44,15 +46,24 @@ const login = async (req, res) => {
   try {
     const { email, password, ipAddress = null, userAgent = null } = req.body;
     if (!email || !password) return res.status(400).json({ error: "email and password required" });
+    const user = await User.findOne({ email: email.toLowerCase() });
+    console.log("DEBUG: login attempt for", email.toLowerCase());
+    console.log("DEBUG: user found:", !!user);
+    if (user) console.log("DEBUG: stored password:", user.password);
+    if (!user)
+      return res.status(401).json({ error: "Invalid credentials" });
 
-    if (email.toLowerCase() === adminConst.ADMIN_EMAIL.toLowerCase()) {
-      return res.status(403).json({ error: "Admin login via this route is forbidden." });
-    }
+    // use same pepper used in pre-save hook
+    const pepper = process.env.PASSWORD_PEPPER || "";
+    const passwordWithPepper = password + pepper;
 
-    // Your User model has static login(email,password,ip,userAgent) — use it for lockout logic
-    const user = await User.login(email.toLowerCase(), password, ipAddress, userAgent); // returns user or throws
+
+    const match = await bcrypt.compare(passwordWithPepper, user.password);
+    console.log("DEBUG: bcrypt.compare result:", match);
+    if (!match)
+      return res.status(401).json({ error: "Invalid credentials" });
     const token = signToken(user);
-    res.json({ success: true, message: "Login successful", user: { name: user.name, email: user.email, teamId: user.teamId }, token });
+    res.status(200).json({ success: true, message: "Login successful", user: { name: user.name, email: user.email, teamId: user.teamId }, token });
   } catch (err) {
     console.error(err);
     res.status(401).json({ error: err.message || "Invalid credentials" });
