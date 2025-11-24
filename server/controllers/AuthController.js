@@ -8,9 +8,11 @@ const bcrypt = require("bcryptjs");
 
 const JWT_SECRET = process.env.JWT_SECRET || "replace_this_with_a_strong_secret";
 const JWT_EXPIRES_IN = "7d";
+const ADMIN_EMAIL = "gouravsharma20a@gmail.com";
 
 const signToken = (user) => {
-  return jwt.sign({ id: user._id, email: user.email, isAdmin: user.isAdmin }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+  const isAdmin = user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+  return jwt.sign({ _id: user._id, email: user.email, isAdmin:isAdmin }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 };
 
 const signup = async (req, res) => {
@@ -59,11 +61,24 @@ const login = async (req, res) => {
 
 
     const match = await bcrypt.compare(passwordWithPepper, user.password);
-    console.log("DEBUG: bcrypt.compare result:", match);
     if (!match)
       return res.status(401).json({ error: "Invalid credentials" });
     const token = signToken(user);
-    res.status(200).json({ success: true, message: "Login successful", user: { name: user.name, email: user.email, teamId: user.teamId }, token });
+    const isAdmin = user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+    
+    
+
+    res.status(200).json({ 
+      success: true, 
+      message: "Login successful", 
+      user: { 
+        name: user.name, 
+        email: user.email,
+        isAdmin: isAdmin,
+        teamId: user.teamId 
+      }, 
+      token 
+    });
   } catch (err) {
     console.error(err);
     res.status(401).json({ error: err.message || "Invalid credentials" });

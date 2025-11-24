@@ -1,37 +1,39 @@
 // middleware/auth.js
 const jwt = require("jsonwebtoken");
-const adminConst = require("../");
-const User = require("../models/UserModel"); // your existing User model
+const User = require("../models/UserModel");
+const ADMIN_EMAIL = "gouravsharma20a@gmail.com";
 
-const JWT_SECRET = process.env.JWT_SECRET || "replace_this_with_a_strong_secret";
 
-/**
- * requireAuth - validate JWT for team members
- */
-const requireAuth = async (req, res, next) => {
-  const auth = req.headers.authorization;
-  if (!auth || !auth.startsWith("Bearer ")) {
-    return res.status(401).json({ error: "Authorization token required" });
+const authUser = async (req,res,next) =>{
+  const {authorization} = req.headers;
+
+  if(!authorization) {
+    return res.status(401).json({error:"Auth token is required"})
   }
-  const token = auth.split(" ")[1];
+
+  const token = authorization.split(" ")[1];
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(decoded.id);
-    if (!user) return res.status(401).json({ error: "Invalid token user" });
-    const isAdmin = user.email.toLowerCase() === adminConst.ADMIN_EMAIL.toLowerCase();
+    const { _id } = jwt.verify(token,process.env.JWT_SECRET);
+    const user = await User.findOne({ _id }).select({ _id: 1, email: 1, name: 1, teamId: 1 });
+    if (!User) {
+      return res.status(401).json({ error: "User not found" });
+    }
+    const isAdmin = user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+    
     req.user = {
-      id: user._id.toString(),
+      _id: user._id,
       name: user.name,
       email: user.email,
-      isAdmin: isAdmin,
-      teamId: user.teamId
+      teamId: user.teamId,
+      isAdmin: isAdmin
     };
-    next();
-  } catch (err) {
-    return res.status(401).json({ error: "Invalid or expired token" });
+    next()
+    
+  } catch (error) {
+    return res.status(401).json({error:"Request is not authorized!"})
+    
   }
 };
-
 
 const isAdmin = (req, res, next) => {
   if (!req.user || !req.user.isAdmin) {
@@ -40,15 +42,15 @@ const isAdmin = (req, res, next) => {
   next();
 };
 
-
-/**
- * isTeamMember - ensure the caller is authenticated team member
- */
-const isTeamMember = (req, res, next) => {
+const isUser = (req, res, next) => {
   if (!req.user || req.user.isAdmin) {
-    return res.status(403).json({ error: "Team member access required" });
+    return res.status(403).json({ error: "User access required" });
   }
   next();
 };
 
-module.exports = { requireAuth, isAdmin, isTeamMember };
+
+
+
+
+module.exports = {authUser,isAdmin,isUser};

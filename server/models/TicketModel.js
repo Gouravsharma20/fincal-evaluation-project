@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 
 const messageSchema = new mongoose.Schema({
-  senderType: { type: String, enum: ["user","admin","team"], required: true },
+  senderType: { type: String, enum: ["user", "admin", "team"], required: true },
   senderId: { type: String, default: null }, // optional: userId/adminId/teamId
   text: { type: String, required: true, trim: true },
   internal: { type: Boolean, default: false }, // internal note (admins/teams only)
@@ -10,7 +10,13 @@ const messageSchema = new mongoose.Schema({
 }, { _id: true });
 
 const ticketSchema = new mongoose.Schema({
-  userName: { type: String, required: true, trim: true, minlength:3 , maxlength:50 },
+  userName: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 3,
+    maxlength: 50
+  },
   userPhoneNumber: {
     type: String,
     required: true,
@@ -25,16 +31,25 @@ const ticketSchema = new mongoose.Schema({
     maxlength: 254,
     match: [/^\S+@\S+\.\S+$/, "Please provide a valid email"]
   },
+  initialMessage: {
+    type: String,
+    trim: true,
+    default: "",
+    required:true
+  },
 
-  subject: { type: String, trim: true, default: "" },
-  description: { type: String, trim: true, default: "" },
+  clientSecret: {
+    type: String,
+    required: true,
+    unique: false
+  },
 
   // conversation messages
   messages: { type: [messageSchema], default: [] },
 
   // ownership & assignment: by default admin owns new tickets
-  status: { type: String, enum: ["open","assigned","in_progress","resolved","closed"], default: "open" },
-  assignedToType: { type: String, enum: ["admin","team","agent", null], default: "admin" },
+  status: { type: String, enum: ["open", "assigned", "in_progress", "resolved", "closed"], default: "open" },
+  assignedToType: { type: String, enum: ["admin", "team", "agent", null], default: "admin" },
   assignedToId: { type: String, default: null }, // e.g. teamId or adminId
 
   // resolution

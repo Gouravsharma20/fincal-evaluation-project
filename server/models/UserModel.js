@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const { isAdmin } = require("../middleware/authMiddleware");
 
 const userSchema = mongoose.Schema(
   {

@@ -1,16 +1,16 @@
 // routes/adminRoutes.js
 const express = require("express");
 const router = express.Router();
-const { requireAuth, isAdmin, isTeamMember } = require("../middleware/authMiddleware");
+const { authUser , isAdmin, } = require("../middleware/authMiddleware");
 const adminCtrl = require("../controllers/AdminControler");
 
 // admin (Gourav injected)
-router.get("/tickets", requireAuth, isAdmin, adminCtrl.listTickets);
-router.post("/tickets/:id/messages", requireAuth , isAdmin, adminCtrl.adminAddMessage);
-router.post("/tickets/:id/assign", requireAuth , isAdmin, adminCtrl.assignTicket);
-router.patch("/tickets/:id/resolve", requireAuth, isAdmin, adminCtrl.resolveTicket);
+router.get("/tickets", authUser, isAdmin, adminCtrl.listAllTickets);
+router.get("/tickets/:id", authUser, isAdmin, adminCtrl.getTicketDetails);
+router.post("/tickets/:id/messages", authUser , isAdmin, adminCtrl.adminAddMessage);
+router.post("/tickets/:id/assign", authUser , isAdmin, adminCtrl.assignTicket);
+router.patch("/tickets/:id/resolve", authUser, isAdmin, adminCtrl.resolveTicket);
 
-// team members
-router.post("/team/tickets/:id/messages", requireAuth, isTeamMember, adminCtrl.teamAddMessage);
+router.get("/users", authUser, isAdmin, adminCtrl.listAllUsers);
 
 module.exports = router;

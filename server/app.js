@@ -24,10 +24,13 @@ app.use(cors());
 const authRoutes = require("./routes/AuthRoutes");
 const ticketRoutes = require("./routes/TicketRoutes");
 const adminRoutes = require("./routes/AdminRoutes");
+const teamRoutes = require("./routes/TeamRoutes");
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/tickets", ticketRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/team",teamRoutes);
 
 // Server
 const PORT = process.env.PORT || 4000;
