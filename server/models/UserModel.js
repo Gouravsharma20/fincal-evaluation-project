@@ -43,7 +43,7 @@ const userSchema = mongoose.Schema(
     }],
     isAdmin: {
       type: Boolean,
-      default: false
+      // default: false
     },
     teamId: { // ADDED: keep teamId on user (since your signup sets it)
       type: mongoose.Schema.Types.ObjectId,

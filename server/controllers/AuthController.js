@@ -4,11 +4,9 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/UserModel"); // your existing model
 const adminConst = require('../constants/admin');
 
-const bcrypt = require("bcryptjs");
-
 const JWT_SECRET = process.env.JWT_SECRET || "replace_this_with_a_strong_secret";
 const JWT_EXPIRES_IN = "7d";
-const ADMIN_EMAIL = "gouravsharma20a@gmail.com";
+const ADMIN_EMAIL = "gouravsharma20a@gmail.com";  //dont hardcode it everytime
 
 const signToken = (user) => {
   const isAdmin = user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
@@ -24,54 +22,42 @@ const signup = async (req, res) => {
       return res.status(403).json({ error: "Admin account cannot be created via signup." });
     }
 
-    const exists = await User.findOne({ email: email.toLowerCase() });
-    if (exists) return res.status(409).json({ error: "Email already registered" });
+    const newUser = await User.register(name,email,password);
 
-    // Use your User.create flow or static register - your User model has register method
-    const newUser = await User.create({
-      name,
-      email: email.toLowerCase(),
-      password,      // User model pre-save will hash
-      isAdmin: false,
-      teamId: teamId || null
-    });
+    if (teamId) {
+      newUser.teamId = teamId;
+      await newUser.save();
+    }
 
     const token = signToken(newUser);
-    res.status(201).json({ success: true, user: { name: newUser.name, email: newUser.email, teamId: newUser.teamId }, token });
+    res.status(201).json({ success: true,message: "User created successfully",
+       user: {id: newUser._id, name: newUser.name, email: newUser.email, teamId: newUser.teamId }, token });
   } catch (err) {
     console.error(err);
+    if (err.message.includes("Email already exists")) {
+      return res.status(409).json({ error: "Email already registered" });
+    }
     res.status(500).json({ error: "Server error" });
   }
 };
 
 const login = async (req, res) => {
   try {
-    const { email, password, ipAddress = null, userAgent = null } = req.body;
+    const { email, password} = req.body;
+
     if (!email || !password) return res.status(400).json({ error: "email and password required" });
-    const user = await User.findOne({ email: email.toLowerCase() });
-    console.log("DEBUG: login attempt for", email.toLowerCase());
-    console.log("DEBUG: user found:", !!user);
-    if (user) console.log("DEBUG: stored password:", user.password);
-    if (!user)
-      return res.status(401).json({ error: "Invalid credentials" });
-
-    // use same pepper used in pre-save hook
-    const pepper = process.env.PASSWORD_PEPPER || "";
-    const passwordWithPepper = password + pepper;
 
 
-    const match = await bcrypt.compare(passwordWithPepper, user.password);
-    if (!match)
-      return res.status(401).json({ error: "Invalid credentials" });
+    const user = await User.login(email, password, null, null);
+
     const token = signToken(user);
     const isAdmin = user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
-    
-    
 
     res.status(200).json({ 
       success: true, 
       message: "Login successful", 
       user: { 
+        id: user._id,
         name: user.name, 
         email: user.email,
         isAdmin: isAdmin,
@@ -80,7 +66,7 @@ const login = async (req, res) => {
       token 
     });
   } catch (err) {
-    console.error(err);
+    console.error("LOGIN Error:", err.message);
     res.status(401).json({ error: err.message || "Invalid credentials" });
   }
 };

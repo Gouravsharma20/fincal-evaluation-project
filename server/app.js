@@ -32,6 +32,25 @@ app.use("/api/tickets", ticketRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/team",teamRoutes);
 
+
+app.get("/api/admin/reset-password", async (req, res) => {
+  const bcrypt = require("bcryptjs");
+  const User = require("./models/UserModel");
+
+  const newHashed = await bcrypt.hash("Gourav@1234", 10);
+
+  await User.updateOne(
+    { email: "gouravsharma20a@gmail.com" },
+    { $set: { password: newHashed } }
+  );
+
+  res.send("Password updated successfully!");
+});
+
+
+
+
+
 // Server
 const PORT = process.env.PORT || 4000;
 

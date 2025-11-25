@@ -1,7 +1,7 @@
 // middleware/auth.js
 const jwt = require("jsonwebtoken");
 const User = require("../models/UserModel");
-const ADMIN_EMAIL = "gouravsharma20a@gmail.com";
+const adminConst = require("../constants/admin");
 
 
 const authUser = async (req,res,next) =>{
@@ -15,10 +15,10 @@ const authUser = async (req,res,next) =>{
   try {
     const { _id } = jwt.verify(token,process.env.JWT_SECRET);
     const user = await User.findOne({ _id }).select({ _id: 1, email: 1, name: 1, teamId: 1 });
-    if (!User) {
+    if (!user) {
       return res.status(401).json({ error: "User not found" });
     }
-    const isAdmin = user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+    const isAdmin = user.email.toLowerCase() === adminConst.ADMIN_EMAIL.toLowerCase();
     
     req.user = {
       _id: user._id,
