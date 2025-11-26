@@ -1,0 +1,17 @@
+
+nav {
+    height: 10vh;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgb(242, 237, 237);
+}
+
+nav .menu {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 40px;
+
+}
