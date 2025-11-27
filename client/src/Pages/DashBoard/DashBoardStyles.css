@@ -14,7 +14,6 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
-/* ==================== SIDEBAR ==================== */
 .admin-sidebar {
   width: 88px;
   background-color: #ffffff;
@@ -99,7 +98,7 @@
   gap: 16px;
 }
 
-/* ==================== MAIN CONTENT ==================== */
+
 .admin-main-content {
   flex: 1;
   display: flex;
@@ -108,7 +107,7 @@
   overflow: hidden;
 }
 
-/* ==================== SEARCH HEADER ==================== */
+
 .admin-search-header {
   padding: 32px 48px;
   background-color: #ffffff;
@@ -153,7 +152,7 @@
   color: #b0b0b0;
 }
 
-/* ==================== FILTER TABS ==================== */
+
 .filter-tabs-section {
   padding: 16px 48px 0;
   display: flex;
@@ -185,13 +184,13 @@
   color: white;
 }
 
-/* ==================== TICKETS CARDS CONTAINER ==================== */
+
 .tickets-cards-container {
   flex: 1;
   overflow-y: auto;
   padding: 24px 48px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  grid-template-columns: 1fr;
   gap: 24px;
 }
 
@@ -224,17 +223,17 @@
   color: #f44336;
 }
 
-/* ==================== TICKET CARD BOX ==================== */
+
 .ticket-card-box {
-  background-color: #ffffff;
-  border: 1.5px solid #e5e5e5;
-  border-radius: 12px;
-  padding: 20px;
+  background-color: #FEFEFE;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
   transition: all 0.3s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   cursor: pointer;
 }
 
@@ -244,12 +243,12 @@
   border-color: #667eea;
 }
 
-/* Card Top Section */
 .card-top-section {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
+  margin-bottom: 4px;
 }
 
 .card-ticket-id {
@@ -263,98 +262,113 @@
   font-size: 12px;
   color: #999;
   white-space: nowrap;
-  font-weight: 500;
+  font-weight: 400;
 }
 
-/* Card Message Section */
 .card-message-section {
-  padding: 14px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  border-left: 4px solid #667eea;
+  padding: 0;
+  background-color: transparent;
+  border-radius: 0;
+  border-left: none;
+  margin-bottom: 12px;
 }
 
 .card-initial-message {
   margin: 0;
-  font-size: 13px;
-  color: #666;
-  line-height: 1.6;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  padding: 0;
+  font-size: 14px;
+  color: #000000;
+  line-height: 1.3;
+  display: block;
+  word-wrap: break-word;
+  font-weight: bold;
 }
 
-/* Card Bottom Section */
+
 .card-bottom-section {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 12px;
-  padding-top: 8px;
-  border-top: 1px solid #f0f0f0;
+  padding-top: 0;
+  border-top: none;
 }
 
 .card-user-info {
   display: flex;
+  flex-direction: row;
+  align-items: flex-start;
   gap: 12px;
   flex: 1;
 }
 
 .card-user-avatar {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
   background-color: #f0f0f0;
+  flex-shrink: 0;
 }
 
 .card-user-details {
   flex: 1;
+  display: flex;         
+  flex-direction: column;
+  gap: 0px;
 }
 
 .card-user-name {
   margin: 0;
+  padding: 0;
   font-size: 13px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: #999;
+  line-height: 1.2;
 }
 
 .card-user-email {
-  margin: 4px 0 0 0;
-  font-size: 12px;
+  margin: 0;
+  padding: 0;
+  font-size: 11px;
   color: #999;
+  line-height: 1.2;
 }
 
 .card-user-phone {
-  margin: 3px 0 0 0;
-  font-size: 12px;
+  margin: 0;
+  padding: 0;
+  font-size: 11px;
   color: #999;
+  line-height: 1.2;
 }
 
 .open-ticket-btn-card {
-  padding: 10px 18px;
-  background-color: #667eea;
-  color: white;
+  padding: 8px 16px;
+  background-color: transparent;
+  color: #184E7F;
   border: none;
-  border-radius: 8px;
-  font-size: 13px;
+  border-radius: 6px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   font-family: inherit;
   white-space: nowrap;
+  text-decoration: none;
+  align-self: center;
 }
 
 .open-ticket-btn-card:hover {
-  background-color: #5568d3;
+  background-color: #f0f0f0;
+  color: #5568d3;
 }
 
 .open-ticket-btn-card:active {
   transform: scale(0.98);
 }
 
-/* ==================== 3-PANEL VIEW ==================== */
+
 .three-panel-container {
   flex: 1;
   display: grid;
@@ -388,7 +402,7 @@
   color: white;
 }
 
-/* Panel Base Styles */
+
 .panel-chat,
 .panel-details,
 .panel-profile {
@@ -415,7 +429,7 @@
   color: #1a1a1a;
 }
 
-/* ==================== CHAT PANEL ==================== */
+
 .panel-chat {
   margin-top: 60px;
 }
@@ -534,7 +548,7 @@
   background-color: #5568d3;
 }
 
-/* ==================== DETAILS PANEL ==================== */
+
 .panel-details {
   margin-top: 60px;
 }
@@ -593,7 +607,7 @@
   color: #e65100;
 }
 
-/* ==================== PROFILE PANEL ==================== */
+
 .panel-profile {
   margin-top: 60px;
   padding: 0;
@@ -647,7 +661,7 @@
   word-break: break-all;
 }
 
-/* ==================== TEAM ASSIGNMENT SECTION ==================== */
+
 .team-assignment-section,
 .status-dropdown-section {
   padding: 20px;
@@ -661,7 +675,7 @@
   color: #1a1a1a;
 }
 
-/* Team Dropdown */
+
 .team-dropdown-wrapper,
 .status-dropdown-wrapper {
   position: relative;
@@ -722,7 +736,7 @@
   margin-top: -2px;
 }
 
-/* Team Options */
+
 .team-option {
   width: 100%;
   padding: 12px;
@@ -768,7 +782,6 @@
   opacity: 1;
 }
 
-/* Status Options */
 .status-option {
   width: 100%;
   padding: 12px;
@@ -798,7 +811,6 @@
   font-weight: 600;
 }
 
-/* Status Badge */
 .status-badge {
   display: inline-block;
   padding: 4px 12px;
@@ -817,7 +829,142 @@
   color: #e65100;
 }
 
-/* ==================== RESPONSIVE ==================== */
+
+.panel-left-chats {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #f8f8f8;
+  border-right: 1px solid #e0e0e0;
+}
+
+/* ===== HEADER ===== */
+.chats-header {
+  padding: 20px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #ffffff;
+}
+
+.chats-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333333;
+  letter-spacing: -0.3px;
+}
+
+/* ===== CHATS LIST CONTAINER ===== */
+.chats-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+  background: #f8f8f8;
+}
+
+/* ===== INDIVIDUAL CHAT ITEM ===== */
+.chat-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 12px;
+  margin: 4px 8px;
+  border-radius: 12px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.chat-list-item:hover {
+  background: #f5f5f5;
+  border-color: #e8e8e8;
+}
+
+.chat-list-item.active {
+  background: #e8f0ff;
+  border-color: #d0e0ff;
+}
+
+/* ===== CHAT AVATAR ===== */
+.chat-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== CHAT INFO SECTION ===== */
+.chat-list-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.chat-name {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0066cc;
+  letter-spacing: -0.2px;
+}
+
+.chat-preview {
+  margin: 0;
+  font-size: 13px;
+  color: #999999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== PROFILE SECTION (For openTicket display) ===== */
+.profile-section {
+  padding: 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.profile-avatar-large {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profile-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333333;
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+.chats-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chats-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chats-list::-webkit-scrollbar-thumb {
+  background: #d0d0d0;
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+
+.chats-list::-webkit-scrollbar-thumb:hover {
+  background: #999999;
+}
+
+
 @media (max-width: 1600px) {
   .three-panel-container {
     gap: 16px;
@@ -871,4 +1018,311 @@
   .tickets-cards-container {
     grid-template-columns: 1fr;
   }
+}
+
+
+/* =====================================================
+   MODAL STYLES
+   ===================================================== */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  max-width: 450px;
+  width: 90%;
+  overflow: hidden;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.modal-close:hover {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.modal-body {
+  padding: 24px 20px;
+}
+
+.modal-message {
+  margin: 0 0 16px 0;
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+.modal-member-info {
+  background-color: #f5f5f5;
+  border-left: 4px solid #007bff;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-top: 12px;
+}
+
+.member-name {
+  display: block;
+  font-weight: 600;
+  color: #007bff;
+  font-size: 1rem;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid #e0e0e0;
+  justify-content: flex-end;
+}
+
+.modal-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 100px;
+}
+
+.modal-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modal-btn-cancel {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #d0d0d0;
+}
+
+.modal-btn-cancel:hover:not(:disabled) {
+  background-color: #e5e5e5;
+}
+
+.modal-btn-confirm {
+  background-color: #007bff;
+  color: white;
+}
+
+.modal-btn-confirm:hover:not(:disabled) {
+  background-color: #0056b3;
+  box-shadow: 0 2px 8px rgba(0, 86, 179, 0.3);
+}
+
+/* =====================================================
+   ASSIGNMENT BADGE STYLES
+   ===================================================== */
+
+.assignment-badge {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+.assignment-badge span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* =====================================================
+   DISABLED MESSAGE BOX STYLES
+   ===================================================== */
+
+.message-reply-box.disabled-box {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px;
+}
+
+.disabled-message {
+  color: #6c757d;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.disabled-message p {
+  margin: 0;
+  padding: 0;
+}
+
+/* =====================================================
+   ASSIGNED MEMBER SECTION STYLES
+   ===================================================== */
+
+.assigned-member-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.assigned-member-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background-color: #f5f5f5;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.assigned-member-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #007bff;
+  flex-shrink: 0;
+}
+
+.assigned-member-details {
+  flex: 1;
+}
+
+.assigned-member-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+  margin: 0 0 4px 0;
+}
+
+.assigned-member-email {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0 0 8px 0;
+}
+
+.assigned-badge {
+  display: inline-block;
+  background-color: #28a745;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* =====================================================
+   PANEL HEADER STYLES
+   ===================================================== */
+
+.panel-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #f9f9f9;
+}
+
+.panel-header p {
+  margin: 0;
+  font-weight: 600;
+  color: #333;
+}
+
+/* =====================================================
+   TEAM OPTION STYLES
+   ===================================================== */
+
+.team-option {
+  padding: 12px 16px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  transition: background-color 0.2s;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.team-option:hover:not(:disabled) {
+  background-color: #f0f0f0;
+}
+
+.team-option.selected {
+  background-color: #e7f3ff;
+  color: #007bff;
+  font-weight: 500;
+}
+
+.team-option-name {
+  flex: 1;
+}
+
+.assign-icon {
+  color: #007bff;
+  font-weight: bold;
+  margin-left: 8px;
 }

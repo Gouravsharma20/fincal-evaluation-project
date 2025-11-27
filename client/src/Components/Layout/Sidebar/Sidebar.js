@@ -10,8 +10,9 @@ import AnalyticsIcon from '../../../Assets//SideBarAssets/Analytics.png'
 import TeamMemberIcon from '../../../Assets/SideBarAssets/TeamMembers.png'
 import HomePageSettingIcon from '../../../Assets//SideBarAssets/HomePageSetting.png'
 import SettingIcon from '../../../Assets//SideBarAssets/Setting.png'
+import AppLogo from '../../../Assets/CommonAssets/appLogo.png'
 
-const Sidebar = ({ userRole = 'team_member' }) => {
+const Sidebar = ({ userRole = 'team_member', openTicket = null }) => {
   const navigate = useNavigate()
   const location = useLocation()
   // const { user } = useAuthContext()
@@ -19,48 +20,48 @@ const Sidebar = ({ userRole = 'team_member' }) => {
   // Navigation configuration with custom icons
   const getNavItems = () => {
     const commonItems = [
-      { 
-        id: 'dashboard', 
-        label: 'Dashboard', 
-        path: '/dashboard', 
+      {
+        id: 'dashboard',
+        label: 'Dashboard',
+        path: '/dashboard',
         icon: HomeIcon,
         tooltip: 'Dashboard'
       },
-      { 
-        id: 'messages', 
-        label: 'Messages', 
-        path: '/messages', 
+      {
+        id: 'messages',
+        label: 'Messages',
+        path: '/messages',
         icon: ChatBoxIcon,
         tooltip: 'Chat & Messages'
       },
-      { 
-        id: 'settings', 
-        label: 'Settings', 
-        path: '/settings', 
+      {
+        id: 'settings',
+        label: 'Settings',
+        path: '/settings',
         icon: SettingIcon,
         tooltip: 'Settings'
       }
     ]
 
     const adminOnlyItems = [
-      { 
-        id: 'analytics', 
-        label: 'Analytics', 
-        path: '/analytics', 
+      {
+        id: 'analytics',
+        label: 'Analytics',
+        path: '/analytics',
         icon: AnalyticsIcon,
         tooltip: 'Analytics & Reports'
       },
-      { 
-        id: 'team', 
-        label: 'Team', 
-        path: '/team-management', 
+      {
+        id: 'team',
+        label: 'Team',
+        path: '/team-management',
         icon: TeamMemberIcon,
         tooltip: 'Team Management'
       },
-      { 
-        id: 'ui-settings', 
-        label: 'UI Settings', 
-        path: '/ui-settings', 
+      {
+        id: 'ui-settings',
+        label: 'UI Settings',
+        path: '/ui-settings',
         icon: HomePageSettingIcon,
         tooltip: 'UI Settings'
       }
@@ -84,12 +85,15 @@ const Sidebar = ({ userRole = 'team_member' }) => {
   const mainItems = navItems.filter(item => item.id !== 'settings')
   const settingsItem = navItems.find(item => item.id === 'settings')
 
+
+
+
   return (
     <div className="sidebar-container">
       {/* Logo Section */}
       <div className="sidebar-top">
         <div className="logo-section">
-          <div className="logo-icon">≈</div>
+          <img src={AppLogo} alt="App Logo" className="logo-icon" />
         </div>
       </div>
 
@@ -99,12 +103,14 @@ const Sidebar = ({ userRole = 'team_member' }) => {
           <button
             key={item.id}
             className={`nav-item ${isActive(item.path) ? 'active' : ''}`}
-            onClick={() => navigate(item.path)}
+            onClick={() => {
+              navigate(item.path)
+            }}
             title={item.tooltip}
           >
-            <img 
-              src={item.icon} 
-              alt={item.label} 
+            <img
+              src={item.icon}
+              alt={item.label}
               className="nav-icon-image"
             />
             <span className="nav-tooltip">{item.tooltip}</span>
@@ -120,9 +126,9 @@ const Sidebar = ({ userRole = 'team_member' }) => {
             onClick={() => navigate(settingsItem.path)}
             title={settingsItem.tooltip}
           >
-            <img 
-              src={settingsItem.icon} 
-              alt={settingsItem.label} 
+            <img
+              src={settingsItem.icon}
+              alt={settingsItem.label}
               className="nav-icon-image"
             />
             <span className="nav-tooltip">{settingsItem.tooltip}</span>

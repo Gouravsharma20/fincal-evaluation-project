@@ -1,0 +1,596 @@
+/* ✅ NEW FILE: MessagesStyles.css
+   This file contains all styling for the Messages component
+   It creates a 3-panel layout similar to Dashboard for consistency
+   
+   Sections:
+   1. Container and main layout
+   2. Header bar with back button
+   3. 3-Panel layout (left chats, center messages, right profile)
+   4. Message styling and animations
+   5. Dropdown menus for team assignment and status
+   6. Responsive design
+*/
+
+/* ===== 1. CONTAINER AND MAIN LAYOUT ===== */
+
+.messages-container {
+  display: flex;
+  height: 100vh;
+  background: #f5f5f5;
+}
+
+.messages-main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ===== 2. HEADER BAR ===== */
+/* ✅ ADDED: Header bar shows when navigated from Dashboard */
+/* Contains back button and title */
+
+.messages-header-bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 15px 30px;
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.messages-header-bar h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+/* ✅ ADDED: Back button styling */
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: #e0e0e0;
+  border-color: #999;
+}
+
+/* ===== 3. THREE PANEL LAYOUT ===== */
+
+.three-panel-container {
+  display: flex;
+  flex: 1;
+  gap: 0;
+  overflow: hidden;
+}
+
+/* LEFT PANEL - CHATS LIST */
+.panel-left-chats {
+  width: 280px;
+  background: white;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chats-header {
+  padding: 20px 15px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f9f9f9;
+}
+
+.chats-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+  font-weight: 600;
+}
+
+.chats-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 0;
+}
+
+/* ✅ ADDED: Chat list item styling */
+.chat-list-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 15px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.chat-list-item:hover {
+  background: #f0f0f0;
+}
+
+/* Active chat item gets blue highlight */
+.chat-list-item.active {
+  background: #e8f0ff;
+  border-left-color: #2196f3;
+}
+
+.chat-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.chat-list-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.chat-name {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.chat-preview {
+  margin: 0;
+  font-size: 12px;
+  color: #777;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.no-chats-text {
+  padding: 20px;
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+}
+
+/* CENTER PANEL - MESSAGES */
+.panel-chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+  min-height: 60px;
+}
+
+.panel-header p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* ✅ ADDED: Ticket status badge in header */
+.ticket-status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-unresolved {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-resolved {
+  background: #d4edda;
+  color: #155724;
+}
+
+/* ===== 4. MESSAGE STYLING ===== */
+
+.messages-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.no-messages-text {
+  text-align: center;
+  color: #999;
+  padding: 40px 20px;
+  font-size: 14px;
+}
+
+/* ✅ ADDED: Message item styling */
+.msg-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 70%;
+}
+
+/* User messages appear on left */
+.msg-item.msg-user {
+  align-self: flex-start;
+  background: #f0f0f0;
+}
+
+/* Admin messages appear on right with blue background */
+.msg-item.msg-admin {
+  align-self: flex-end;
+  background: #e3f2fd;
+}
+
+.msg-info {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 12px;
+}
+
+.msg-sender {
+  font-weight: 600;
+  color: #333;
+}
+
+.msg-timestamp {
+  color: #999;
+  font-size: 11px;
+}
+
+.msg-content {
+  margin: 0;
+  padding: 12px 15px;
+  background: inherit;
+  border-radius: 8px;
+  word-wrap: break-word;
+  color: #333;
+  line-height: 1.4;
+}
+
+.msg-item.msg-user .msg-content {
+  background: #f0f0f0;
+}
+
+.msg-item.msg-admin .msg-content {
+  background: #e3f2fd;
+}
+
+/* MESSAGE REPLY BOX */
+.message-reply-box {
+  display: flex;
+  gap: 10px;
+  padding: 15px 25px;
+  background: #f9f9f9;
+  border-top: 1px solid #e0e0e0;
+}
+
+.reply-textarea {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: none;
+  transition: border-color 0.3s ease;
+}
+
+.reply-textarea:focus {
+  outline: none;
+  border-color: #2196f3;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+}
+
+.reply-send-btn {
+  padding: 10px 20px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.reply-send-btn:hover:not(:disabled) {
+  background: #1976d2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+}
+
+/* ✅ ADDED: Disabled state for send button when textarea is empty */
+.reply-send-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* RIGHT PANEL - PROFILE */
+.panel-profile {
+  width: 320px;
+  background: white;
+  border-left: 1px solid #e0e0e0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== 5. PROFILE SECTION ===== */
+
+.customer-profile-section {
+  padding: 25px 20px;
+  background: #f9f9f9;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.profile-avatar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.profile-avatar-large {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #2196f3;
+}
+
+.profile-details-section h3 {
+  margin: 0 0 15px 0;
+  text-align: center;
+  font-size: 16px;
+  color: #333;
+}
+
+.profile-info-item {
+  margin-bottom: 15px;
+}
+
+.profile-info-item label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.profile-info-item p {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+  word-break: break-all;
+}
+
+/* ===== 6. ASSIGNMENT AND STATUS SECTIONS ===== */
+
+.team-assignment-section,
+.status-dropdown-section {
+  padding: 20px 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.section-heading {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.team-dropdown-wrapper,
+.status-dropdown-wrapper {
+  position: relative;
+}
+
+/* ✅ ADDED: Dropdown button styling */
+.team-dropdown-btn,
+.status-dropdown-btn {
+  width: 100%;
+  padding: 10px 12px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.team-dropdown-btn:hover,
+.status-dropdown-btn:hover {
+  border-color: #2196f3;
+}
+
+.dropdown-text {
+  flex: 1;
+  text-align: left;
+}
+
+.dropdown-icon {
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+  font-size: 12px;
+}
+
+/* ✅ ADDED: Rotate dropdown arrow when open */
+.dropdown-icon.open {
+  transform: rotate(180deg);
+}
+
+/* ✅ ADDED: Dropdown menu styling */
+.team-dropdown-menu,
+.status-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  overflow: hidden;
+}
+
+.team-option,
+.status-option {
+  width: 100%;
+  padding: 10px 12px;
+  background: white;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.team-option:hover,
+.status-option:hover {
+  background: #f0f0f0;
+}
+
+/* Highlight selected/active option */
+.team-option.selected,
+.status-option.active {
+  background: #e3f2fd;
+  color: #2196f3;
+  font-weight: 600;
+}
+
+.team-option-name {
+  flex: 1;
+}
+
+.assign-icon {
+  margin-left: 8px;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.status-badge.status-unresolved {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-badge.status-resolved {
+  background: #d4edda;
+  color: #155724;
+}
+
+/* ===== 7. EMPTY STATE ===== */
+/* ✅ ADDED: Empty state styling - shown when no ticket selected */
+
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  color: #999;
+  font-size: 16px;
+}
+
+/* ===== 8. SCROLLBAR STYLING ===== */
+/* ✅ ADDED: Custom scrollbar styling for better appearance */
+
+.messages-list::-webkit-scrollbar,
+.chats-list::-webkit-scrollbar,
+.panel-profile::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messages-list::-webkit-scrollbar-track,
+.chats-list::-webkit-scrollbar-track,
+.panel-profile::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messages-list::-webkit-scrollbar-thumb,
+.chats-list::-webkit-scrollbar-thumb,
+.panel-profile::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.messages-list::-webkit-scrollbar-thumb:hover,
+.chats-list::-webkit-scrollbar-thumb:hover,
+.panel-profile::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* ===== 9. RESPONSIVE DESIGN ===== */
+/* ✅ ADDED: Responsive styling for smaller screens */
+
+@media (max-width: 1200px) {
+  .panel-profile {
+    width: 280px;
+  }
+
+  .three-panel-container {
+    gap: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Stack panels vertically on small screens */
+  .three-panel-container {
+    flex-direction: column;
+  }
+
+  .panel-left-chats,
+  .panel-chat,
+  .panel-profile {
+    width: 100%;
+    border: none;
+  }
+
+  .panel-left-chats {
+    max-height: 30%;
+  }
+
+  .panel-profile {
+    max-height: 30%;
+  }
+}

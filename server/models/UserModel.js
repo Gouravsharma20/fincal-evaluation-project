@@ -49,6 +49,11 @@ const userSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Team",
       default: null
+    },
+    designation: {
+      type: String,
+      default: "Member",
+      trim: true
     }
   },
   { timestamps: true }

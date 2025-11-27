@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import PasswordSettings from '../../Components/Shared/PasswordSettings/PasswordSettings'
+import PasswordSettings from '../../Components/PasswordSettings/PaaswordSettings'
 import { useAuthContext } from '../../Hooks/useAuthContext'
 import './SettingsStyles.css'
 

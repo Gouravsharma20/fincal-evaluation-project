@@ -17,6 +17,11 @@
   align-items: center;
   width: 100%;
 }
+.logo-icon {
+  width: 50px;  /* adjust as needed */
+  height: 50px; /* adjust as needed */
+  object-fit: contain;
+}
 
 .logo-section {
   display: flex;

@@ -5,12 +5,26 @@ import Home from './Pages/Home/Home';
 import NavBar from './Components/NavBar/NavBar';
 import SignUp from './Pages/SignUo/SignUp';
 import Login from './Pages/Login/Login';
-import Admin from './Pages/Admin/Admin';
 import Team from './Pages/Team/Team';
 import AuthContextProvider, { AuthContext } from './Context/AuthContext';
 
+
+import Dashboard from "./Pages/DashBoard/Dashboard"
+import Messages from './Pages/Messages/Messages';
+import Analytics from './Pages/Analytics/Analytics';
+import TeamManagement from './Pages/TeamManagement/TeamManagement';
+import UISettings from './Pages/UISettings/UISettings';
+import Settings from './Pages/Settings/Settings';
+
+import Sidebar from './Components/Layout/Sidebar/Sidebar';
+
+
+
+
+
+
 function AppContent() {
-    const { user,token,loading } = useContext(AuthContext);
+    const { user, token, loading } = useContext(AuthContext);
 
     console.log('🔵 [APP] Rendering AppContent');
     console.log('   user:', user);
@@ -20,12 +34,11 @@ function AppContent() {
     if (loading) {
         return <div className="App"><p>Loading...</p></div>;
     }
-    
+
     return (
         <div className="App">
-            <Router>
                 <NavBar />
-                
+
                 {!user ? (
                     // Not logged in - show login/signup/home
                     <Routes>
@@ -35,22 +48,20 @@ function AppContent() {
                         <Route path="*" element={<Navigate to="/login" />} />
                     </Routes>
                 ) : user.isAdmin ? (
-                    // Admin logged in - show admin routes only
-                    <Routes>
-                      <Route path="/dashboard" element={<Admin />} />
-                        <Route path="/messages" element={<Admin />} />
-                        <Route path="/analytics" element={<Admin />} />
-                        <Route path="/team-management" element={<Admin />} />
-                        <Route path="/ui-settings" element={<Admin />} />
-                        <Route path="/settings" element={<Admin />} />
-
-
-                        <Route path="/admin/*" element={<Admin />} />
-
-                        
-                        <Route path="/" element={<Navigate to="/admin" />} />
-                        <Route path="*" element={<Navigate to="/admin" />} />
-                    </Routes>
+                    <>
+                        <Sidebar userRole="admin" />
+                        <Routes>
+                            <Route path="/dashboard" element={<Dashboard />} />
+                            <Route path="/messages" element={<Messages />} />
+                            <Route path="/analytics" element={<Analytics />} />
+                            <Route path="/team-management" element={<TeamManagement />} />
+                            <Route path="/ui-settings" element={<UISettings />} />
+                            <Route path="/settings" element={<Settings />} />
+                            <Route path="/dashboard/*" element={<Dashboard />} />
+                            <Route path="/" element={<Navigate to="/dashboard" />} />
+                            <Route path="*" element={<Navigate to="/dashboard" />} />
+                        </Routes>
+                    </>
                 ) : (
                     // Regular user logged in - show team routes only
                     <Routes>
@@ -58,16 +69,18 @@ function AppContent() {
                         <Route path="/" element={<Navigate to="/team" />} />
                         <Route path="*" element={<Navigate to="/team" />} />
                     </Routes>
-                )}
-            </Router>
-        </div>
+                )
+                }
+        </div >
     );
 }
 
 function App() {
     return (
         <AuthContextProvider>
-            <AppContent />
+            <Router>
+                <AppContent />
+            </Router>
         </AuthContextProvider>
     );
 }
