@@ -1,17 +1,57 @@
-
-nav {
-    height: 10vh;
+/* Main navbar container */
+.navbar {
     width: 100%;
+    height: 80px;
+    background-color: #FFFFFF;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    background-color: rgb(242, 237, 237);
+    padding: 0 100px;   /* GAP ON LEFT AND RIGHT */
+    box-sizing: border-box;
 }
 
-nav .menu {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    gap: 40px;
+/* Logo */
+.logo-image {
+    height: 45px;
+    object-fit: contain;
+}
 
+/* Right side links */
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+/* Login text */
+.login-text {
+    font-size: 16px;
+    text-decoration: none;
+    color: #36364A;
+}
+
+/* Signup button */
+.signup-btn {
+    background-color: #244779;
+    color: #FFFFFF;
+    padding: 10px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* If user is logged in */
+.username {
+    color: #36364A;
+    font-size: 16px;
+}
+
+.logout-btn {
+    background-color: #244779;
+    color: #FFFFFF;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
 }

@@ -556,6 +556,11 @@ const Dashboard = () => {
                 </div>
               ) : (
                 <div className="message-reply-box">
+                  {openTicket?.isMissedChat && (
+                    <p style={{ color: 'red', marginBottom: '10px', fontSize: '14px', fontWeight: '500' }}>
+                      Replying to missed chat
+                    </p>
+                  )}
                   <textarea
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}

@@ -3,39 +3,37 @@ const UISettings = require('../models/Uisettingsmodel');
 
 // Enum values for header colors
 const HEADER_COLOR_ENUM = [
-  '#2C4A6E',      // Dark Blue
-  '#1f3350',      // Darker Blue
+  '#FFFFFF',      // White
   '#000000',      // Black
-  '#FF0000',      // Red
-  '#008000',      // Green
-  '#800080',      // Purple
-  '#FFA500'       // Orange
+  '#33475B'       // Default Blue
 ];
 
-// Enum values for custom color headings
-const CUSTOM_COLOR_HEADING_ENUM = [
-  'primary',
-  'secondary',
-  'success',
-  'danger',
-  'warning',
-  'info',
-  'dark',
-  'light'
+// Enum values for background colors
+const BACKGROUND_COLOR_ENUM = [
+  '#FFFFFF',      // White
+  '#000000',      // Black
+  '#FAFBFC'       // Light Gray
 ];
 
 // Default settings
 const DEFAULT_SETTINGS = {
-  headerColor: '#2C4A6E',
-  customColorHeading: 'primary',
-  buttonColor: '#2C4A6E',
-  backgroundColor: '#FFFFFF',
-  welcomeMessage: '👋 Want to chat about Hubly? I\'m an chatbot here to help you find your way.',
+  headerColor: '#33475B',
+  backgroundColor: '#FAFBFC',
+  formPlaceholders: {
+    namePlaceholder: 'Your name',
+    phonePlaceholder: '+1 (000) 000-0000',
+    emailPlaceholder: 'example@gmail.com',
+    buttonText: 'Thank You!'
+  },
+  welcomeMessage: '👋 Want to chat about Hubly? I\'m a chatbot here to help you find your way.',
   customMessage: 'Thank You! We\'ll get back to you soon.',
   missedChatTimerEnabled: true
 };
 
-// GET current UI settings - PUBLIC (no auth required)
+/**
+ * GET current UI settings - PUBLIC (no auth required)
+ * Returns: settings, headerColorEnum, backgroundColorEnum
+ */
 const getUISettings = async (req, res) => {
   try {
     let settings = await UISettings.findOne();
@@ -49,16 +47,15 @@ const getUISettings = async (req, res) => {
       success: true,
       settings: {
         headerColor: settings.headerColor,
-        customColorHeading: settings.customColorHeading,
-        buttonColor: settings.buttonColor,
         backgroundColor: settings.backgroundColor,
+        formPlaceholders: settings.formPlaceholders,
         welcomeMessage: settings.welcomeMessage,
         customMessage: settings.customMessage,
         missedChatTimerEnabled: settings.missedChatTimerEnabled
       },
       enums: {
         headerColorOptions: HEADER_COLOR_ENUM,
-        customColorHeadingOptions: CUSTOM_COLOR_HEADING_ENUM
+        backgroundColorOptions: BACKGROUND_COLOR_ENUM
       }
     });
   } catch (error) {
@@ -71,12 +68,26 @@ const getUISettings = async (req, res) => {
   }
 };
 
-// UPDATE UI settings - ADMIN ONLY (middleware handles auth + admin verification)
+/**
+ * UPDATE UI settings - ADMIN ONLY (middleware handles auth + admin verification)
+ * Can update: headerColor, backgroundColor, formPlaceholders, welcomeMessage, customMessage, missedChatTimerEnabled
+ */
 const updateUISettings = async (req, res) => {
   try {
-    const { headerColor, customColorHeading, buttonColor, backgroundColor, welcomeMessage, customMessage, missedChatTimerEnabled } = req.body;
+    const { 
+      headerColor, 
+      backgroundColor, 
+      formPlaceholders,
+      welcomeMessage, 
+      customMessage, 
+      missedChatTimerEnabled 
+    } = req.body;
 
-    // Validate header color is valid enum
+    // ════════════════════════════════════════════════════════════════════════
+    // VALIDATION
+    // ════════════════════════════════════════════════════════════════════════
+
+    // Validate header color is in enum
     if (headerColor && !HEADER_COLOR_ENUM.includes(headerColor)) {
       return res.status(400).json({
         success: false,
@@ -84,32 +95,54 @@ const updateUISettings = async (req, res) => {
       });
     }
 
-    // Validate custom color heading is valid enum
-    if (customColorHeading && !CUSTOM_COLOR_HEADING_ENUM.includes(customColorHeading)) {
+    // Validate background color is in enum
+    if (backgroundColor && !BACKGROUND_COLOR_ENUM.includes(backgroundColor)) {
       return res.status(400).json({
         success: false,
-        error: 'Invalid custom color heading. Must be one of: ' + CUSTOM_COLOR_HEADING_ENUM.join(', ')
+        error: 'Invalid background color. Must be one of: ' + BACKGROUND_COLOR_ENUM.join(', ')
       });
     }
 
-    // Validate button color (hex format)
-    const isValidColor = (color) => /^#[0-9A-F]{6}$/i.test(color);
+    // Validate form placeholders if provided
+    if (formPlaceholders) {
+      if (typeof formPlaceholders !== 'object') {
+        return res.status(400).json({
+          success: false,
+          error: 'formPlaceholders must be an object'
+        });
+      }
 
-    if (buttonColor && !isValidColor(buttonColor)) {
-      return res.status(400).json({
-        success: false,
-        error: 'Invalid button color format'
-      });
+      // Check individual placeholder fields
+      if (formPlaceholders.namePlaceholder && formPlaceholders.namePlaceholder.length > 100) {
+        return res.status(400).json({
+          success: false,
+          error: 'namePlaceholder must be 100 characters or less'
+        });
+      }
+
+      if (formPlaceholders.phonePlaceholder && formPlaceholders.phonePlaceholder.length > 100) {
+        return res.status(400).json({
+          success: false,
+          error: 'phonePlaceholder must be 100 characters or less'
+        });
+      }
+
+      if (formPlaceholders.emailPlaceholder && formPlaceholders.emailPlaceholder.length > 100) {
+        return res.status(400).json({
+          success: false,
+          error: 'emailPlaceholder must be 100 characters or less'
+        });
+      }
+
+      if (formPlaceholders.buttonText && formPlaceholders.buttonText.length > 100) {
+        return res.status(400).json({
+          success: false,
+          error: 'buttonText must be 100 characters or less'
+        });
+      }
     }
 
-    if (backgroundColor && !isValidColor(backgroundColor)) {
-      return res.status(400).json({
-        success: false,
-        error: 'Invalid background color format'
-      });
-    }
-
-    // Validate message lengths
+    // Validate welcome message length
     if (welcomeMessage && welcomeMessage.length > 200) {
       return res.status(400).json({
         success: false,
@@ -117,6 +150,7 @@ const updateUISettings = async (req, res) => {
       });
     }
 
+    // Validate custom message length
     if (customMessage && customMessage.length > 200) {
       return res.status(400).json({
         success: false,
@@ -124,7 +158,10 @@ const updateUISettings = async (req, res) => {
       });
     }
 
-    // Find and update the settings
+    // ════════════════════════════════════════════════════════════════════════
+    // UPDATE SETTINGS
+    // ════════════════════════════════════════════════════════════════════════
+
     let settings = await UISettings.findOne();
 
     if (!settings) {
@@ -132,9 +169,8 @@ const updateUISettings = async (req, res) => {
       settings = await UISettings.create({
         ...DEFAULT_SETTINGS,
         headerColor: headerColor || DEFAULT_SETTINGS.headerColor,
-        customColorHeading: customColorHeading || DEFAULT_SETTINGS.customColorHeading,
-        buttonColor: buttonColor || DEFAULT_SETTINGS.buttonColor,
         backgroundColor: backgroundColor || DEFAULT_SETTINGS.backgroundColor,
+        formPlaceholders: formPlaceholders || DEFAULT_SETTINGS.formPlaceholders,
         welcomeMessage: welcomeMessage || DEFAULT_SETTINGS.welcomeMessage,
         customMessage: customMessage || DEFAULT_SETTINGS.customMessage,
         missedChatTimerEnabled: missedChatTimerEnabled !== undefined ? missedChatTimerEnabled : DEFAULT_SETTINGS.missedChatTimerEnabled,
@@ -143,9 +179,14 @@ const updateUISettings = async (req, res) => {
     } else {
       // Update existing settings
       if (headerColor) settings.headerColor = headerColor;
-      if (customColorHeading) settings.customColorHeading = customColorHeading;
-      if (buttonColor) settings.buttonColor = buttonColor;
       if (backgroundColor) settings.backgroundColor = backgroundColor;
+      if (formPlaceholders) {
+        // Merge with existing placeholders (only update provided fields)
+        settings.formPlaceholders = {
+          ...settings.formPlaceholders,
+          ...formPlaceholders
+        };
+      }
       if (welcomeMessage) settings.welcomeMessage = welcomeMessage;
       if (customMessage) settings.customMessage = customMessage;
       if (missedChatTimerEnabled !== undefined) settings.missedChatTimerEnabled = missedChatTimerEnabled;
@@ -159,9 +200,8 @@ const updateUISettings = async (req, res) => {
       message: 'UI settings updated successfully',
       settings: {
         headerColor: settings.headerColor,
-        customColorHeading: settings.customColorHeading,
-        buttonColor: settings.buttonColor,
         backgroundColor: settings.backgroundColor,
+        formPlaceholders: settings.formPlaceholders,
         welcomeMessage: settings.welcomeMessage,
         customMessage: settings.customMessage,
         missedChatTimerEnabled: settings.missedChatTimerEnabled
@@ -177,7 +217,10 @@ const updateUISettings = async (req, res) => {
   }
 };
 
-// RESET to default settings - ADMIN ONLY (middleware handles auth + admin verification)
+/**
+ * RESET to default settings - ADMIN ONLY
+ * Resets all UI settings to their default values
+ */
 const resetUISettings = async (req, res) => {
   try {
     let settings = await UISettings.findOne();
@@ -190,9 +233,8 @@ const resetUISettings = async (req, res) => {
     } else {
       // Reset all settings to defaults
       settings.headerColor = DEFAULT_SETTINGS.headerColor;
-      settings.customColorHeading = DEFAULT_SETTINGS.customColorHeading;
-      settings.buttonColor = DEFAULT_SETTINGS.buttonColor;
       settings.backgroundColor = DEFAULT_SETTINGS.backgroundColor;
+      settings.formPlaceholders = DEFAULT_SETTINGS.formPlaceholders;
       settings.welcomeMessage = DEFAULT_SETTINGS.welcomeMessage;
       settings.customMessage = DEFAULT_SETTINGS.customMessage;
       settings.missedChatTimerEnabled = DEFAULT_SETTINGS.missedChatTimerEnabled;
@@ -206,9 +248,8 @@ const resetUISettings = async (req, res) => {
       message: 'Settings reset to defaults',
       settings: {
         headerColor: settings.headerColor,
-        customColorHeading: settings.customColorHeading,
-        buttonColor: settings.buttonColor,
         backgroundColor: settings.backgroundColor,
+        formPlaceholders: settings.formPlaceholders,
         welcomeMessage: settings.welcomeMessage,
         customMessage: settings.customMessage,
         missedChatTimerEnabled: settings.missedChatTimerEnabled
@@ -228,4 +269,4 @@ module.exports = {
   getUISettings,
   updateUISettings,
   resetUISettings
-};
+}

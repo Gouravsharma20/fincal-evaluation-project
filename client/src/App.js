@@ -22,7 +22,7 @@ import Sidebar from './Components/Layout/Sidebar/Sidebar';
 
 
 function AppContent() {
-  const { user, token, loading } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);   //token was also there [removed because of warning]
 
   if (loading) {
     return <div className="App"><p>Loading...</p></div>;
@@ -46,6 +46,7 @@ function AppContent() {
         <div className="app-layout">
           <Sidebar userRole="admin" />
           <div className='app-main'>
+            <NavBar/>
             <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/messages" element={<Messages />} />

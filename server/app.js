@@ -26,7 +26,7 @@ const ticketRoutes = require("./routes/TicketRoutes");
 const adminRoutes = require("./routes/AdminRoutes");
 const teamRoutes = require("./routes/TeamRoutes");
 const userRoutes = require("./routes/UserRoutes");
-const uiSettingsRoutes = require("./routes/UiSettingRoutes")
+// const uiSettingsRoutes = require("./routes/UiSettingRoutes")
 
 
 app.use("/api/auth", authRoutes);
@@ -34,22 +34,10 @@ app.use("/api/tickets", ticketRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/team",teamRoutes);
 app.use("/api/user",userRoutes);
-app.use("/api/uisettings",uiSettingsRoutes);
+// app.use("/api/uisettings",uiSettingsRoutes);
 
 
-app.get("/api/admin/reset-password", async (req, res) => {
-  const bcrypt = require("bcryptjs");
-  const User = require("./models/UserModel");
 
-  const newHashed = await bcrypt.hash("Gourav@1234", 10);
-
-  await User.updateOne(
-    { email: "gouravsharma20a@gmail.com" },
-    { $set: { password: newHashed } }
-  );
-
-  res.send("Password updated successfully!");
-});
 
 
 

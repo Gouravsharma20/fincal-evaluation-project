@@ -3,67 +3,102 @@ const mongoose = require('mongoose');
 
 const uiSettingsSchema = new mongoose.Schema(
   {
-    // Header Color - Enum based
+    // ════════════════════════════════════════════════════════════════════════
+    // HEADER COLOR SETTINGS
+    // ════════════════════════════════════════════════════════════════════════
+    
     headerColor: {
       type: String,
       enum: [
-        '#2C4A6E',      // Dark Blue
-        '#1f3350',      // Darker Blue
-        '#000000',      // Black
-        '#FF0000',      // Red
-        '#008000',      // Green
-        '#800080',      // Purple
-        '#FFA500'       // Orange
+        '#FFFFFF',     // White
+        '#000000',     // Black
+        '#33475B',     // Default Blue
       ],
-      default: '#2C4A6E'
+      default: '#33475B'
     },
 
-    // Custom Color Heading - Enum based
-    customColorHeading: {
-      type: String,
-      enum: [
-        'primary',
-        'secondary',
-        'success',
-        'danger',
-        'warning',
-        'info',
-        'dark',
-        'light'
-      ],
-      default: 'primary'
-    },
-
-    // Button Color - Can be hex or other
-    buttonColor: {
-      type: String,
-      default: '#2C4A6E',
-      match: /^#[0-9A-F]{6}$/i
-    },
-
+    // ════════════════════════════════════════════════════════════════════════
+    // BACKGROUND COLOR SETTINGS
+    // ════════════════════════════════════════════════════════════════════════
+    
     backgroundColor: {
       type: String,
-      default: '#FFFFFF',
-      match: /^#[0-9A-F]{6}$/i
+      enum: [
+        '#FFFFFF',     // White
+        '#000000',     // Black
+        '#FAFBFC',     // Light Gray
+      ],
+      default: '#FAFBFC'
     },
 
+    // ════════════════════════════════════════════════════════════════════════
+    // INTRODUCTION FORM PLACEHOLDERS (NEW)
+    // ════════════════════════════════════════════════════════════════════════
+    
+    formPlaceholders: {
+      type: {
+        namePlaceholder: {
+          type: String,
+          default: 'Your name',
+          maxlength: 100
+        },
+        phonePlaceholder: {
+          type: String,
+          default: '+1 (000) 000-0000',
+          maxlength: 100
+        },
+        emailPlaceholder: {
+          type: String,
+          default: 'example@gmail.com',
+          maxlength: 100
+        },
+        buttonText: {
+          type: String,
+          default: 'Thank You!',
+          maxlength: 100
+        }
+      },
+      default: {
+        namePlaceholder: 'Your name',
+        phonePlaceholder: '+1 (000) 000-0000',
+        emailPlaceholder: 'example@gmail.com',
+        buttonText: 'Thank You!'
+      }
+    },
+
+    // ════════════════════════════════════════════════════════════════════════
+    // WELCOME MESSAGE SETTINGS
+    // ════════════════════════════════════════════════════════════════════════
+    
     welcomeMessage: {
       type: String,
-      default: '👋 Want to chat about Hubly? I\'m an chatbot here to help you find your way.',
-      maxlength: 200
+      default: '👋 Want to chat about Hubly? I\'m a chatbot here to help you find your way.',
+      maxlength: 50
     },
 
+    // ════════════════════════════════════════════════════════════════════════
+    // CUSTOM/SUCCESS MESSAGE SETTINGS
+    // ════════════════════════════════════════════════════════════════════════
+    
     customMessage: {
       type: String,
       default: 'Thank You! We\'ll get back to you soon.',
       maxlength: 200
     },
 
+    // ════════════════════════════════════════════════════════════════════════
+    // MISSED CHAT TIMER SETTINGS
+    // ════════════════════════════════════════════════════════════════════════
+    
     missedChatTimerEnabled: {
       type: Boolean,
       default: true
     },
 
+    // ════════════════════════════════════════════════════════════════════════
+    // METADATA
+    // ════════════════════════════════════════════════════════════════════════
+    
     lastUpdatedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
