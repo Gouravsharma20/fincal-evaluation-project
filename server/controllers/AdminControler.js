@@ -3,6 +3,13 @@ const Ticket = require("../models/TicketModel");
 const User = require("../models/UserModel");
 const crypto = require('crypto');
 const bcrypt = require('bcrypt')
+const Settings = require("../models/SettingsModel");              // ✅ ADD THIS LINE
+const {                                                           // ✅ ADD THIS LINE
+  checkAndMarkMissedChat,                                        // ✅ ADD THIS LINE
+  incrementMissedChatsForWeek,                                   // ✅ ADD THIS LINE
+  getAllAnalytics                                                // ✅ ADD THIS LINE
+} = require("../utils/AnalyticsUtils");                          // ✅ ADD THIS LINE
+
 
 /**
  * listTickets (admin) - paginated
@@ -185,28 +192,27 @@ const resolveTicket = async (req, res) => {
     ticket.resolutionNote = resolutionNote || "";
     ticket.lastMessageAt = Date.now();
 
+    try {
+      const settings = await Settings.getInstance();
+      const resolutionTimeLimit = settings.resolutionTimeLimit;
 
-    const settings = await Settings.getInstance();
-    const resolutionTimeLimit = settings.resolutionTimeLimit;
+      const isMissed = checkAndMarkMissedChat(ticket, resolutionTimeLimit);
 
-    const isMissed = checkAndMarkMissedChat(ticket, resolutionTimeLimit);
+      // If missed, increment the analytics counter for that week
+      if (isMissed) {
+        await incrementMissedChatsForWeek(ticket.createdAt);
+      }
 
-    // If missed, increment the analytics counter for that week
-    if (isMissed) {
-      await incrementMissedChatsForWeek(ticket.createdAt);
+    } catch (analyticsErr) {
+      console.warn("Analytics calculation failed (non-critical):", analyticsErr);
     }
-
-
-
-
-
-
-    await ticket.save();
+     await ticket.save();
 
     return res.json({
       success: true,
       message: "Ticket resolved",
-      ticketId: ticket._id
+      ticketId: ticket._id,
+      isMissedChat: ticket.isMissedChat || false
     });
   } catch (err) {
     console.error(err);
@@ -363,12 +369,97 @@ const deleteTeamMember = async (req, res) => {
   }
 };
 
+
+// / ✅ STEP 4: ADD THREE NEW FUNCTIONS (Lines 328-415) - ALL NEW
+/**
+ * getSettings - Get global resolution time limit settings
+ */
+const getSettings = async (req, res) => {                        // ✅ NEW FUNCTION
+  try {
+    const settings = await Settings.getInstance();
+    return res.json({
+      success: true,
+      settings: {
+        resolutionTimeLimit: settings.resolutionTimeLimit,
+        lastUpdatedAt: settings.lastUpdatedAt,
+        lastUpdatedBy: settings.lastUpdatedBy
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
+
+
+const updateSettings = async (req, res) => {                     // ✅ NEW FUNCTION
+  try {
+    const { resolutionTimeLimit } = req.body;
+
+    if (resolutionTimeLimit === undefined || resolutionTimeLimit === null) {
+      return res.status(400).json({ error: "resolutionTimeLimit is required" });
+    }
+
+    if (typeof resolutionTimeLimit !== "number" || resolutionTimeLimit < 1) {
+      return res.status(400).json({ error: "resolutionTimeLimit must be a positive number (in minutes)" });
+    }
+
+    const settings = await Settings.getInstance();
+    settings.resolutionTimeLimit = resolutionTimeLimit;
+    settings.lastUpdatedBy = req.user._id || req.user.email;
+    settings.lastUpdatedAt = new Date();
+
+    await settings.save();
+
+    return res.json({
+      success: true,
+      message: `Resolution time limit updated to ${resolutionTimeLimit} minutes`,
+      settings: {
+        resolutionTimeLimit: settings.resolutionTimeLimit,
+        lastUpdatedAt: settings.lastUpdatedAt,
+        lastUpdatedBy: settings.lastUpdatedBy
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
+
+// * getAnalytics - Get all analytics data
+const getAnalytics = async (req, res) => {                       // ✅ NEW FUNCTION
+  try {
+    const analytics = await getAllAnalytics();
+
+    return res.json({
+      success: true,
+      analytics: {
+        totalChats: analytics.totalChats,
+        averageReplyTime: analytics.averageReplyTime,
+        resolvedTicketsPercentage: analytics.resolvedTicketsPercentage,
+        missedChatsPerWeek: analytics.missedChatsPerWeek.map(item => ({
+          week: item.week,
+          year: item.year,
+          missedChatsCount: item.missedChatsCount
+        }))
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
+
+
 module.exports = {
   listAllTickets,
   getTicketDetails,
   adminAddMessage,
   assignTicket,
   resolveTicket,
+  getSettings,              
+  updateSettings,       
+  getAnalytics,  
   listAllUsers,
   createTeamMember,
   updateTeamMember,

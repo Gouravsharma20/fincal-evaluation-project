@@ -22,63 +22,62 @@ import Sidebar from './Components/Layout/Sidebar/Sidebar';
 
 
 function AppContent() {
-    const { user, token, loading } = useContext(AuthContext);
+  const { user, token, loading } = useContext(AuthContext);
 
-    console.log('🔵 [APP] Rendering AppContent');
-    console.log('   user:', user);
-    console.log('   token:', token);
-    console.log('   user?.isAdmin:', user?.isAdmin);
+  if (loading) {
+    return <div className="App"><p>Loading...</p></div>;
+  }
 
-    if (loading) {
-        return <div className="App"><p>Loading...</p></div>;
-    }
+  return (
+    <div className="App">
+      {!user ? (
+        <>
+          {/* NavBar MUST be outside <Routes> */}
+          <NavBar />
 
-    return (
-        <div className="App">
-            <NavBar />
-
-            {!user ? (
-                // Not logged in - show login/signup/home
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/signup" element={<SignUp />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="*" element={<Navigate to="/" />} />
-                </Routes>
-            ) : user.isAdmin ? (
-                <>
-                    <Sidebar userRole="admin" />
-                    <Routes>
-                        <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/messages" element={<Messages />} />
-                        <Route path="/analytics" element={<Analytics />} />
-                        <Route path="/team-management" element={<TeamManagement />} />
-                        <Route path="/ui-settings" element={<UISettings />} />
-                        <Route path="/settings" element={<Settings />} />
-                        <Route path="/dashboard/*" element={<Dashboard />} />
-                        <Route path="/" element={<Navigate to="/dashboard" />} />
-                        <Route path="*" element={<Navigate to="/dashboard" />} />
-                    </Routes>
-                </>
-            ) : (
-                <>
-                    <Sidebar />
-                    <Routes>
-                        <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/messages" element={<Messages />} />
-                        <Route path="/team/*" element={<Team />} />
-                        <Route path="/settings" element={<Settings />} />
-                        <Route path="/dashboard/*" element={<Dashboard />} />
-                        <Route path="/" element={<Navigate to="/team" />} />
-                        <Route path="*" element={<Navigate to="/team" />} />
-                    </Routes>
-                </>
-
-            )
-            }
-        </div >
-    );
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </>
+      ) : user.isAdmin ? (
+        <div className="app-layout">
+          <Sidebar userRole="admin" />
+          <div className='app-main'>
+            <Routes>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/messages" element={<Messages />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/team-management" element={<TeamManagement />} />
+            <Route path="/ui-settings" element={<UISettings />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/" element={<Navigate to="/dashboard" />} />
+            <Route path="*" element={<Navigate to="/dashboard" />} />
+          </Routes>
+          </div>
+        </div>
+      ) : (
+        <div className="app-layout">
+          <Sidebar />
+          <div className='app-main'>
+            <Routes>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/messages" element={<Messages />} />
+            <Route path="/team/*" element={<Team />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/" element={<Navigate to="/team" />} />
+            <Route path="*" element={<Navigate to="/team" />} />
+          </Routes>
+          </div>
+          
+        </div>
+      )}
+    </div>
+  );
 }
+
 
 function App() {
     return (

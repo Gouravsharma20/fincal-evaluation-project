@@ -5,7 +5,7 @@ import './AnalyticsStyles.css'
 const Analytics = () => {
   const { user } = useAuthContext()
 
-  if (!user || user.role !== 'admin') {
+  if (!user || !user.isAdmin) {
     return <div className="unauthorized">Admin access only</div>
   }
 

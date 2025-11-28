@@ -1,38 +1,45 @@
+/* App.css - minimal & focused on layout */
+
+/* Basic reset for the root app container */
 .App {
-  text-align: center;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Layout wrapper that places sidebar (left) + main content (right) in a row */
+.app-layout {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  flex-direction: row;   /* horizontal layout */
+  height: 100vh;        /* full viewport height */
+  width: 100%;
 }
 
-.App-link {
-  color: #61dafb;
+/* Main content area */
+.app-main {
+  flex: 1;              /* take remaining width next to sidebar */
+  overflow-y: auto;     /* scrollable main content */
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Optional: ensure your sidebar has an explicit width if not set in SidebarStyles.css.
+   If you already set width in SidebarStyles.css, remove this rule to avoid duplication. */
+.sidebar-container {
+  /* Example width — adjust to match your SidebarStyles.css, or remove this rule */
+  width: 72px; /* or 240px for expanded sidebar */
+  box-sizing: border-box;
+}
+
+/* Responsive: stack on small screens */
+@media (max-width: 800px) {
+  .app-layout {
+    flex-direction: column;
+    height: auto; /* allow full page to scroll */
   }
-  to {
-    transform: rotate(360deg);
+
+  .sidebar-container {
+    width: 100%;
   }
 }
