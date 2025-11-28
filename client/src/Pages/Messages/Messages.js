@@ -16,17 +16,41 @@ const Messages = () => {
   const [showTeamDropdown, setShowTeamDropdown] = useState(false)
   const [ticketStatus, setTicketStatus] = useState('unresolved')
   const [showStatusDropdown, setShowStatusDropdown] = useState(false)
-  // eslint-disable-next-line no-unused-vars
   const [sending, setSending] = useState(false)
-
-  const [teamMembers] = useState([
-    { id: 1, name: 'John Doe' },
-    { id: 2, name: 'Jane Smith' },
-    { id: 3, name: 'Mike Johnson' },
-    { id: 4, name: 'Sarah Williams' },
-  ])
+  const [teamMembers, setTeamMembers] = useState([])
+  const [loadingTeamMembers, setLoadingTeamMembers] = useState(false)
+  
+  // Confirmation Modal State
+  const [showAssignmentModal, setShowAssignmentModal] = useState(false)
+  const [pendingAssignment, setPendingAssignment] = useState(null)
+  const [assignmentLoading, setAssignmentLoading] = useState(false)
 
   const { token } = useAuthContext()
+
+  const fetchTeamMembers = useCallback(async () => {
+    if (!token) return
+
+    setLoadingTeamMembers(true)
+    try {
+      const response = await fetch('http://localhost:4000/api/admin/team-members', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+
+      if (!response.ok) throw new Error('Failed to fetch team members')
+      const data = await response.json()
+      // Filter out admins - only show members
+      const membersOnly = (data.users || []).filter(user => user.designation !== 'Admin')
+      setTeamMembers(membersOnly)
+    } catch (err) {
+      console.error('Error fetching team members:', err)
+      setTeamMembers([])
+    } finally {
+      setLoadingTeamMembers(false)
+    }
+  }, [token])
 
   const fetchTickets = useCallback(async () => {
     if (!token) return
@@ -81,7 +105,8 @@ const Messages = () => {
 
   useEffect(() => {
     fetchTickets()
-  }, [fetchTickets])
+    fetchTeamMembers()
+  }, [fetchTickets, fetchTeamMembers])
 
   useEffect(() => {
     applyFilters(tickets, filter, searchQuery)
@@ -101,7 +126,6 @@ const Messages = () => {
     setTicketStatus(ticket.status || 'unresolved')
   }
 
-  
   const handleSendMessage = async () => {
     if (!newMessage.trim()) {
       setError('Message cannot be empty')
@@ -114,11 +138,17 @@ const Messages = () => {
       return
     }
 
+    // Check if ticket is assigned - prevent message sending if it is
+    if (openTicket.assignedTo) {
+      setError('This ticket has been assigned. You can no longer send messages.')
+      setTimeout(() => setError(''), 3000)
+      return
+    }
+
     setSending(true)
     setError('')
 
     try {
-      // CHANGE: Endpoint URL - use /messages (plural) instead of /message
       const response = await fetch(
         `http://localhost:4000/api/admin/tickets/${openTicket._id}/messages`,
         {
@@ -127,10 +157,9 @@ const Messages = () => {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
-          // CHANGE: Request body structure - use { text, internal } instead of { message, senderType }
           body: JSON.stringify({
-            text: newMessage,          // CHANGE: Field name is "text" not "message"
-            internal: false            // CHANGE: Add "internal" field set to false (send to customer)
+            text: newMessage,
+            internal: false
           })
         }
       )
@@ -143,8 +172,6 @@ const Messages = () => {
       const data = await response.json()
       console.log('Message sent successfully:', data)
       
-      // CHANGE: API returns only { success, message, ticketId }, not the full updated ticket
-      // So we need to fetch the updated ticket separately to get the new messages
       const updatedResponse = await fetch(
         `http://localhost:4000/api/admin/tickets/${openTicket._id}`,
         {
@@ -161,7 +188,6 @@ const Messages = () => {
         
         setOpenTicket(updatedTicket)
         setTickets(tickets.map(t => t._id === updatedTicket._id ? updatedTicket : t))
-        // CHANGE: Also update filteredTickets to keep chat list in sync
         setFilteredTickets(filteredTickets.map(t => t._id === updatedTicket._id ? updatedTicket : t))
       }
       
@@ -176,37 +202,111 @@ const Messages = () => {
     }
   }
 
-  const handleAssignTeamMember = async (member) => {
-    if (!openTicket) return
+  // Function to open confirmation modal
+  const handleTeamMemberClick = (member) => {
+    console.log('🟢 handleTeamMemberClick called')
+    console.log('  Member:', member)
+    console.log('  Member ID:', member._id)
+    console.log('  Member Name:', member.name)
+    
+    setPendingAssignment(member)
+    console.log('  pendingAssignment state set to:', member)
+    
+    setShowAssignmentModal(true)
+    console.log('  showAssignmentModal set to true')
+    console.log('  Modal should now be visible')
+  }
+
+  // Function to confirm and process assignment
+  const handleConfirmAssignment = async () => {
+    console.log('🔵 handleConfirmAssignment called')
+    
+    if (!openTicket || !pendingAssignment) {
+      console.log('❌ Missing openTicket or pendingAssignment')
+      return
+    }
+
+    console.log('📋 Assignment Details:')
+    console.log('  Ticket ID:', openTicket._id)
+    console.log('  Member ID:', pendingAssignment._id)
+    console.log('  Member Name:', pendingAssignment.name)
+
+    setAssignmentLoading(true)
 
     try {
-      const response = await fetch(
-        `http://localhost:4000/api/admin/tickets/${openTicket._id}/assign`,
-        {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            teamMemberId: member.id,
-            teamMemberName: member.name
-          })
-        }
-      )
+      const url = `http://localhost:4000/api/admin/tickets/${openTicket._id}/assign`
+      const body = {
+        assignedToId: pendingAssignment._id,
+        note: `Assigned by admin to ${pendingAssignment.name}`
+      }
 
-      if (!response.ok) throw new Error('Failed to assign ticket')
+      const response = await fetch(url, {
+        method: 'POST',  
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      })
+
+      console.log('📥 Response received:')
+      console.log('  Status:', response.status)
+      console.log('  OK:', response.ok)
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        console.log('❌ Error Response:', errorData)
+        throw new Error(errorData.error || errorData.message || `Failed to assign ticket (${response.status})`)
+      }
 
       const data = await response.json()
-      setOpenTicket(data.ticket)
-      setSelectedTeamMember(member)
-      setTickets(tickets.map(t => t._id === data.ticket._id ? data.ticket : t))
+      console.log('✅ Success Response:', data)
+      
+      // Build updated ticket object with assignedTo info for frontend
+      const updatedTicket = {
+        ...openTicket,
+        assignedToType: "team",
+        assignedToId: pendingAssignment._id,
+        assignedTo: {
+          _id: pendingAssignment._id,
+          name: pendingAssignment.name,
+          email: pendingAssignment.email
+        },
+        status: "assigned"
+      }
+      
+      console.log('🔄 Updated ticket with assignedTo:', updatedTicket.assignedTo)
+      
+      // Update the open ticket
+      setOpenTicket(updatedTicket)
+      setSelectedTeamMember(pendingAssignment)
+      
+      // Update tickets lists
+      setTickets(tickets.map(t => t._id === updatedTicket._id ? updatedTicket : t))
+      setFilteredTickets(filteredTickets.map(t => t._id === updatedTicket._id ? updatedTicket : t))
+      
+      // Close modal and reset
+      setShowAssignmentModal(false)
+      setPendingAssignment(null)
       setShowTeamDropdown(false)
+
+      setError('')
+      console.log('✅ Ticket assigned successfully to:', pendingAssignment.name)
+
     } catch (err) {
-      console.log('Assignment action triggered for:', member.name)
-      setSelectedTeamMember(member)
-      setShowTeamDropdown(false)
+      console.error('❌ Error in handleConfirmAssignment:', err)
+      setError(err.message || 'Failed to assign ticket. Please try again.')
+      setTimeout(() => setError(''), 4000)
+    } finally {
+      setAssignmentLoading(false)
+      console.log('🏁 Assignment process completed')
     }
+  }
+
+  // Function to cancel assignment
+  const handleCancelAssignment = () => {
+    setShowAssignmentModal(false)
+    setPendingAssignment(null)
   }
 
   const handleStatusChange = async (status) => {
@@ -239,10 +339,62 @@ const Messages = () => {
     }
   }
 
+  // Check if ticket is assigned
+  const isTicketAssigned = openTicket?.assignedTo
+
+  // =====================================================
+  // CONFIRMATION MODAL COMPONENT (INLINE)
+  // =====================================================
+  const ConfirmationModal = ({ isOpen, memberName }) => {
+    if (!isOpen) return null
+
+    return (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h2>Confirm Assignment</h2>
+            <button className="modal-close" onClick={handleCancelAssignment}>×</button>
+          </div>
+
+          <div className="modal-body">
+            <p className="modal-message">
+              Are you sure you want to assign this ticket to <strong>{memberName}</strong>?
+            </p>
+            {memberName && (
+              <div className="modal-member-info">
+                <span className="member-name">{memberName}</span>
+              </div>
+            )}
+          </div>
+
+          <div className="modal-footer">
+            <button 
+              className="modal-btn modal-btn-cancel" 
+              onClick={handleCancelAssignment}
+              disabled={assignmentLoading}
+            >
+              Cancel
+            </button>
+            <button 
+              className="modal-btn modal-btn-confirm" 
+              onClick={handleConfirmAssignment}
+              disabled={assignmentLoading}
+            >
+              {assignmentLoading ? 'Processing...' : 'Confirm Assignment'}
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="admin-dashboard">
-      {/* Sidebar */}
-      {/* <Sidebar userRole="admin" /> */}
+      {/* Confirmation Modal */}
+      <ConfirmationModal 
+        isOpen={showAssignmentModal} 
+        memberName={pendingAssignment?.name}
+      />
 
       {/* Main Content */}
       <div className="admin-main-content">
@@ -381,6 +533,11 @@ const Messages = () => {
             <div className="panel-chat">
               <div className="panel-header">
                 <p>Ticket#2025-{openTicket._id.slice(0, 5)}</p>
+                {isTicketAssigned && (
+                  <div className="assignment-badge">
+                    <span>✓ Assigned to {openTicket.assignedTo?.name || 'Team Member'}</span>
+                  </div>
+                )}
               </div>
 
               <div className="messages-list">
@@ -404,21 +561,30 @@ const Messages = () => {
                 ))}
               </div>
 
-              <div className="message-reply-box">
-                <textarea
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="Type here..."
-                  className="reply-textarea"
-                  rows="4"
-                />
-                <button
-                  className="reply-send-btn"
-                  onClick={handleSendMessage}
-                >
-                  Send Reply
-                </button>
-              </div>
+              {isTicketAssigned ? (
+                <div className="message-reply-box disabled-box">
+                  <div className="disabled-message">
+                    <p>This ticket has been assigned to <strong>{openTicket.assignedTo?.name}</strong>. You are now viewing as a member.</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="message-reply-box">
+                  <textarea
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    placeholder="Type here..."
+                    className="reply-textarea"
+                    rows="4"
+                  />
+                  <button
+                    className="reply-send-btn"
+                    onClick={handleSendMessage}
+                    disabled={sending}
+                  >
+                    {sending ? 'Sending...' : 'Send Reply'}
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* RIGHT PANEL - PROFILE & ASSIGNMENT */}
@@ -447,36 +613,66 @@ const Messages = () => {
               </div>
 
               {/* Team Members Assignment */}
-              <div className="team-assignment-section">
-                <h3 className="section-heading">Assign Team Member</h3>
+              {!isTicketAssigned && (
+                <div className="team-assignment-section">
+                  <h3 className="section-heading">Assign Team Member</h3>
 
-                <div className="team-dropdown-wrapper">
-                  <button
-                    className="team-dropdown-btn"
-                    onClick={() => setShowTeamDropdown(!showTeamDropdown)}
-                  >
-                    <span className="dropdown-text">
-                      {selectedTeamMember ? selectedTeamMember.name : 'Select Team Member'}
-                    </span>
-                    <span className={`dropdown-icon ${showTeamDropdown ? 'open' : ''}`}>▼</span>
-                  </button>
+                  <div className="team-dropdown-wrapper">
+                    <button
+                      className="team-dropdown-btn"
+                      onClick={() => setShowTeamDropdown(!showTeamDropdown)}
+                    >
+                      <span className="dropdown-text">
+                        {selectedTeamMember ? selectedTeamMember.name : 'Select Team Member'}
+                      </span>
+                      <span className={`dropdown-icon ${showTeamDropdown ? 'open' : ''}`}>▼</span>
+                    </button>
 
-                  {showTeamDropdown && (
-                    <div className="team-dropdown-menu">
-                      {teamMembers.map(member => (
-                        <button
-                          key={member.id}
-                          className={`team-option ${selectedTeamMember?.id === member.id ? 'selected' : ''}`}
-                          onClick={() => handleAssignTeamMember(member)}
-                        >
-                          <span className="team-option-name">{member.name}</span>
-                          <span className="assign-icon">→</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
+                    {showTeamDropdown && (
+                      <div className="team-dropdown-menu">
+                        {loadingTeamMembers ? (
+                          <div className="team-option">
+                            <span>Loading members...</span>
+                          </div>
+                        ) : teamMembers.length === 0 ? (
+                          <div className="team-option">
+                            <span>No team members available</span>
+                          </div>
+                        ) : (
+                          teamMembers.map(member => (
+                            <button
+                              key={member._id}
+                              className={`team-option ${selectedTeamMember?._id === member._id ? 'selected' : ''}`}
+                              onClick={() => handleTeamMemberClick(member)}
+                            >
+                              <span className="team-option-name">{member.name}</span>
+                              <span className="assign-icon">→</span>
+                            </button>
+                          ))
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {isTicketAssigned && (
+                <div className="assigned-member-section">
+                  <h3 className="section-heading">Assigned To</h3>
+                  <div className="assigned-member-info">
+                    <img
+                      src={`https://ui-avatars.com/api/?name=${openTicket.assignedTo?.name}&size=80&background=random&color=fff`}
+                      alt={openTicket.assignedTo?.name}
+                      className="assigned-member-avatar"
+                    />
+                    <div className="assigned-member-details">
+                      <p className="assigned-member-name">{openTicket.assignedTo?.name}</p>
+                      <p className="assigned-member-email">{openTicket.assignedTo?.email}</p>
+                      <span className="assigned-badge">✓ Assigned</span>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Ticket Status Dropdown */}
               <div className="status-dropdown-section">

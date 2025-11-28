@@ -5,11 +5,11 @@ import './SidebarStyles.css'
 
 // Import your custom assets
 import HomeIcon from '../../../Assets/SideBarAssets/DashBoard.png'
-import ChatBoxIcon from '../../../Assets//SideBarAssets/ChatBox.png'
-import AnalyticsIcon from '../../../Assets//SideBarAssets/Analytics.png'
+import ChatBoxIcon from '../../../Assets/SideBarAssets/ChatBox.png'
+import AnalyticsIcon from '../../../Assets/SideBarAssets/Analytics.png'
 import TeamMemberIcon from '../../../Assets/SideBarAssets/TeamMembers.png'
-import HomePageSettingIcon from '../../../Assets//SideBarAssets/HomePageSetting.png'
-import SettingIcon from '../../../Assets//SideBarAssets/Setting.png'
+import HomePageSettingIcon from '../../../Assets/SideBarAssets/HomePageSetting.png'
+import SettingIcon from '../../../Assets/SideBarAssets/Setting.png'
 import AppLogo from '../../../Assets/CommonAssets/appLogo.png'
 
 const Sidebar = ({ userRole = 'team_member', openTicket = null }) => {

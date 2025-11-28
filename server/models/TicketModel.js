@@ -56,6 +56,7 @@ const ticketSchema = new mongoose.Schema({
   resolvedBy: { type: String, default: null },
   resolvedAt: { type: Date, default: null },
   resolutionNote: { type: String, default: "" },
+  isMissedChat: { type: Boolean, default: false },
 
   // meta
   consentAt: { type: Date, default: null }, // store when user allowed messages

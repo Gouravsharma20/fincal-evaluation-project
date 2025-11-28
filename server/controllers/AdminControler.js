@@ -184,6 +184,23 @@ const resolveTicket = async (req, res) => {
     ticket.resolvedBy = req.user._id;
     ticket.resolutionNote = resolutionNote || "";
     ticket.lastMessageAt = Date.now();
+
+
+    const settings = await Settings.getInstance();
+    const resolutionTimeLimit = settings.resolutionTimeLimit;
+
+    const isMissed = checkAndMarkMissedChat(ticket, resolutionTimeLimit);
+
+    // If missed, increment the analytics counter for that week
+    if (isMissed) {
+      await incrementMissedChatsForWeek(ticket.createdAt);
+    }
+
+
+
+
+
+
     await ticket.save();
 
     return res.json({

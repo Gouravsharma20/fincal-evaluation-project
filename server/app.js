@@ -25,12 +25,16 @@ const authRoutes = require("./routes/AuthRoutes");
 const ticketRoutes = require("./routes/TicketRoutes");
 const adminRoutes = require("./routes/AdminRoutes");
 const teamRoutes = require("./routes/TeamRoutes");
+const userRoutes = require("./routes/UserRoutes");
+const uiSettingsRoutes = require("./routes/UiSettingRoutes")
 
 
 app.use("/api/auth", authRoutes);
 app.use("/api/tickets", ticketRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/team",teamRoutes);
+app.use("/api/user",userRoutes);
+app.use("/api/uisettings",uiSettingsRoutes);
 
 
 app.get("/api/admin/reset-password", async (req, res) => {
