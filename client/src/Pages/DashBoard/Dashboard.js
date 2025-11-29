@@ -21,7 +21,7 @@ const Dashboard = () => {
   const [sending, setSending] = useState(false)
   const [teamMembers, setTeamMembers] = useState([])
   const [loadingTeamMembers, setLoadingTeamMembers] = useState(false)
-  
+
   // Confirmation Modal State
   const [showAssignmentModal, setShowAssignmentModal] = useState(false)
   const [pendingAssignment, setPendingAssignment] = useState(null)
@@ -203,10 +203,10 @@ const Dashboard = () => {
     console.log('  Member:', member)
     console.log('  Member ID:', member._id)
     console.log('  Member Name:', member.name)
-    
+
     setPendingAssignment(member)
     console.log('  pendingAssignment state set to:', member)
-    
+
     setShowAssignmentModal(true)
     console.log('  showAssignmentModal set to true')
     console.log('  Modal should now be visible')
@@ -215,13 +215,13 @@ const Dashboard = () => {
   // Function to confirm and process assignment
   const handleConfirmAssignment = async () => {
     console.log('🔵 handleConfirmAssignment called')
-    
+
     if (!openTicket || !pendingAssignment) {
-      console.log('❌ Missing openTicket or pendingAssignment')
+      console.log(' Missing openTicket or pendingAssignment')
       return
     }
 
-    console.log('📋 Assignment Details:')
+    console.log(' Assignment Details:')
     console.log('  Ticket ID:', openTicket._id)
     console.log('  Member ID:', pendingAssignment._id)
     console.log('  Member Name:', pendingAssignment.name)
@@ -235,9 +235,9 @@ const Dashboard = () => {
         note: `Assigned by admin to ${pendingAssignment.name}`
       }
 
-    
+
       const response = await fetch(url, {
-        method: 'POST',  
+        method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -257,7 +257,7 @@ const Dashboard = () => {
 
       const data = await response.json()
       console.log('✅ Success Response:', data)
-      
+
       // Build updated ticket object with assignedTo info for frontend
       const updatedTicket = {
         ...openTicket,
@@ -270,17 +270,17 @@ const Dashboard = () => {
         },
         status: "assigned"
       }
-      
+
       console.log('🔄 Updated ticket with assignedTo:', updatedTicket.assignedTo)
-      
+
       // Update the open ticket
       setOpenTicket(updatedTicket)
       setSelectedTeamMember(pendingAssignment)
-      
+
       // Update tickets lists
       setTickets(tickets.map(t => t._id === updatedTicket._id ? updatedTicket : t))
       setFilteredTickets(filteredTickets.map(t => t._id === updatedTicket._id ? updatedTicket : t))
-      
+
       // Close modal and reset
       setShowAssignmentModal(false)
       setPendingAssignment(null)
@@ -305,402 +305,429 @@ const Dashboard = () => {
     setPendingAssignment(null)
   }
 
-  const handleStatusChange = async (status) => {
-    if (!openTicket) return
+  
 
-    try {
-      const response = await fetch(
-        `http://localhost:4000/api/admin/tickets/${openTicket._id}/status`,
-        {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ status })
+const handleStatusChange = async (status) => {
+  if (!openTicket) return;
+
+  try {
+    const response = await fetch(
+      `http://localhost:4000/api/admin/tickets/${openTicket._id}/resolve`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ resolutionNote: "" })
+      }
+    );
+
+    if (!response.ok) throw new Error('Failed to update status');
+
+    const freshResponse = await fetch(
+      `http://localhost:4000/api/admin/tickets/${openTicket._id}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
-      )
+      }
+    );
 
-      if (!response.ok) throw new Error('Failed to update status')
+    if (freshResponse.ok) {
+      const freshData = await freshResponse.json();
+      const freshTicket = freshData.ticket || freshData;
 
-      const data = await response.json()
-      setOpenTicket(data.ticket)
-      setTicketStatus(status)
-      setTickets(tickets.map(t => t._id === data.ticket._id ? data.ticket : t))
-      setShowStatusDropdown(false)
-    } catch (err) {
-      console.log('Status changed to:', status)
-      setTicketStatus(status)
-      setShowStatusDropdown(false)
+      setOpenTicket(freshTicket);
+      setTickets(tickets.map(t => t._id === freshTicket._id ? freshTicket : t));
+      setFilteredTickets(filteredTickets.map(t => t._id === freshTicket._id ? freshTicket : t));
+      
+      setTicketStatus(status);
+      setShowStatusDropdown(false);
+      console.log('✅ Status updated with isMissedChat:', freshTicket.isMissedChat);
+    } else {
+      throw new Error('Failed to fetch updated ticket');
     }
+
+  } catch (err) {
+    console.error('❌ Error in handleStatusChange:', err);
+    setError(err.message || 'Failed to update status');
+    setTimeout(() => setError(''), 3000);
   }
+};
 
-  // Check if ticket is assigned
-  const isTicketAssigned = openTicket?.assignedTo
 
-  // =====================================================
-  // CONFIRMATION MODAL COMPONENT (INLINE)
-  // =====================================================
-  const ConfirmationModal = ({ isOpen, memberName }) => {
-    if (!isOpen) return null
 
-    return (
-      <div className="modal-overlay">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h2>Confirm Assignment</h2>
-            <button className="modal-close" onClick={handleCancelAssignment}>×</button>
-          </div>
 
-          <div className="modal-body">
-            <p className="modal-message">
-              Are you sure you want to assign this ticket to <strong>{memberName}</strong>?
-            </p>
-            {memberName && (
-              <div className="modal-member-info">
-                <span className="member-name">{memberName}</span>
-              </div>
-            )}
-          </div>
 
-          <div className="modal-footer">
-            <button 
-              className="modal-btn modal-btn-cancel" 
-              onClick={handleCancelAssignment}
-              disabled={assignmentLoading}
-            >
-              Cancel
-            </button>
-            <button 
-              className="modal-btn modal-btn-confirm" 
-              onClick={handleConfirmAssignment}
-              disabled={assignmentLoading}
-            >
-              {assignmentLoading ? 'Processing...' : 'Confirm Assignment'}
-            </button>
-          </div>
+
+// Check if ticket is assigned
+const isTicketAssigned = openTicket?.assignedTo
+
+// =====================================================
+// CONFIRMATION MODAL COMPONENT (INLINE)
+// =====================================================
+const ConfirmationModal = ({ isOpen, memberName }) => {
+  if (!isOpen) return null
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h2>Confirm Assignment</h2>
+          <button className="modal-close" onClick={handleCancelAssignment}>×</button>
+        </div>
+
+        <div className="modal-body">
+          <p className="modal-message">
+            Are you sure you want to assign this ticket to <strong>{memberName}</strong>?
+          </p>
+          {memberName && (
+            <div className="modal-member-info">
+              <span className="member-name">{memberName}</span>
+            </div>
+          )}
+        </div>
+
+        <div className="modal-footer">
+          <button
+            className="modal-btn modal-btn-cancel"
+            onClick={handleCancelAssignment}
+            disabled={assignmentLoading}
+          >
+            Cancel
+          </button>
+          <button
+            className="modal-btn modal-btn-confirm"
+            onClick={handleConfirmAssignment}
+            disabled={assignmentLoading}
+          >
+            {assignmentLoading ? 'Processing...' : 'Confirm Assignment'}
+          </button>
         </div>
       </div>
-    )
-  }
+    </div>
+  )
+}
 
-  // =====================================================
-  // MAIN RENDER
-  // =====================================================
-  return (
-    <div className="admin-dashboard">
-      {/* Confirmation Modal */}
-      <ConfirmationModal 
-        isOpen={showAssignmentModal} 
-        memberName={pendingAssignment?.name}
-      />
+// =====================================================
+// MAIN RENDER
+// =====================================================
+return (
+  <div className="admin-dashboard">
+    {/* Confirmation Modal */}
+    <ConfirmationModal
+      isOpen={showAssignmentModal}
+      memberName={pendingAssignment?.name}
+    />
 
-      <div className="admin-main-content">
-        {!openTicket && (
-          <>
-            <div className="admin-search-header">
-              <div className="search-wrapper">
-                <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <path d="m21 21-4.35-4.35"></path>
-                </svg>
-                <input
-                  type="text"
-                  placeholder="Search for ticket"
-                  value={searchQuery}
-                  onChange={handleSearch}
-                  className="search-input-main"
-                />
-              </div>
+    <div className="admin-main-content">
+      {!openTicket && (
+        <>
+          <div className="admin-search-header">
+            <div className="search-wrapper">
+              <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+              </svg>
+              <input
+                type="text"
+                placeholder="Search for ticket"
+                value={searchQuery}
+                onChange={handleSearch}
+                className="search-input-main"
+              />
             </div>
+          </div>
 
-            <div className="filter-tabs-section">
-              <button
-                className={`filter-tab ${filter === 'all' ? 'active' : ''}`}
-                onClick={() => handleFilterChange('all')}
-              >
-                All Tickets
-              </button>
-              <button
-                className={`filter-tab ${filter === 'resolved' ? 'active' : ''}`}
-                onClick={() => handleFilterChange('resolved')}
-              >
-                Resolved
-              </button>
-              <button
-                className={`filter-tab ${filter === 'unresolved' ? 'active' : ''}`}
-                onClick={() => handleFilterChange('unresolved')}
-              >
-                Unresolved
-              </button>
-            </div>
+          <div className="filter-tabs-section">
+            <button
+              className={`filter-tab ${filter === 'all' ? 'active' : ''}`}
+              onClick={() => handleFilterChange('all')}
+            >
+              All Tickets
+            </button>
+            <button
+              className={`filter-tab ${filter === 'resolved' ? 'active' : ''}`}
+              onClick={() => handleFilterChange('resolved')}
+            >
+              Resolved
+            </button>
+            <button
+              className={`filter-tab ${filter === 'unresolved' ? 'active' : ''}`}
+              onClick={() => handleFilterChange('unresolved')}
+            >
+              Unresolved
+            </button>
+          </div>
 
-            <div className="tickets-cards-container">
-              {loading && <p className="status-text">Loading tickets...</p>}
-              {error && <p className="status-text error-text">Error: {error}</p>}
+          <div className="tickets-cards-container">
+            {loading && <p className="status-text">Loading tickets...</p>}
+            {error && <p className="status-text error-text">Error: {error}</p>}
 
-              {!loading && filteredTickets.length === 0 && (
-                <p className="status-text">No tickets found</p>
-              )}
+            {!loading && filteredTickets.length === 0 && (
+              <p className="status-text">No tickets found</p>
+            )}
 
-              {!loading && filteredTickets.map((ticket, idx) => (
-                <div key={ticket._id} className="ticket-card-box">
-                  <div className="card-top-section">
-                    <h3 className="card-ticket-id">Ticket# 2023-{String(idx + 1).padStart(5, '0')}</h3>
-                    <span className="card-posted-time">
-                      Posted at {new Date(ticket.createdAt).toLocaleTimeString('en-US', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true
-                      })}
-                    </span>
+            {!loading && filteredTickets.map((ticket, idx) => (
+              <div key={ticket._id} className="ticket-card-box">
+                <div className="card-top-section">
+                  <h3 className="card-ticket-id">Ticket# 2023-{String(idx + 1).padStart(5, '0')}</h3>
+                  <span className="card-posted-time">
+                    Posted at {new Date(ticket.createdAt).toLocaleTimeString('en-US', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true
+                    })}
+                  </span>
+                </div>
+
+                <div className="card-message-section">
+                  <p className="card-initial-message">
+                    {ticket.messages[0]?.text || 'No message'}
+                  </p>
+                </div>
+
+                <div className="card-bottom-section">
+                  <div className="card-user-info">
+                    <img
+                      src={`https://ui-avatars.com/api/?name=${ticket.userName}&background=random&color=fff&size=48`}
+                      alt={ticket.userName}
+                      className="card-user-avatar"
+                    />
+                    <div className="card-user-details">
+                      <p className="card-user-name">{ticket.userName}</p>
+                      <p className="card-user-email">{ticket.userEmail}</p>
+                      <p className="card-user-phone">+{ticket.userPhoneNumber}</p>
+                    </div>
                   </div>
+                  <button
+                    className="open-ticket-btn-card"
+                    onClick={() => handleOpenTicket(ticket)}
+                  >
+                    Open Ticket
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
 
-                  <div className="card-message-section">
-                    <p className="card-initial-message">
+      {openTicket && (
+        <div className="three-panel-container">
+          <div className="panel-left-chats">
+            <div className="chats-header">
+              <h3>Chats</h3>
+            </div>
+
+            <div className="chats-list">
+              {filteredTickets.map((ticket, idx) => (
+                <div
+                  key={ticket._id}
+                  className={`chat-list-item ${openTicket._id === ticket._id ? 'active' : ''}`}
+                  onClick={() => handleOpenTicket(ticket)}
+                >
+                  <img
+                    src={`https://ui-avatars.com/api/?name=${ticket.userName}&background=random&color=fff&size=40`}
+                    alt={ticket.userName}
+                    className="chat-avatar"
+                  />
+                  <div className="chat-list-info">
+                    <h4 className="chat-name">Chat {idx + 1}</h4>
+                    <p className="chat-preview">
                       {ticket.messages[0]?.text || 'No message'}
                     </p>
-                  </div>
-
-                  <div className="card-bottom-section">
-                    <div className="card-user-info">
-                      <img
-                        src={`https://ui-avatars.com/api/?name=${ticket.userName}&background=random&color=fff&size=48`}
-                        alt={ticket.userName}
-                        className="card-user-avatar"
-                      />
-                      <div className="card-user-details">
-                        <p className="card-user-name">{ticket.userName}</p>
-                        <p className="card-user-email">{ticket.userEmail}</p>
-                        <p className="card-user-phone">+{ticket.userPhoneNumber}</p>
-                      </div>
-                    </div>
-                    <button
-                      className="open-ticket-btn-card"
-                      onClick={() => handleOpenTicket(ticket)}
-                    >
-                      Open Ticket
-                    </button>
                   </div>
                 </div>
               ))}
             </div>
-          </>
-        )}
+          </div>
 
-        {openTicket && (
-          <div className="three-panel-container">
-            <div className="panel-left-chats">
-              <div className="chats-header">
-                <h3>Chats</h3>
+          <div className="panel-chat">
+            <div className="panel-header">
+              <p>Ticket#2025-{openTicket._id.slice(0, 5)}</p>
+              {isTicketAssigned && (
+                <div className="assignment-badge">
+                  <span>✓ Assigned to {openTicket.assignedTo?.name || 'Team Member'}</span>
+                </div>
+              )}
+            </div>
+
+            <div className="messages-list">
+              {openTicket.messages && openTicket.messages.map((msg, idx) => (
+                <div key={idx} className={`msg-item msg-${msg.senderType}`}>
+                  <div className="msg-info">
+                    <span className="msg-sender">
+                      {openTicket.userName}
+                    </span>
+                    <span className="msg-timestamp">
+                      {new Date(msg.createdAt).toLocaleDateString("en-US", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric"
+                      })}
+                    </span>
+                  </div>
+                  <p className="msg-content">{msg.text}</p>
+                </div>
+              ))}
+            </div>
+
+            {isTicketAssigned ? (
+              <div className="message-reply-box disabled-box">
+                <div className="disabled-message">
+                  <p>This ticket has been assigned to <strong>{openTicket.assignedTo?.name}</strong>. You are now viewing as a member.</p>
+                </div>
+              </div>
+            ) : (
+              <div className="message-reply-box">
+                {openTicket?.isMissedChat && (
+                  <p style={{ color: 'red', marginBottom: '10px', fontSize: '14px', fontWeight: '500' }}>
+                    Replying to missed chat
+                  </p>
+                )}
+                <textarea
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  placeholder="Type here..."
+                  className="reply-textarea"
+                  rows="4"
+                />
+                <button
+                  className="reply-send-btn"
+                  onClick={handleSendMessage}
+                  disabled={sending}
+                >
+                  {sending ? 'Sending...' : 'Send Reply'}
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="panel-profile">
+            <div className="customer-profile-section">
+              <div className="profile-avatar-container">
+                <img
+                  src={`https://ui-avatars.com/api/?name=${openTicket.userName}&size=120&background=random&color=fff`}
+                  alt={openTicket.userName}
+                  className="profile-avatar-large"
+                />
               </div>
 
-              <div className="chats-list">
-                {filteredTickets.map((ticket, idx) => (
-                  <div
-                    key={ticket._id}
-                    className={`chat-list-item ${openTicket._id === ticket._id ? 'active' : ''}`}
-                    onClick={() => handleOpenTicket(ticket)}
-                  >
-                    <img
-                      src={`https://ui-avatars.com/api/?name=${ticket.userName}&background=random&color=fff&size=40`}
-                      alt={ticket.userName}
-                      className="chat-avatar"
-                    />
-                    <div className="chat-list-info">
-                      <h4 className="chat-name">Chat {idx + 1}</h4>
-                      <p className="chat-preview">
-                        {ticket.messages[0]?.text || 'No message'}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+              <div className="profile-details-section">
+                <h3>{openTicket.userName}</h3>
+                <div className="profile-info-item">
+                  <label>Email</label>
+                  <p>{openTicket.userEmail}</p>
+                </div>
+                <div className="profile-info-item">
+                  <label>Phone</label>
+                  <p>+{openTicket.userPhoneNumber}</p>
+                </div>
               </div>
             </div>
 
-            <div className="panel-chat">
-              <div className="panel-header">
-                <p>Ticket#2025-{openTicket._id.slice(0, 5)}</p>
-                {isTicketAssigned && (
-                  <div className="assignment-badge">
-                    <span>✓ Assigned to {openTicket.assignedTo?.name || 'Team Member'}</span>
+            {!isTicketAssigned && (
+              <div className="team-assignment-section">
+                <h3 className="section-heading">Assign Team Member</h3>
+
+                <div className="team-dropdown-wrapper">
+                  <button
+                    className="team-dropdown-btn"
+                    onClick={() => setShowTeamDropdown(!showTeamDropdown)}
+                  >
+                    <span className="dropdown-text">
+                      {selectedTeamMember ? selectedTeamMember.name : 'Select Team Member'}
+                    </span>
+                    <span className={`dropdown-icon ${showTeamDropdown ? 'open' : ''}`}>▼</span>
+                  </button>
+
+                  {showTeamDropdown && (
+                    <div className="team-dropdown-menu">
+                      {loadingTeamMembers ? (
+                        <div className="team-option">
+                          <span>Loading members...</span>
+                        </div>
+                      ) : teamMembers.length === 0 ? (
+                        <div className="team-option">
+                          <span>No team members available</span>
+                        </div>
+                      ) : (
+                        teamMembers.map(member => (
+                          <button
+                            key={member._id}
+                            className={`team-option ${selectedTeamMember?._id === member._id ? 'selected' : ''}`}
+                            onClick={() => handleTeamMemberClick(member)}
+                          >
+                            <span className="team-option-name">{member.name}</span>
+                            <span className="assign-icon">→</span>
+                          </button>
+                        ))
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {isTicketAssigned && (
+              <div className="assigned-member-section">
+                <h3 className="section-heading">Assigned To</h3>
+                <div className="assigned-member-info">
+                  <img
+                    src={`https://ui-avatars.com/api/?name=${openTicket.assignedTo?.name}&size=80&background=random&color=fff`}
+                    alt={openTicket.assignedTo?.name}
+                    className="assigned-member-avatar"
+                  />
+                  <div className="assigned-member-details">
+                    <p className="assigned-member-name">{openTicket.assignedTo?.name}</p>
+                    <p className="assigned-member-email">{openTicket.assignedTo?.email}</p>
+                    <span className="assigned-badge">✓ Assigned</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="status-dropdown-section">
+              <h3 className="section-heading">Ticket Status</h3>
+
+              <div className="status-dropdown-wrapper">
+                <button
+                  className="status-dropdown-btn"
+                  onClick={() => setShowStatusDropdown(!showStatusDropdown)}
+                >
+                  <span className={`status-badge status-${ticketStatus}`}>
+                    {ticketStatus.charAt(0).toUpperCase() + ticketStatus.slice(1)}
+                  </span>
+                  <span className={`dropdown-icon ${showStatusDropdown ? 'open' : ''}`}>▼</span>
+                </button>
+
+                {showStatusDropdown && (
+                  <div className="status-dropdown-menu">
+                    <button
+                      className={`status-option ${ticketStatus === 'unresolved' ? 'active' : ''}`}
+                      onClick={() => handleStatusChange('unresolved')}
+                    >
+                      Unresolved
+                    </button>
+                    <button
+                      className={`status-option ${ticketStatus === 'resolved' ? 'active' : ''}`}
+                      onClick={() => handleStatusChange('resolved')}
+                    >
+                      Resolved
+                    </button>
                   </div>
                 )}
               </div>
-
-              <div className="messages-list">
-                {openTicket.messages && openTicket.messages.map((msg, idx) => (
-                  <div key={idx} className={`msg-item msg-${msg.senderType}`}>
-                    <div className="msg-info">
-                      <span className="msg-sender">
-                        {openTicket.userName}
-                      </span>
-                      <span className="msg-timestamp">
-                        {new Date(msg.createdAt).toLocaleDateString("en-US", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric"
-                        })}
-                      </span>
-                    </div>
-                    <p className="msg-content">{msg.text}</p>
-                  </div>
-                ))}
-              </div>
-
-              {isTicketAssigned ? (
-                <div className="message-reply-box disabled-box">
-                  <div className="disabled-message">
-                    <p>This ticket has been assigned to <strong>{openTicket.assignedTo?.name}</strong>. You are now viewing as a member.</p>
-                  </div>
-                </div>
-              ) : (
-                <div className="message-reply-box">
-                  {openTicket?.isMissedChat && (
-                    <p style={{ color: 'red', marginBottom: '10px', fontSize: '14px', fontWeight: '500' }}>
-                      Replying to missed chat
-                    </p>
-                  )}
-                  <textarea
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    placeholder="Type here..."
-                    className="reply-textarea"
-                    rows="4"
-                  />
-                  <button
-                    className="reply-send-btn"
-                    onClick={handleSendMessage}
-                    disabled={sending}
-                  >
-                    {sending ? 'Sending...' : 'Send Reply'}
-                  </button>
-                </div>
-              )}
-            </div>
-
-            <div className="panel-profile">
-              <div className="customer-profile-section">
-                <div className="profile-avatar-container">
-                  <img
-                    src={`https://ui-avatars.com/api/?name=${openTicket.userName}&size=120&background=random&color=fff`}
-                    alt={openTicket.userName}
-                    className="profile-avatar-large"
-                  />
-                </div>
-
-                <div className="profile-details-section">
-                  <h3>{openTicket.userName}</h3>
-                  <div className="profile-info-item">
-                    <label>Email</label>
-                    <p>{openTicket.userEmail}</p>
-                  </div>
-                  <div className="profile-info-item">
-                    <label>Phone</label>
-                    <p>+{openTicket.userPhoneNumber}</p>
-                  </div>
-                </div>
-              </div>
-
-              {!isTicketAssigned && (
-                <div className="team-assignment-section">
-                  <h3 className="section-heading">Assign Team Member</h3>
-
-                  <div className="team-dropdown-wrapper">
-                    <button
-                      className="team-dropdown-btn"
-                      onClick={() => setShowTeamDropdown(!showTeamDropdown)}
-                    >
-                      <span className="dropdown-text">
-                        {selectedTeamMember ? selectedTeamMember.name : 'Select Team Member'}
-                      </span>
-                      <span className={`dropdown-icon ${showTeamDropdown ? 'open' : ''}`}>▼</span>
-                    </button>
-
-                    {showTeamDropdown && (
-                      <div className="team-dropdown-menu">
-                        {loadingTeamMembers ? (
-                          <div className="team-option">
-                            <span>Loading members...</span>
-                          </div>
-                        ) : teamMembers.length === 0 ? (
-                          <div className="team-option">
-                            <span>No team members available</span>
-                          </div>
-                        ) : (
-                          teamMembers.map(member => (
-                            <button
-                              key={member._id}
-                              className={`team-option ${selectedTeamMember?._id === member._id ? 'selected' : ''}`}
-                              onClick={() => handleTeamMemberClick(member)}
-                            >
-                              <span className="team-option-name">{member.name}</span>
-                              <span className="assign-icon">→</span>
-                            </button>
-                          ))
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {isTicketAssigned && (
-                <div className="assigned-member-section">
-                  <h3 className="section-heading">Assigned To</h3>
-                  <div className="assigned-member-info">
-                    <img
-                      src={`https://ui-avatars.com/api/?name=${openTicket.assignedTo?.name}&size=80&background=random&color=fff`}
-                      alt={openTicket.assignedTo?.name}
-                      className="assigned-member-avatar"
-                    />
-                    <div className="assigned-member-details">
-                      <p className="assigned-member-name">{openTicket.assignedTo?.name}</p>
-                      <p className="assigned-member-email">{openTicket.assignedTo?.email}</p>
-                      <span className="assigned-badge">✓ Assigned</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className="status-dropdown-section">
-                <h3 className="section-heading">Ticket Status</h3>
-
-                <div className="status-dropdown-wrapper">
-                  <button
-                    className="status-dropdown-btn"
-                    onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-                  >
-                    <span className={`status-badge status-${ticketStatus}`}>
-                      {ticketStatus.charAt(0).toUpperCase() + ticketStatus.slice(1)}
-                    </span>
-                    <span className={`dropdown-icon ${showStatusDropdown ? 'open' : ''}`}>▼</span>
-                  </button>
-
-                  {showStatusDropdown && (
-                    <div className="status-dropdown-menu">
-                      <button
-                        className={`status-option ${ticketStatus === 'unresolved' ? 'active' : ''}`}
-                        onClick={() => handleStatusChange('unresolved')}
-                      >
-                        Unresolved
-                      </button>
-                      <button
-                        className={`status-option ${ticketStatus === 'resolved' ? 'active' : ''}`}
-                        onClick={() => handleStatusChange('resolved')}
-                      >
-                        Resolved
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
-  )
+  </div>
+)
 }
 
 export default Dashboard

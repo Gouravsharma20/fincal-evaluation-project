@@ -1,176 +1,80 @@
-.sidebar-container {
-  width: 88px;
-  background-color: #ffffff;
-  border-right: 1px solid #e5e5e5;
+/* Sidebar container */
+.sidebar-wrapper {
+  width: 90px;
+  background: #ffffff;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: space-between;
-  padding: 24px 0;
-  flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-right: 1px solid #e6e6e6;
+  padding: 20px 0;
 }
 
-.sidebar-top {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-.logo-icon {
-  width: 50px;  /* adjust as needed */
-  height: 50px; /* adjust as needed */
-  object-fit: contain;
+/* Logo */
+.sidebar-logo img {
+  width: 50px;
+  display: block;
+  margin: 0 auto 20px auto;
 }
 
-.logo-section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 40px;
-}
-
-.logo-icon {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 28px;
-  font-weight: 600;
-}
-
+/* Navigation icons */
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  flex: 1;
+  gap: 22px;
   align-items: center;
-  width: 100%;
 }
 
-.nav-item {
-  width: 52px;
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
+/* Single icon button */
+.sidebar-btn {
+  background: none;
+  border: none;
   cursor: pointer;
-  color: #b0b0b0;
-  transition: all 0.3s ease;
-  background-color: transparent;
-  border: 2px solid transparent;
   position: relative;
-  padding: 0;
-}
-
-.nav-item:hover {
-  background-color: #f0f0f0;
-  color: #667eea;
-}
-
-.nav-item.active {
-  background-color: #e3f2fd;
-  color: #667eea;
-  border-color: #667eea;
-}
-
-.nav-icon-image {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-  transition: all 0.3s ease;
-}
-
-.nav-item:hover .nav-icon-image {
-  filter: brightness(0) saturate(100%) invert(25%) sepia(80%) saturate(1600%) hue-rotate(220deg);
-}
-
-.nav-item.active .nav-icon-image {
-  filter: brightness(0) saturate(100%) invert(25%) sepia(80%) saturate(1600%) hue-rotate(220deg);
-}
-
-.nav-tooltip {
-  position: absolute;
-  bottom: -40px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #1a1a1a;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.2s;
-  pointer-events: none;
-  z-index: 1000;
-}
-
-.nav-item:hover .nav-tooltip {
-  opacity: 1;
-  visibility: visible;
-  bottom: -35px;
-}
-
-.sidebar-bottom {
+  padding: 10px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  border-top: 1px solid #e5e5e5;
-  padding-top: 16px;
 }
 
-@media (max-width: 768px) {
-  .sidebar-container {
-    width: 100%;
-    height: 88px;
-    flex-direction: row;
-    padding: 0 24px;
-    justify-content: flex-start;
-  }
+.sidebar-btn .icon {
+  width: 28px;
+  height: 28px;
+  transition: transform 0.2s ease-in-out;
+}
 
-  .sidebar-top {
-    margin-right: 20px;
-  }
+.sidebar-btn:hover .icon {
+  transform: scale(1.12);
+}
 
-  .logo-section {
-    margin-bottom: 0;
-  }
+/* Label below the active icon */
+.label {
+  margin-top: 6px;
+  font-size: 11px;
+  opacity: 0;
+  transition: 0.2s;
+  color: #333;
+  font-weight: 500;
+}
 
-  .sidebar-nav {
-    flex-direction: row;
-    flex: 1;
-    gap: 8px;
-  }
+.sidebar-btn.active .label {
+  opacity: 1;
+}
 
-  .nav-item {
-    width: 48px;
-    height: 48px;
-  }
+/* RIGHT BLUE INDICATOR */
+.sidebar-btn.active::after {
+  content: "";
+  position: absolute;
+  right: -8px;
+  width: 6px;
+  height: 35px;
+  border-radius: 8px 0 0 8px;
+  background-color: #3D63DD;
+}
 
-  .nav-icon-image {
-    width: 24px;
-    height: 24px;
-  }
-
-  .sidebar-bottom {
-    border-top: none;
-    border-left: 1px solid #e5e5e5;
-    padding-top: 0;
-    padding-left: 16px;
-    margin-left: auto;
-  }
-
-  .nav-tooltip {
-    display: none;
-  }
+/* Bottom settings */
+.sidebar-bottom {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 }

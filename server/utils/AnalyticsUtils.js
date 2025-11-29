@@ -36,12 +36,13 @@ const calculateAverageReplyTime = async () => {
 
   if (resolvedTickets.length === 0) return 0;
 
-  const totalMinutes = resolvedTickets.reduce((sum, ticket) => {
-    const minutes = (ticket.resolvedAt - ticket.createdAt) / (1000 * 60);
-    return sum + minutes;
+
+  const totalMilliseconds = resolvedTickets.reduce((sum, ticket) => {
+    const milliseconds = (ticket.resolvedAt - ticket.createdAt);
+    return sum + milliseconds;
   }, 0);
 
-  const average = totalMinutes / resolvedTickets.length;
+  const average = totalMilliseconds / resolvedTickets.length;
   return Math.floor(average);
 };
 
@@ -70,7 +71,11 @@ const getMissedChatsLast10Weeks = async () => {
     .limit(10);
 
   // Reverse to show chronologically (oldest to newest)
-  return analyticsData.reverse();
+  return analyticsData.reverse().map(item => ({
+    week: `Week ${item.week}`,  // ✅ Format: "Week 1", "Week 2", etc.
+    year: item.year,
+    missedChatsCount: item.missedChatsCount
+  }));
 };
 
 /**

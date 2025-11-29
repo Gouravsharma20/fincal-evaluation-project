@@ -46,7 +46,7 @@ function AppContent() {
         <div className="app-layout">
           <Sidebar userRole="admin" />
           <div className='app-main'>
-            <NavBar/>
+            {/* <NavBar/> */}
             <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/messages" element={<Messages />} />
@@ -63,6 +63,7 @@ function AppContent() {
         <div className="app-layout">
           <Sidebar />
           <div className='app-main'>
+            <NavBar/>
             <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/messages" element={<Messages />} />

@@ -13,7 +13,7 @@ export const useLogin = () => {
             const response = await fetch("http://localhost:4000/api/auth/login", {
                 method: "POST",
                 headers: { "Content-type": "application/json" },
-                body: JSON.stringify({email, password})
+                body: JSON.stringify({ email, password })
             });
 
             const data = await response.json();
@@ -25,6 +25,13 @@ export const useLogin = () => {
                 setError(errmsg);
                 return { ok: false, error: errmsg };
             }
+            const cleanData = {
+                user: data.user,
+                token: data.token
+            };
+
+            localStorage.setItem("user", JSON.stringify(cleanData));
+            dispatch({ type: "LOGIN", payload: cleanData });
 
             localStorage.setItem("user", JSON.stringify(data));
             dispatch({ type: "LOGIN", payload: data });

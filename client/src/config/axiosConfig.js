@@ -4,10 +4,31 @@ const axiosInstance = axios.create();
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    // ════════════════════════════════════════════════════════════════════════
+    // FIX: Get token from localStorage 'user' JSON object
+    // ════════════════════════════════════════════════════════════════════════
+    
+    try {
+      const storedUser = localStorage.getItem('user');
+      
+      if (storedUser) {
+        // Parse the JSON to get token
+        const userData = JSON.parse(storedUser);
+        const token = userData.token;
+        
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+          console.log('✓ Token attached to request'); // For debugging
+        } else {
+          console.warn('⚠️ Token not found in stored user data');
+        }
+      } else {
+        console.warn('⚠️ No user data in localStorage');
+      }
+    } catch (error) {
+      console.error('❌ Error retrieving token from localStorage:', error);
     }
+    
     return config;
   },
   (error) => Promise.reject(error)

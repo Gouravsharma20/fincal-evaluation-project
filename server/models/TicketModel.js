@@ -49,7 +49,7 @@ const ticketSchema = new mongoose.Schema({
 
   // ownership & assignment: by default admin owns new tickets
   status: { type: String, enum: ["open", "assigned", "in_progress", "resolved", "closed"], default: "open" },
-  assignedToType: { type: String, enum: ["admin", "team", "agent", null], default: "admin" },
+  assignedToType: { type: String, enum: ["admin", "team", null], default: "admin" },
   assignedToId: { type: String, default: null }, // e.g. teamId or adminId
 
   // resolution

@@ -73,7 +73,7 @@ const uiSettingsSchema = new mongoose.Schema(
     welcomeMessage: {
       type: String,
       default: '👋 Want to chat about Hubly? I\'m a chatbot here to help you find your way.',
-      maxlength: 50
+      maxlength: 200
     },
 
     // ════════════════════════════════════════════════════════════════════════

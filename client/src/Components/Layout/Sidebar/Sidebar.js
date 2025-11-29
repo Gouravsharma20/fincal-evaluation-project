@@ -1,140 +1,84 @@
-import React from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-// import { useAuthContext } from '../../../Hooks/useAuthContext'
 import './SidebarStyles.css'
 
-// Import your custom assets
 import HomeIcon from '../../../Assets/SideBarAssets/DashBoard.png'
 import ChatBoxIcon from '../../../Assets/SideBarAssets/ChatBox.png'
 import AnalyticsIcon from '../../../Assets/SideBarAssets/Analytics.png'
 import TeamMemberIcon from '../../../Assets/SideBarAssets/TeamMembers.png'
 import HomePageSettingIcon from '../../../Assets/SideBarAssets/HomePageSetting.png'
 import SettingIcon from '../../../Assets/SideBarAssets/Setting.png'
-import AppLogo from '../../../Assets/CommonAssets/appLogo.png'
+import AppLogo from '../../../Assets/SideBarAssets/SidebarLogo.png'
+import ProfileIcon from '../../../Assets/SideBarAssets/ProfileIcon.png'
 
-const Sidebar = ({ userRole = 'team_member', openTicket = null }) => {
+const Sidebar = ({ userRole = 'team_member' }) => {
   const navigate = useNavigate()
   const location = useLocation()
-  // const { user } = useAuthContext()
 
-  // Navigation configuration with custom icons
+  // ---- NEVER TOUCH THIS LOGIC ----
   const getNavItems = () => {
     const commonItems = [
-      {
-        id: 'dashboard',
-        label: 'Dashboard',
-        path: '/dashboard',
-        icon: HomeIcon,
-        tooltip: 'Dashboard'
-      },
-      {
-        id: 'messages',
-        label: 'Messages',
-        path: '/messages',
-        icon: ChatBoxIcon,
-        tooltip: 'Chat & Messages'
-      },
-      {
-        id: 'settings',
-        label: 'Settings',
-        path: '/settings',
-        icon: SettingIcon,
-        tooltip: 'Settings'
-      }
+      { id: 'dashboard', label: 'Dashboard', path: '/dashboard', icon: HomeIcon },
+      { id: 'messages', label: 'Messages', path: '/messages', icon: ChatBoxIcon },
+      { id: 'settings', label: 'Settings', path: '/settings', icon: SettingIcon },
     ]
 
     const adminOnlyItems = [
-      {
-        id: 'analytics',
-        label: 'Analytics',
-        path: '/analytics',
-        icon: AnalyticsIcon,
-        tooltip: 'Analytics & Reports'
-      },
-      {
-        id: 'team',
-        label: 'Team',
-        path: '/team-management',
-        icon: TeamMemberIcon,
-        tooltip: 'Team Management'
-      },
-      {
-        id: 'ui-settings',
-        label: 'UI Settings',
-        path: '/ui-settings',
-        icon: HomePageSettingIcon,
-        tooltip: 'UI Settings'
-      }
+      { id: 'analytics', label: 'Analytics', path: '/analytics', icon: AnalyticsIcon },
+      { id: 'team', label: 'Team', path: '/team-management', icon: TeamMemberIcon },
+      { id: 'ui-settings', label: 'UI Settings', path: '/ui-settings', icon: HomePageSettingIcon }
     ]
 
     if (userRole === 'admin') {
       return [
-        commonItems[0],
-        commonItems[1],
+        commonItems[0],  // Dashboard
+        commonItems[1],  // Messages
         ...adminOnlyItems,
-        commonItems[2]
+        commonItems[2]   // Settings
       ]
-    } else {
-      return commonItems
     }
+
+    // non-admin user → only dashboard, messages, settings
+    return commonItems
   }
 
   const navItems = getNavItems()
   const isActive = (path) => location.pathname === path
 
-  const mainItems = navItems.filter(item => item.id !== 'settings')
-  const settingsItem = navItems.find(item => item.id === 'settings')
-
-
-
+  const mainItems = navItems
+  const settingsItem = navItems.find(i => i.id === 'settings')
 
   return (
-    <div className="sidebar-container">
-      {/* Logo Section */}
-      <div className="sidebar-top">
-        <div className="logo-section">
-          <img src={AppLogo} alt="App Logo" className="logo-icon" />
-        </div>
+    <div className="sidebar-wrapper">
+
+      <div className="sidebar-logo">
+        <img src={AppLogo} alt="App Logo" />
       </div>
 
-      {/* Main Navigation Items */}
-      <nav className="sidebar-nav">
-        {mainItems.map(item => (
+      <div className="sidebar-nav">
+        {mainItems.map((item) => (
           <button
             key={item.id}
-            className={`nav-item ${isActive(item.path) ? 'active' : ''}`}
-            onClick={() => {
-              navigate(item.path)
-            }}
-            title={item.tooltip}
+            className={`sidebar-btn ${isActive(item.path) ? 'active' : ''}`}
+            onClick={() => navigate(item.path)}
           >
-            <img
-              src={item.icon}
-              alt={item.label}
-              className="nav-icon-image"
-            />
-            <span className="nav-tooltip">{item.tooltip}</span>
+            <img src={item.icon} alt={item.label} className="icon" />
+            <span className="label">{item.label}</span>
           </button>
         ))}
-      </nav>
+      </div>
 
-      {/* Settings at Bottom */}
+
+      {/* ⭐ BOTTOM ICON — CHANGED TO PROFILE ICON */}
       {settingsItem && (
         <div className="sidebar-bottom">
-          <button
-            className={`nav-item ${isActive(settingsItem.path) ? 'active' : ''}`}
-            onClick={() => navigate(settingsItem.path)}
-            title={settingsItem.tooltip}
-          >
-            <img
-              src={settingsItem.icon}
-              alt={settingsItem.label}
-              className="nav-icon-image"
-            />
-            <span className="nav-tooltip">{settingsItem.tooltip}</span>
-          </button>
+          <img
+            src={ProfileIcon} 
+            alt="Profile"
+            className="nav-icon-image"
+          />
         </div>
       )}
+
     </div>
   )
 }

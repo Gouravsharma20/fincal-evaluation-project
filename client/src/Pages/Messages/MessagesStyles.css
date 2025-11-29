@@ -594,3 +594,7 @@
     max-height: 30%;
   }
 }
+
+.message-box { z-index: 50; }
+.chat-button { z-index: 60; }
+.chat-modal  { z-index: 70; }

@@ -1,34 +1,52 @@
-/* App.css - minimal & focused on layout */
+/* App.css - improved layout */
 
-/* Basic reset for the root app container */
-.App {
-  box-sizing: border-box;
+/* Ensure root elements fill viewport so percentage heights work */
+html, body, #root {
   height: 100%;
-  width: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  margin: 0;
 }
 
-/* Layout wrapper that places sidebar (left) + main content (right) in a row */
+/* App root: allow it to grow; prefer min-height for flexibility */
+.App {
+  box-sizing: border-box;
+  min-height: 100vh;
+  width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Layout wrapper: sidebar + main area */
 .app-layout {
   display: flex;
   flex-direction: row;   /* horizontal layout */
-  height: 100vh;        /* full viewport height */
+  min-height: 100vh;     /* full viewport height */
   width: 100%;
 }
 
-/* Main content area */
+/* Make the main area a column so we can push a footer/companies bar to the bottom */
 .app-main {
-  flex: 1;              /* take remaining width next to sidebar */
-  overflow-y: auto;     /* scrollable main content */
-  padding: 20px;
+  flex: 1;                     /* take remaining width next to sidebar */
+  display: flex;
+  flex-direction: column;      /* make children stack vertically */
+  min-height: 0;               /* important for correct scroll behavior inside flex */
+  overflow: hidden;            /* keep scrolling inside .page-content */
   box-sizing: border-box;
+  padding: 20px;
 }
 
-/* Optional: ensure your sidebar has an explicit width if not set in SidebarStyles.css.
-   If you already set width in SidebarStyles.css, remove this rule to avoid duplication. */
+/* Page content area that actually scrolls.
+   Give this the scroll container so footer remains after content. */
+.page-content {
+  flex: 1;               /* grow to fill available main area */
+  overflow-y: auto;      /* scroll only the page content */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Optional: keep nav outside routes but inside page content where appropriate */
+/* Sidebar width example (remove if defined elsewhere) */
 .sidebar-container {
-  /* Example width — adjust to match your SidebarStyles.css, or remove this rule */
-  width: 72px; /* or 240px for expanded sidebar */
+  width: 72px; /* update to match your sidebar styles */
   box-sizing: border-box;
 }
 
@@ -36,7 +54,7 @@
 @media (max-width: 800px) {
   .app-layout {
     flex-direction: column;
-    height: auto; /* allow full page to scroll */
+    min-height: 100%; /* allow full page to scroll */
   }
 
   .sidebar-container {
