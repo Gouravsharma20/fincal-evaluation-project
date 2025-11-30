@@ -18,7 +18,7 @@ mongoose.connect(MONGO_URI)
 
 // Middleware - CORS with proper configuration
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:3000",
+  origin: "*",  // Allow all origins - PERMANENT FIX
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
