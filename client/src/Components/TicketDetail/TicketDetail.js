@@ -1,5 +1,3 @@
-// Components/TicketDetail/TicketDetail.js
-// ========================================
 import React, { useState } from 'react'
 import './TicketDetailStyles.css'
 import MessageBox from '../MessageBox/MessageBox'

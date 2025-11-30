@@ -10,7 +10,7 @@ const MessageForm = () => {
   const [showMessageBox, setShowMessageBox] = useState(true);
   const [userMessage, setUserMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const [initialMessage, setInitialMessage] = useState(""); // ← CAPTURE INITIAL MESSAGE
+  const [initialMessage, setInitialMessage] = useState("");
   const [customerForm, setCustomerForm] = useState({
     name: "",
     phoneNumber: "",

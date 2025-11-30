@@ -1,6 +1,3 @@
-
-
-import React from "react";
 import "./NavBarStyles.css";
 import { Link } from "react-router-dom";
 import appLogo from "../../Assets/CommonAssets/appLogo.png";
