@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-// import './AddMessageFormStyles.css'
+import './AddMessageFormStyles.css'
+
+import {API_BASE_URL} from '../../config/api'
 
 const AddMessageForm = ({ ticketId, clientSecret, onMessageAdded, endpoint, userToken, isAdmin, isTeamMember }) => {
   const [text, setText] = useState('')
@@ -24,7 +26,7 @@ const AddMessageForm = ({ ticketId, clientSecret, onMessageAdded, endpoint, user
         headers.Authorization = `Bearer ${userToken}`
       }
 
-      const response = await fetch(`http://localhost:4000${endpoint}`, {
+      const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
         method: 'POST',
         headers,
         body: JSON.stringify(body)

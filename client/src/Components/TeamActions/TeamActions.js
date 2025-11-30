@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 // import './TeamActionsStyles.css'
 import AddMessageForm from '../AddMessageForm/AddMessageForm'
+import {API_BASE_URL} from '../../config/api'
 
 
 const TeamActions = ({ ticket, userToken, onMessageAdded, onTicketUpdated }) => {
@@ -12,7 +13,7 @@ const TeamActions = ({ ticket, userToken, onMessageAdded, onTicketUpdated }) => 
 
     setLoading(true)
     try {
-      const response = await fetch(`http://localhost:4000/api/team/tickets/${ticket._id}/resolve`, {
+      const response = await fetch(`${API_BASE_URL}/api/team/tickets/${ticket._id}/resolve`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

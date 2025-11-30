@@ -97,8 +97,6 @@ const Home = () => {
             </div>
           </div>
         </div>
-
-        {/* COMPANIES BAR - OUTSIDE hero-container, full width, at bottom of hero-section */}
         <CompanyLogos />
       </section>
 

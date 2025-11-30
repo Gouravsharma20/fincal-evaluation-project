@@ -1,12 +1,10 @@
-// controllers/authController.js
-//(Team signup/login — forces isAdmin: false and prevents creating Gourav)
 const jwt = require("jsonwebtoken");
-const User = require("../models/UserModel"); // your existing model
+const User = require("../models/UserModel"); 
 const adminConst = require('../constants/admin');
 
-const JWT_SECRET = process.env.JWT_SECRET || "replace_this_with_a_strong_secret";
+const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = "7d";
-const ADMIN_EMAIL = "gouravsharma20a@gmail.com";  //dont hardcode it everytime
+const ADMIN_EMAIL = "gouravsharma20a@gmail.com";
 
 const signToken = (user) => {
   const isAdmin = user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();

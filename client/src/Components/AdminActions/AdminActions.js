@@ -4,6 +4,7 @@
 import React, { useState } from 'react'
 import './AdminActionsStyles.css'
 import AddMessageForm from '../AddMessageForm/AddMessageForm'
+import {API_BASE_URL} from '../../config/api'
 
 const AdminActions = ({ ticket, userToken, onMessageAdded, onTicketUpdated }) => {
   const [showAssign, setShowAssign] = useState(false)
@@ -14,7 +15,7 @@ const AdminActions = ({ ticket, userToken, onMessageAdded, onTicketUpdated }) =>
 
   const fetchTeamMembers = async () => {
     try {
-      const response = await fetch('http://localhost:4000/api/admin/users', {
+      const response = await fetch(`${API_BASE_URL}/api/admin/users`, {
         headers: { Authorization: `Bearer ${userToken}` }
       })
       const data = await response.json()
@@ -29,7 +30,7 @@ const AdminActions = ({ ticket, userToken, onMessageAdded, onTicketUpdated }) =>
     
     setLoading(true)
     try {
-      const response = await fetch(`http://localhost:4000/api/admin/tickets/${ticket._id}/assign`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/tickets/${ticket._id}/assign`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +61,7 @@ const AdminActions = ({ ticket, userToken, onMessageAdded, onTicketUpdated }) =>
 
     setLoading(true)
     try {
-      const response = await fetch(`http://localhost:4000/api/admin/tickets/${ticket._id}/resolve`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/tickets/${ticket._id}/resolve`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
