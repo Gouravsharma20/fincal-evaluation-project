@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import './DashboardStyles.css?version=2'
+import './DashBoardStyles.css'
 import { useAuthContext } from '../../Hooks/useAuthContext'
 import {API_BASE_URL} from '../../config/api'
 
