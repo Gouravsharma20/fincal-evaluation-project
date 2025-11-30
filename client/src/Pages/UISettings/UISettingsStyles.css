@@ -1,4 +1,4 @@
-/* Main Container - Side by Side Layout */
+/* 
 .ui-settings-wrapper {
   display: flex;
   gap: 80px;
@@ -9,7 +9,7 @@
   margin: 0 auto;
 }
 
-/* Left Side - Chat Widget Display */
+
 .ui-settings-left {
   flex: 1;
   display: flex;
@@ -19,7 +19,7 @@
   min-width: 350px;
 }
 
-/* Chat Bot Label */
+
 .ui-chat-bot-label {
   font-size: 14px;
   font-weight: 600;
@@ -29,7 +29,7 @@
   letter-spacing: 0.5px;
 }
 
-/* Chat Widget Container */
+
 .ui-chat-widget-container {
   display: flex;
   flex-direction: column;
@@ -39,7 +39,7 @@
   justify-content: center;
 }
 
-/* Message Box - Welcome Message */
+
 .ui-message-box {
   position: relative;
   background-color: white;
@@ -93,7 +93,7 @@
   color: #333;
 }
 
-/* Chat Modal */
+
 .ui-chat-modal {
   width: 380px;
   height: 600px;
@@ -106,7 +106,7 @@
   order: 1;
 }
 
-/* Chat Modal Header */
+
 .ui-chat-modal-header {
   display: flex;
   justify-content: space-between;
@@ -152,7 +152,7 @@
   opacity: 0.8;
 }
 
-/* Messages Container */
+
 .ui-messages-container {
   flex: 1;
   overflow-y: auto;
@@ -163,7 +163,7 @@
   background-color: #f5f5f5;
 }
 
-/* Bot Message */
+
 .ui-bot-message-wrapper {
   display: flex;
   gap: 8px;
@@ -188,7 +188,7 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-/* Message Input Container */
+
 .ui-message-input-container {
   padding: 12px 16px;
   border-top: 1px solid #eee;
@@ -235,7 +235,7 @@
   opacity: 0.7;
 }
 
-/* Saving Indicator */
+
 .ui-saving-indicator {
   padding: 12px 16px;
   border-radius: 8px;
@@ -261,7 +261,6 @@
   color: #d32f2f;
 }
 
-/* Right Side - Settings Panel */
 .ui-settings-right {
   flex: 1;
   display: flex;
@@ -278,7 +277,7 @@
   max-height: calc(100vh - 80px);
 }
 
-/* Settings Card */
+
 .ui-setting-card {
   background: white;
   border-radius: 12px;
@@ -297,7 +296,7 @@
   margin: 0;
 }
 
-/* Color Preset Group */
+
 .ui-color-preset-group {
   display: flex;
   gap: 12px;
@@ -324,7 +323,7 @@
   box-shadow: 0 0 0 2px white, 0 0 0 4px #2C4A6E;
 }
 
-/* Color Selected Box */
+
 .ui-color-selected-box {
   display: flex;
   gap: 12px;
@@ -349,7 +348,7 @@
   font-family: 'Courier New', monospace;
 }
 
-/* Message Box Header */
+
 .ui-message-box-header {
   display: flex;
   justify-content: space-between;
@@ -366,7 +365,7 @@
   font-weight: 500;
 }
 
-/* Textarea */
+
 .ui-welcome-textarea {
   width: 100%;
   padding: 12px;
@@ -386,11 +385,7 @@
   box-shadow: 0 0 0 3px rgba(44, 74, 110, 0.1);
 }
 
-/* ════════════════════════════════════════════════════════════════════ */
-/* FORM PREVIEW STYLES - CRITICAL FIX */
-/* ════════════════════════════════════════════════════════════════════ */
 
-/* Form Preview Container - Inside chat modal */
 .ui-form-preview-container {
   width: 100%;
   display: flex;
@@ -399,7 +394,7 @@
   padding: 0;
 }
 
-/* Form Preview Card */
+
 .ui-form-preview {
   width: 100%;
   max-width: 280px;
@@ -413,7 +408,7 @@
   gap: 12px;
 }
 
-/* Form Group - Label + Input Vertical Stack */
+
 .ui-form-group {
   display: flex;
   flex-direction: column;
@@ -421,7 +416,7 @@
   width: 100%;
 }
 
-/* Form Label Styling */
+
 .ui-form-label {
   font-size: 12px;
   font-weight: 600;
@@ -431,7 +426,7 @@
   padding: 0;
 }
 
-/* Form Input Styling */
+
 .ui-form-input {
   width: 100%;
   padding: 10px 12px;
@@ -456,12 +451,11 @@
   color: #666;
 }
 
-/* Form Preview Title - Hidden inside chat */
 .ui-form-preview-title {
   display: none;
 }
 
-/* Form Submit Button */
+
 .ui-form-submit-btn {
   width: 100%;
   padding: 12px 16px;
@@ -480,7 +474,7 @@
   cursor: not-allowed;
 }
 
-/* Form Field Input (for settings panel preview) */
+
 .ui-form-field-input {
   width: 100%;
   padding: 10px 12px;
@@ -499,9 +493,7 @@
   border-color: #2C4A6E;
 }
 
-/* ════════════════════════════════════════════════════════════════════ */
-/* TIMER TOGGLE */
-/* ════════════════════════════════════════════════════════════════════ */
+
 
 .ui-timer-toggle {
   display: flex;
@@ -559,7 +551,7 @@
   font-weight: 500;
 }
 
-/* Timer Display */
+
 .ui-timer-display {
   display: flex;
   flex-direction: column;
@@ -660,7 +652,7 @@
   color: #d32f2f;
 }
 
-/* Loading State */
+
 .ui-settings-loading {
   display: flex;
   align-items: center;
@@ -670,7 +662,7 @@
   color: #666;
 }
 
-/* Unauthorized */
+
 .ui-unauthorized {
   display: flex;
   align-items: center;
@@ -681,7 +673,7 @@
   font-weight: 600;
 }
 
-/* Animations */
+
 @keyframes ui-slideUp {
   from {
     opacity: 0;
@@ -702,7 +694,7 @@
   }
 }
 
-/* Scrollbar Styling */
+
 .ui-settings-scroll-container::-webkit-scrollbar {
   width: 6px;
 }
@@ -738,7 +730,7 @@
   background: #999;
 }
 
-/* Responsive Design */
+
 @media (max-width: 1200px) {
   .ui-settings-wrapper {
     flex-direction: column;
@@ -787,4 +779,4 @@
   .ui-form-preview {
     max-width: 100%;
   }
-}
+} */

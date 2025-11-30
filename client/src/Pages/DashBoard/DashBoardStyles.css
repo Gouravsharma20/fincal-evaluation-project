@@ -1,7 +1,4 @@
-/* =====================================================
-   DASHBOARD STYLES - HORIZONTAL TICKET LAYOUT
-   SINGLE COLUMN, FULL WIDTH TICKETS
-   ===================================================== */
+/* 
 
 * {
   box-sizing: border-box;
@@ -28,9 +25,7 @@ body {
   overflow: hidden;
 }
 
-/* =====================================================
-   SEARCH HEADER
-   ===================================================== */
+
 
 .admin-search-header {
   padding: 20px;
@@ -57,9 +52,7 @@ body {
   box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
 }
 
-/* =====================================================
-   FILTER TABS
-   ===================================================== */
+
 
 .filter-tabs-section {
   display: flex;
@@ -111,9 +104,7 @@ body {
   font-size: 16px;
 }
 
-/* =====================================================
-   TICKETS LIST CONTAINER
-   ===================================================== */
+
 
 .tickets-list-container {
   flex: 1;
@@ -125,9 +116,7 @@ body {
   width: 100%;
 }
 
-/* =====================================================
-   TICKET ROW - HORIZONTAL LAYOUT
-   ===================================================== */
+
 
 .ticket-row {
   background-color: white;
@@ -150,7 +139,7 @@ body {
   background-color: #fafafa;
 }
 
-/* ===== LEFT CONTENT ===== */
+
 
 .ticket-left-content {
   flex: 1;
@@ -160,7 +149,7 @@ body {
   min-width: 0;
 }
 
-/* TICKET ID & TIME */
+
 
 .ticket-header-row {
   display: flex;
@@ -183,7 +172,7 @@ body {
   flex-shrink: 0;
 }
 
-/* MESSAGE */
+
 
 .ticket-message {
   margin: 0;
@@ -196,7 +185,7 @@ body {
   overflow: hidden;
 }
 
-/* USER SECTION */
+
 
 .ticket-user-section {
   display: flex;
@@ -245,7 +234,7 @@ body {
   text-overflow: ellipsis;
 }
 
-/* ===== RIGHT ACTION ===== */
+
 
 .ticket-right-action {
   display: flex;
@@ -273,7 +262,7 @@ body {
   text-decoration: underline;
 }
 
-/* ===== STATUS MESSAGES ===== */
+
 
 .status-text {
   text-align: center;
@@ -286,9 +275,7 @@ body {
   color: #d32f2f;
 }
 
-/* =====================================================
-   SCROLLBAR STYLING
-   ===================================================== */
+
 
 .tickets-list-container::-webkit-scrollbar {
   width: 6px;
@@ -307,9 +294,7 @@ body {
   background: #999;
 }
 
-/* =====================================================
-   RESPONSIVE DESIGN
-   ===================================================== */
+
 
 @media (max-width: 1024px) {
   .ticket-row {
@@ -464,4 +449,4 @@ body {
   .open-ticket-link {
     font-size: 11px;
   }
-}
+} */

@@ -1,11 +1,4 @@
-/* MessagesStyles.css - COMPLETE REDESIGN
-   All 5 requirements implemented:
-   1. isMissedChat display
-   2. Assignment handling
-   3. Resolution handling
-   4. Message avatars
-   5. Right panel redesign
-*/
+/* 
 
 * {
   box-sizing: border-box;
@@ -26,9 +19,7 @@
   overflow: hidden;
 }
 
-/* =====================================================
-   SEARCH & FILTER SECTION
-   ===================================================== */
+
 
 .admin-search-header {
   padding: 20px;
@@ -84,9 +75,7 @@
   border-color: #1976d2;
 }
 
-/* =====================================================
-   TICKETS CARDS
-   ===================================================== */
+
 
 .tickets-cards-container {
   flex: 1;
@@ -226,9 +215,7 @@
   color: #d32f2f;
 }
 
-/* =====================================================
-   THREE PANEL LAYOUT
-   ===================================================== */
+
 
 .three-panel-container {
   display: grid;
@@ -239,7 +226,7 @@
   background-color: white;
 }
 
-/* ===== LEFT PANEL - CHATS ===== */
+
 
 .panel-left-chats {
   border-right: 1px solid #e0e0e0;
@@ -338,7 +325,6 @@
   color: #2e7d32;
 }
 
-/* ===== MIDDLE PANEL - MESSAGES ===== */
 
 .panel-chat {
   display: flex;
@@ -369,7 +355,7 @@
   gap: 12px;
 }
 
-/* ✅ Message Date Separator */
+
 .msg-date-separator {
   text-align: center;
   margin: 20px 0;
@@ -397,7 +383,7 @@
   letter-spacing: 0.5px;
 }
 
-/* ✅ Message Item with Avatar */
+
 .msg-item {
   margin-bottom: 16px;
 }
@@ -412,7 +398,6 @@
   max-width: 70%;
 }
 
-/* ✅ Message Header with Avatar and Info */
 .msg-header {
   display: flex;
   gap: 8px;
@@ -462,7 +447,7 @@
   color: #1565c0;
 }
 
-/* ✅ Missed Chat Indicator */
+
 .missed-chat-indicator {
   text-align: center;
   padding: 12px 0;
@@ -476,7 +461,7 @@
   font-size: 14px;
 }
 
-/* ===== MESSAGE INPUT AREA ===== */
+
 
 .message-reply-box {
   padding: 20px;
@@ -484,7 +469,7 @@
   background-color: #f9f9f9;
 }
 
-/* ✅ Assigned State */
+
 .message-reply-box.assigned-state {
   display: flex;
   align-items: center;
@@ -492,7 +477,7 @@
   flex: 0 0 auto;
 }
 
-/* ✅ Resolved State */
+
 .message-reply-box.resolved-state {
   display: flex;
   align-items: center;
@@ -500,7 +485,7 @@
   flex: 0 0 auto;
 }
 
-/* ✅ No Access Message */
+
 .no-access-message {
   text-align: center;
   padding: 20px;
@@ -513,7 +498,7 @@
   font-weight: 500;
 }
 
-/* ✅ Textarea Wrapper - Send button inside */
+
 .reply-textarea-wrapper {
   position: relative;
   width: 100%;
@@ -542,7 +527,7 @@
   color: #999;
 }
 
-/* ✅ Send Button Inside Textarea */
+
 .reply-send-btn {
   position: absolute;
   right: 12px;
@@ -580,7 +565,6 @@
   object-fit: contain;
 }
 
-/* ===== RIGHT PANEL ===== */
 
 .panel-profile {
   border-left: 1px solid #e0e0e0;
@@ -590,14 +574,13 @@
   flex-direction: column;
 }
 
-/* ===== CUSTOMER PROFILE SECTION (REDESIGNED) ===== */
+
 
 .customer-profile-section {
   border-bottom: 1px solid #e0e0e0;
   background-color: white;
 }
 
-/* ✅ Profile Header - Image at Top */
 .profile-header {
   text-align: center;
   padding: 20px;
@@ -620,7 +603,7 @@
   color: #333;
 }
 
-/* ✅ Profile Details - Icon Rows */
+
 .profile-details {
   padding: 20px;
 }
@@ -687,7 +670,7 @@
   color: #e65100;
 }
 
-/* ===== TEAM ASSIGNMENT SECTION ===== */
+
 
 .team-assignment-section {
   padding: 20px;
@@ -784,7 +767,7 @@
   font-weight: bold;
 }
 
-/* ===== STATUS DROPDOWN SECTION ===== */
+
 
 .status-dropdown-section {
   padding: 20px;
@@ -864,9 +847,7 @@
   font-weight: 500;
 }
 
-/* =====================================================
-   MODAL
-   ===================================================== */
+
 
 .modal-overlay {
   position: fixed;
@@ -978,9 +959,6 @@
   cursor: not-allowed;
 }
 
-/* =====================================================
-   SCROLLBAR
-   ===================================================== */
 
 .chats-list::-webkit-scrollbar,
 .messages-list::-webkit-scrollbar,
@@ -1011,9 +989,7 @@
   background: #999;
 }
 
-/* =====================================================
-   RESPONSIVE
-   ===================================================== */
+
 
 @media (max-width: 1200px) {
   .three-panel-container {
@@ -1030,4 +1006,4 @@
   .panel-profile {
     display: none;
   }
-}
+} */

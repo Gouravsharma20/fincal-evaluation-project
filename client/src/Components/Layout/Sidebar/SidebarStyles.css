@@ -1,4 +1,4 @@
-
+/* 
 .sidebar-wrapper {
   width: 90px;
   background: #ffffff;
@@ -70,11 +70,15 @@
   height: 35px;
   border-radius: 8px 0 0 8px;
   background-color: #3D63DD;
-}
+} */
 
 /* Bottom settings */
-.sidebar-bottom {
+
+
+
+
+/* .sidebar-bottom {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
-}
+} */

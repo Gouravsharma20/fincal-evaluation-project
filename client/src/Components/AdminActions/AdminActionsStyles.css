@@ -1,4 +1,4 @@
-/* Components/AdminActions/AdminActionsStyles.css & TeamActions/TeamActionsStyles.css */
+/* 
 
 .admin-actions,
 .team-actions {
@@ -12,7 +12,7 @@
   border-top: 3px solid #007bff;
 }
 
-/* SECTION HEADERS */
+
 .admin-messages,
 .team-messages {
   padding-bottom: 1.5rem;
@@ -40,7 +40,7 @@
   font-size: 1.2rem;
 }
 
-/* CONTROLS SECTION */
+
 .admin-controls,
 .team-controls {
   display: flex;
@@ -48,7 +48,7 @@
   gap: 0.875rem;
 }
 
-/* BUTTONS */
+
 .btn-assign,
 .btn-resolve {
   padding: 0.875rem 1.5rem;
@@ -105,7 +105,7 @@
   box-shadow: none;
 }
 
-/* ASSIGN PANEL */
+
 .assign-panel {
   display: flex;
   flex-direction: column;
@@ -153,7 +153,7 @@
   color: #adb5bd;
 }
 
-/* ASSIGN PANEL BUTTON */
+
 .assign-panel button {
   padding: 0.875rem;
   background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
@@ -177,7 +177,7 @@
   opacity: 0.7;
 }
 
-/* TEAM MEMBER OPTION LABELS */
+
 .assign-panel select option {
   padding: 0.75rem;
 }
@@ -186,7 +186,7 @@
   background: linear-gradient(#007bff, #0056b3);
 }
 
-/* STATUS INDICATOR */
+
 .status-indicator {
   display: inline-flex;
   align-items: center;
@@ -208,7 +208,7 @@
   color: #0a3622;
 }
 
-/* LOADING SPINNER */
+
 .admin-actions button:disabled::after,
 .team-actions button:disabled::after {
   content: '';
@@ -226,7 +226,7 @@
   to { transform: rotate(360deg); }
 }
 
-/* RESPONSIVE */
+
 @media (max-width: 768px) {
   .admin-actions,
   .team-actions {
@@ -259,11 +259,11 @@
   .assign-panel input,
   .assign-panel button {
     padding: 0.75rem;
-    font-size: 16px; /* Prevents auto-zoom on iOS */
+    font-size: 16px; 
   }
 }
 
-/* TEAM ACTIONS SPECIFIC */
+
 .team-actions {
   border-top-color: #9c27b0;
 }
@@ -272,11 +272,11 @@
   content: '👤';
 }
 
-/* ADMIN ACTIONS SPECIFIC */
+
 .admin-actions {
   border-top-color: #007bff;
 }
 
 .admin-actions h4::before {
   content: '👨‍💼';
-}
+} */
