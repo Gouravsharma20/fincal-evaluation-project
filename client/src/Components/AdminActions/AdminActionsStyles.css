@@ -31,12 +31,12 @@
 }
 
 .admin-messages h4::before {
-  content: '✉';
+  content: '';
   font-size: 1.2rem;
 }
 
 .team-messages h4::before {
-  content: '💬';
+  content: '';
   font-size: 1.2rem;
 }
 

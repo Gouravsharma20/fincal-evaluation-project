@@ -197,7 +197,7 @@
   height: 36px;
   opacity: 0.88;
   display: block;
-  filter: saturate(0.95);
+  filter: saturate(95%);
 }
 
 /* ---------- responsive ---------- */
