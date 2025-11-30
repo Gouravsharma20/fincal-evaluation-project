@@ -16,9 +16,15 @@ mongoose.connect(MONGO_URI)
 // Alternative DB connection (uncomment if using separate db/connection file)
 // require("./db/connection");
 
-// Middleware
+// Middleware - CORS with proper configuration
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "http://localhost:3000",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 app.use(express.json());
-app.use(cors());
 
 // Routes
 const authRoutes = require("./routes/AuthRoutes");
@@ -26,22 +32,12 @@ const ticketRoutes = require("./routes/TicketRoutes");
 const adminRoutes = require("./routes/AdminRoutes");
 const teamRoutes = require("./routes/TeamRoutes");
 const userRoutes = require("./routes/UserRoutes");
-// const uiSettingsRoutes = require("./routes/UiSettingRoutes")
-
 
 app.use("/api/auth", authRoutes);
 app.use("/api/tickets", ticketRoutes);
 app.use("/api/admin", adminRoutes);
-app.use("/api/team",teamRoutes);
-app.use("/api/user",userRoutes);
-// app.use("/api/uisettings",uiSettingsRoutes);
-
-
-
-
-
-
-
+app.use("/api/team", teamRoutes);
+app.use("/api/user", userRoutes);
 
 // Server
 const PORT = process.env.PORT || 4000;
