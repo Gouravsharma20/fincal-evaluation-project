@@ -1,8 +1,8 @@
 services:
-  - type: static
+  - type: web
     name: fincal-evaluation-project
     buildCommand: cd client && npm install && npm run build
-    staticPublishPath: client/build
+    startCommand: npm install -g serve && serve -s client/build
     envVars:
       - key: NODE_ENV
         value: production
