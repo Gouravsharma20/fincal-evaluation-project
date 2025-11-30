@@ -1,6 +1,6 @@
 /* =====================================================
-   DASHBOARD STYLES - SINGLE COLUMN LAYOUT
-   ONE TICKET CARD PER ROW - ALWAYS
+   DASHBOARD STYLES - HORIZONTAL TICKET LAYOUT
+   SINGLE COLUMN, FULL WIDTH TICKETS
    ===================================================== */
 
 * {
@@ -29,7 +29,7 @@ body {
 }
 
 /* =====================================================
-   SEARCH & FILTER
+   SEARCH HEADER
    ===================================================== */
 
 .admin-search-header {
@@ -57,12 +57,17 @@ body {
   box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
 }
 
+/* =====================================================
+   FILTER TABS
+   ===================================================== */
+
 .filter-tabs-section {
   display: flex;
-  gap: 20px;
-  padding: 15px 20px;
+  gap: 32px;
+  padding: 16px 20px;
   background-color: white;
   border-bottom: 1px solid #e0e0e0;
+  align-items: center;
 }
 
 .filter-tab {
@@ -73,8 +78,12 @@ body {
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  transition: all 0.2s;
+  transition: color 0.2s;
   position: relative;
+  padding-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .filter-tab:hover {
@@ -83,13 +92,13 @@ body {
 
 .filter-tab.active {
   color: #1976d2;
-  font-weight: 600;
+  font-weight: 500;
 }
 
-.filter-tab.active::after {
+.filter-tab.active::before {
   content: '';
   position: absolute;
-  bottom: -15px;
+  bottom: -16px;
   left: 0;
   right: 0;
   height: 3px;
@@ -97,78 +106,86 @@ body {
   border-radius: 2px;
 }
 
+.filter-tab::before {
+  content: '📧';
+  font-size: 16px;
+}
+
 /* =====================================================
-   TICKETS CONTAINER - SINGLE COLUMN ONLY
+   TICKETS LIST CONTAINER
    ===================================================== */
 
-.tickets-cards-container {
+.tickets-list-container {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-  width: 100%;
-  max-width: 100%;
-}
-
-/* =====================================================
-   TICKET CARD - VERTICAL STACKING WITHIN CARD
-   ===================================================== */
-
-.ticket-card-box {
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: all 0.2s;
-  cursor: pointer;
-  
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 16px;
   width: 100%;
 }
 
-.ticket-card-box:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  background-color: #f9f9f9;
-  transform: translateY(-2px);
-}
+/* =====================================================
+   TICKET ROW - HORIZONTAL LAYOUT
+   ===================================================== */
 
-/* ===== TICKET ID & TIME ===== */
-
-.card-top-section {
-  display: block;
+.ticket-row {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.2s;
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  gap: 20px;
   width: 100%;
-  padding: 0;
-  border: none;
+  min-height: 140px;
 }
 
-.card-ticket-id {
-  margin: 0 0 6px 0;
+.ticket-row:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  background-color: #fafafa;
+}
+
+/* ===== LEFT CONTENT ===== */
+
+.ticket-left-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* TICKET ID & TIME */
+
+.ticket-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.ticket-id {
+  margin: 0;
   font-size: 16px;
   font-weight: 600;
   color: #333;
+  flex-shrink: 0;
 }
 
-.card-posted-time {
+.ticket-posted-time {
   font-size: 12px;
   color: #999;
+  flex-shrink: 0;
 }
 
-/* ===== MESSAGE ===== */
+/* MESSAGE */
 
-.card-message-section {
-  display: block;
-  width: 100%;
-  padding: 0;
-  background-color: transparent;
-  margin: 0;
-}
-
-.card-initial-message {
+.ticket-message {
   margin: 0;
   font-size: 14px;
   color: #666;
@@ -179,32 +196,30 @@ body {
   overflow: hidden;
 }
 
-/* ===== USER INFO ===== */
+/* USER SECTION */
 
-.card-user-info {
+.ticket-user-section {
   display: flex;
   gap: 12px;
-  width: 100%;
   align-items: flex-start;
 }
 
-.card-user-avatar {
-  width: 48px;
-  height: 48px;
+.ticket-avatar {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
-  margin-top: 2px;
 }
 
-.card-user-details {
+.ticket-user-details {
   flex: 1;
   min-width: 0;
 }
 
-.card-user-name {
-  margin: 0 0 4px 0;
-  font-size: 14px;
+.user-name {
+  margin: 0 0 2px 0;
+  font-size: 13px;
   font-weight: 600;
   color: #333;
   white-space: nowrap;
@@ -212,8 +227,8 @@ body {
   text-overflow: ellipsis;
 }
 
-.card-user-email {
-  margin: 0 0 4px 0;
+.user-phone {
+  margin: 0 0 2px 0;
   font-size: 12px;
   color: #999;
   white-space: nowrap;
@@ -221,7 +236,7 @@ body {
   text-overflow: ellipsis;
 }
 
-.card-user-phone {
+.user-email {
   margin: 0;
   font-size: 12px;
   color: #999;
@@ -230,24 +245,32 @@ body {
   text-overflow: ellipsis;
 }
 
-/* ===== BUTTON - FULL WIDTH ===== */
+/* ===== RIGHT ACTION ===== */
 
-.open-ticket-btn-card {
-  padding: 10px 16px;
-  background-color: #1976d2;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  width: 100%;
-  text-align: center;
+.ticket-right-action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  height: 100%;
 }
 
-.open-ticket-btn-card:hover {
-  background-color: #1565c0;
+.open-ticket-link {
+  padding: 0;
+  background: none;
+  border: none;
+  color: #1976d2;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.open-ticket-link:hover {
+  color: #1565c0;
+  text-decoration: underline;
 }
 
 /* ===== STATUS MESSAGES ===== */
@@ -257,7 +280,6 @@ body {
   color: #999;
   padding: 40px 20px;
   font-size: 14px;
-  grid-column: 1 / -1;
 }
 
 .error-text {
@@ -265,29 +287,51 @@ body {
 }
 
 /* =====================================================
-   SCROLLBAR
+   SCROLLBAR STYLING
    ===================================================== */
 
-.tickets-cards-container::-webkit-scrollbar {
+.tickets-list-container::-webkit-scrollbar {
   width: 6px;
 }
 
-.tickets-cards-container::-webkit-scrollbar-track {
+.tickets-list-container::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.tickets-cards-container::-webkit-scrollbar-thumb {
+.tickets-list-container::-webkit-scrollbar-thumb {
   background: #ddd;
   border-radius: 3px;
 }
 
-.tickets-cards-container::-webkit-scrollbar-thumb:hover {
+.tickets-list-container::-webkit-scrollbar-thumb:hover {
   background: #999;
 }
 
 /* =====================================================
-   RESPONSIVE - ONLY ADJUST SPACING, NOT LAYOUT
+   RESPONSIVE DESIGN
    ===================================================== */
+
+@media (max-width: 1024px) {
+  .ticket-row {
+    padding: 16px;
+    gap: 16px;
+    min-height: auto;
+  }
+
+  .ticket-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .ticket-id {
+    font-size: 15px;
+  }
+
+  .ticket-message {
+    font-size: 13px;
+  }
+}
 
 @media (max-width: 768px) {
   .admin-search-header {
@@ -299,34 +343,125 @@ body {
   }
 
   .filter-tabs-section {
-    gap: 15px;
+    gap: 20px;
+    padding: 12px 15px;
   }
 
-  .tickets-cards-container {
-    padding: 12px;
-    gap: 12px;
+  .filter-tab {
+    font-size: 13px;
   }
 
-  .ticket-card-box {
+  .tickets-list-container {
     padding: 12px;
     gap: 10px;
   }
 
-  .card-user-avatar {
-    width: 40px;
-    height: 40px;
+  .ticket-row {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px;
+    gap: 10px;
+    min-height: auto;
   }
 
-  .card-ticket-id {
+  .ticket-header-row {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .ticket-id {
     font-size: 14px;
   }
 
-  .card-initial-message {
+  .ticket-message {
+    font-size: 12px;
+    -webkit-line-clamp: 2;
+  }
+
+  .ticket-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .user-name {
+    font-size: 12px;
+  }
+
+  .user-phone,
+  .user-email {
+    font-size: 11px;
+  }
+
+  .open-ticket-link {
+    font-size: 12px;
+    align-self: flex-end;
+    margin-top: 8px;
+  }
+
+  .ticket-right-action {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-search-header {
+    padding: 12px;
+  }
+
+  .search-input-main {
+    font-size: 16px;
+    padding: 10px 12px;
+  }
+
+  .filter-tabs-section {
+    gap: 12px;
+    padding: 10px 12px;
+    flex-wrap: wrap;
+  }
+
+  .filter-tab {
+    font-size: 12px;
+  }
+
+  .tickets-list-container {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .ticket-row {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .ticket-id {
     font-size: 13px;
   }
 
-  .open-ticket-btn-card {
-    padding: 8px 12px;
+  .ticket-posted-time {
+    font-size: 11px;
+  }
+
+  .ticket-message {
     font-size: 12px;
+    -webkit-line-clamp: 2;
+  }
+
+  .ticket-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .user-name {
+    font-size: 11px;
+  }
+
+  .user-phone,
+  .user-email {
+    font-size: 10px;
+  }
+
+  .open-ticket-link {
+    font-size: 11px;
   }
 }

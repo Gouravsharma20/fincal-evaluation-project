@@ -105,51 +105,52 @@ const Dashboard = () => {
           </button>
         </div>
 
-        {/* TICKETS LIST - COLUMN LAYOUT */}
-        <div className="tickets-cards-container">
+        {/* TICKETS LIST */}
+        <div className="tickets-list-container">
           {loading && <p className="status-text">Loading tickets...</p>}
           {error && <p className="status-text error-text">Error: {error}</p>}
           {!loading && filteredTickets.length === 0 && <p className="status-text">No tickets found</p>}
 
           {!loading && filteredTickets.map((ticket, idx) => (
-            <div key={ticket._id} className="ticket-card-box">
-              {/* TICKET ID & TIME */}
-              <div className="card-top-section">
-                <h3 className="card-ticket-id">Ticket# 2023-{String(idx + 1).padStart(5, '0')}</h3>
-                <span className="card-posted-time">
-                  Posted at {new Date(ticket.createdAt).toLocaleTimeString('en-US', {
+            <div key={ticket._id} className="ticket-row">
+              {/* LEFT SECTION - TICKET INFO */}
+              <div className="ticket-left-content">
+                {/* TOP: Ticket ID and Posted Time */}
+                <div className="ticket-header-row">
+                  <h3 className="ticket-id">Ticket# 2023-{String(idx + 1).padStart(5, '0')}</h3>
+                  <span className="ticket-posted-time">Posted at {new Date(ticket.createdAt).toLocaleTimeString('en-US', {
                     hour: '2-digit',
                     minute: '2-digit',
                     hour12: true
-                  })}
-                </span>
-              </div>
+                  })}</span>
+                </div>
 
-              {/* MESSAGE */}
-              <div className="card-message-section">
-                <p className="card-initial-message">
+                {/* MIDDLE: Message */}
+                <p className="ticket-message">
                   {ticket.messages[0]?.text || 'No message'}
                 </p>
-              </div>
 
-              {/* USER INFO */}
-              <div className="card-user-info">
-                <img
-                  src={`https://ui-avatars.com/api/?name=${ticket.userName}&background=random&color=fff&size=48`}
-                  alt={ticket.userName}
-                  className="card-user-avatar"
-                />
-                <div className="card-user-details">
-                  <p className="card-user-name">{ticket.userName}</p>
-                  <p className="card-user-email">{ticket.userEmail}</p>
-                  <p className="card-user-phone">+{ticket.userPhoneNumber}</p>
+                {/* BOTTOM: User Info */}
+                <div className="ticket-user-section">
+                  <img
+                    src={`https://ui-avatars.com/api/?name=${ticket.userName}&background=random&color=fff&size=40`}
+                    alt={ticket.userName}
+                    className="ticket-avatar"
+                  />
+                  <div className="ticket-user-details">
+                    <p className="user-name">{ticket.userName}</p>
+                    <p className="user-phone">+{ticket.userPhoneNumber}</p>
+                    <p className="user-email">{ticket.userEmail}</p>
+                  </div>
                 </div>
               </div>
 
-              {/* BUTTON - SEPARATE, FULL WIDTH */}
-              <button className="open-ticket-btn-card" onClick={() => alert('Ticket: ' + ticket._id)}>
-                View Ticket
-              </button>
+              {/* RIGHT SECTION - ACTION */}
+              <div className="ticket-right-action">
+                <a href={`/tickets/${ticket._id}`} className="open-ticket-link">
+                  Open Ticket
+                </a>
+              </div>
             </div>
           ))}
         </div>
