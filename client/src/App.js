@@ -1,20 +1,20 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
 import { useContext } from "react";
-import Home from './Pages/Home/Home';
-import NavBar from './Components/NavBar/NavBar';
-import SignUp from './Pages/SignUp/SignUp';
-import Login from './Pages/Login/Login';
-import Team from './Pages/Team/Team';
-import AuthContextProvider, { AuthContext } from './Context/AuthContext';
-import Dashboard from "./Pages/Dashboard/Dashboard"
-import Messages from './Pages/Messages/Messages';
-import Analytics from './Pages/Analytics/Analytics';
-import TeamManagement from './Pages/TeamManagement/TeamManagement';
-import UISettings from './Pages/UISettings/UISettings';
-import Settings from './Pages/Settings/Settings';
+import Home from './Pages/Home/Home.js';
+import NavBar from './Components/NavBar/NavBar.js';
+import SignUp from './Pages/SignUp/SignUp.js';
+import Login from './Pages/Login/Login.js';
+import Team from './Pages/Team/Team.js';
+import AuthContextProvider, { AuthContext } from './Context/AuthContext.js';
+import Dashboard from "./Pages/Dashboard/Dashboard.js"
+import Messages from './Pages/Messages/Messages.js';
+import Analytics from './Pages/Analytics/Analytics.js';
+import TeamManagement from './Pages/TeamManagement/TeamManagement.js';
+import UISettings from './Pages/UISettings/UISettings.js';
+import Settings from './Pages/Settings/Settings.js';
 
-import Sidebar from './Components/Layout/Sidebar/Sidebar';
+import Sidebar from './Components/Layout/Sidebar/Sidebar.js';
 
 
 
