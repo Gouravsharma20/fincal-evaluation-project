@@ -13,20 +13,14 @@ import Analytics from '../Pages/Analytics/Analytics'
 import TeamManagement from '../Pages/TeamManagement/TeamManagement'
 import UISettings from '../Pages/UISettings/UISettings'
 import Settings from '../Pages/Settings/Settings'
-// import Team from '../Pages/Team/Team'
 
-// ==========================================
-// PUBLIC ROUTES (User not logged in)
-// ==========================================
 export const PUBLIC_ROUTES = [
   { path: '/', element: Home },
   { path: '/signup', element: SignUp },
   { path: '/login', element: Login }
 ]
 
-// ==========================================
-// ADMIN ROUTES (user.isAdmin === true)
-// ==========================================
+
 export const ADMIN_ROUTES = [
   { path: '/dashboard', element: Dashboard },
   { path: '/messages', element: Messages },
@@ -36,9 +30,7 @@ export const ADMIN_ROUTES = [
   { path: '/settings', element: Settings }
 ]
 
-// ==========================================
-// TEAM MEMBER ROUTES (logged in user)
-// ==========================================
+
 export const TEAM_ROUTES = [
   // { path: '/team/*', element: Team },
   { path: '/settings', element: Settings }

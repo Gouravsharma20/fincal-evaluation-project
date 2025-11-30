@@ -9,8 +9,6 @@ export const authReducer = (state, action) => {
             const { user, token } = action.payload;
             localStorage.setItem('user', JSON.stringify({ user, token }));
             return { user, token };
-        // localStorage.setItem('user', JSON.stringify(action.payload))
-        // return { user: action.payload.user, token: action.payload.token };
         case `LOGOUT`:
             localStorage.removeItem('user');
             return { user: null, token: null };
@@ -27,7 +25,6 @@ export const AuthContextProvider = ({ children }) => {
         user: null,
         token: null
     })
-    // eslint-disable-next-line no-unused-vars
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

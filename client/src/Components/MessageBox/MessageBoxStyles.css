@@ -1,4 +1,4 @@
-/* Components/MessageBox/MessageBoxStyles.css */
+
 
 .message-box {
   display: flex;
@@ -36,7 +36,7 @@
   word-wrap: break-word;
 }
 
-/* MESSAGE TYPES */
+
 .message.admin {
   background: #e7f3ff;
   border-left: 4px solid #0066cc;
@@ -57,7 +57,7 @@
   border-left: 4px solid #ff9800;
 }
 
-/* INTERNAL MESSAGES */
+
 .message.internal {
   opacity: 0.75;
   background: #fef9e7;
@@ -73,7 +73,7 @@
   margin-bottom: 0.25rem;
 }
 
-/* MESSAGE HEADER */
+
 .message-header {
   display: flex;
   align-items: center;
@@ -124,7 +124,7 @@
   white-space: nowrap;
 }
 
-/* MESSAGE TEXT */
+
 .message-text {
   margin: 0;
   color: #333;
@@ -144,7 +144,7 @@
   color: #1b5e20;
 }
 
-/* EMPTY STATE */
+
 .message-box:empty::before {
   content: 'No messages yet';
   display: flex;
@@ -155,7 +155,7 @@
   font-size: 1rem;
 }
 
-/* RESPONSIVE */
+
 @media (max-width: 768px) {
   .message-box {
     gap: 1rem;

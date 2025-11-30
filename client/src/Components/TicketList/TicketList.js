@@ -1,5 +1,4 @@
-// Components/TicketList/TicketList.js
-// ========================================
+
 import React from 'react'
 import './TicketListStyles.css'
 

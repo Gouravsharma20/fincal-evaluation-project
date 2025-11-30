@@ -1,4 +1,4 @@
-/* Main navbar container */
+
 .navbar {
     width: 100%;
     height: 80px;
@@ -6,31 +6,31 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 100px;   /* GAP ON LEFT AND RIGHT */
+    padding: 0 100px;   
     box-sizing: border-box;
 }
 
-/* Logo */
+
 .logo-image {
     height: 45px;
     object-fit: contain;
 }
 
-/* Right side links */
+
 .navbar-right {
     display: flex;
     align-items: center;
     gap: 25px;
 }
 
-/* Login text */
+
 .login-text {
     font-size: 16px;
     text-decoration: none;
     color: #36364A;
 }
 
-/* Signup button */
+
 .signup-btn {
     background-color: #244779;
     color: #FFFFFF;
@@ -41,7 +41,7 @@
     font-weight: 500;
 }
 
-/* If user is logged in */
+
 .username {
     color: #36364A;
     font-size: 16px;

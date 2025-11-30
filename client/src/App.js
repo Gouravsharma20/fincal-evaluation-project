@@ -22,7 +22,7 @@ import Sidebar from './Components/Layout/Sidebar/Sidebar';
 
 
 function AppContent() {
-  const { user, loading } = useContext(AuthContext);   //token was also there [removed because of warning]
+  const { user, loading } = useContext(AuthContext);   
 
   if (loading) {
     return <div className="App"><p>Loading...</p></div>;
@@ -32,7 +32,7 @@ function AppContent() {
     <div className="App">
       {!user ? (
         <>
-          {/* NavBar MUST be outside <Routes> */}
+          
           <NavBar />
 
           <Routes>

@@ -1,6 +1,4 @@
-/* ========================================
-   Components/TicketList/TicketListStyles.css
-   ======================================== */
+
 .ticket-list {
   display: flex;
   flex-direction: column;

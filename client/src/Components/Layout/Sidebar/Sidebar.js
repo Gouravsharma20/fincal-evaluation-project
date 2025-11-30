@@ -13,8 +13,6 @@ import ProfileIcon from '../../../Assets/SideBarAssets/ProfileIcon.png'
 const Sidebar = ({ userRole = 'team_member' }) => {
   const navigate = useNavigate()
   const location = useLocation()
-
-  // ---- NEVER TOUCH THIS LOGIC ----
   const getNavItems = () => {
     const commonItems = [
       { id: 'dashboard', label: 'Dashboard', path: '/dashboard', icon: HomeIcon },
@@ -30,14 +28,14 @@ const Sidebar = ({ userRole = 'team_member' }) => {
 
     if (userRole === 'admin') {
       return [
-        commonItems[0],  // Dashboard
-        commonItems[1],  // Messages
+        commonItems[0],  
+        commonItems[1],  
         ...adminOnlyItems,
-        commonItems[2]   // Settings
+        commonItems[2]   
       ]
     }
 
-    // non-admin user → only dashboard, messages, settings
+  
     return commonItems
   }
 
@@ -68,7 +66,7 @@ const Sidebar = ({ userRole = 'team_member' }) => {
       </div>
 
 
-      {/* ⭐ BOTTOM ICON — CHANGED TO PROFILE ICON */}
+  
       {settingsItem && (
         <div className="sidebar-bottom">
           <img

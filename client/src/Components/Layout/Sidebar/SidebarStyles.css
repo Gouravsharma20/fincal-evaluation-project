@@ -1,4 +1,4 @@
-/* Sidebar container */
+
 .sidebar-wrapper {
   width: 90px;
   background: #ffffff;
@@ -10,14 +10,14 @@
   padding: 20px 0;
 }
 
-/* Logo */
+
 .sidebar-logo img {
   width: 50px;
   display: block;
   margin: 0 auto 20px auto;
 }
 
-/* Navigation icons */
+
 .sidebar-nav {
   display: flex;
   flex-direction: column;
@@ -25,7 +25,7 @@
   align-items: center;
 }
 
-/* Single icon button */
+
 .sidebar-btn {
   background: none;
   border: none;
@@ -47,7 +47,7 @@
   transform: scale(1.12);
 }
 
-/* Label below the active icon */
+
 .label {
   margin-top: 6px;
   font-size: 11px;
@@ -61,7 +61,7 @@
   opacity: 1;
 }
 
-/* RIGHT BLUE INDICATOR */
+
 .sidebar-btn.active::after {
   content: "";
   position: absolute;

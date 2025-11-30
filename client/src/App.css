@@ -1,12 +1,9 @@
-/* App.css - improved layout */
 
-/* Ensure root elements fill viewport so percentage heights work */
 html, body, #root {
   height: 100%;
   margin: 0;
 }
 
-/* App root: allow it to grow; prefer min-height for flexibility */
 .App {
   box-sizing: border-box;
   min-height: 100vh;
@@ -16,45 +13,43 @@ html, body, #root {
   flex-direction: column;
 }
 
-/* Layout wrapper: sidebar + main area */
+
 .app-layout {
   display: flex;
-  flex-direction: row;   /* horizontal layout */
-  min-height: 100vh;     /* full viewport height */
+  flex-direction: row;   
+  min-height: 100vh;     
   width: 100%;
 }
 
-/* Make the main area a column so we can push a footer/companies bar to the bottom */
+
 .app-main {
-  flex: 1;                     /* take remaining width next to sidebar */
+  flex: 1;                     
   display: flex;
-  flex-direction: column;      /* make children stack vertically */
-  min-height: 0;               /* important for correct scroll behavior inside flex */
-  overflow: hidden;            /* keep scrolling inside .page-content */
+  flex-direction: column;      
+  min-height: 0;               
+  overflow: hidden;            
   box-sizing: border-box;
   padding: 20px;
 }
 
-/* Page content area that actually scrolls.
-   Give this the scroll container so footer remains after content. */
+
 .page-content {
-  flex: 1;               /* grow to fill available main area */
-  overflow-y: auto;      /* scroll only the page content */
+  flex: 1;               
+  overflow-y: auto;      
   -webkit-overflow-scrolling: touch;
 }
 
-/* Optional: keep nav outside routes but inside page content where appropriate */
-/* Sidebar width example (remove if defined elsewhere) */
+
 .sidebar-container {
-  width: 72px; /* update to match your sidebar styles */
+  width: 72px; 
   box-sizing: border-box;
 }
 
-/* Responsive: stack on small screens */
+
 @media (max-width: 800px) {
   .app-layout {
     flex-direction: column;
-    min-height: 100%; /* allow full page to scroll */
+    min-height: 100%;
   }
 
   .sidebar-container {

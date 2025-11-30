@@ -10,14 +10,14 @@ const NavBar = () => {
 
   return (
     <nav className="navbar">
-      {/* Left side - logo */}
+
       <div className="navbar-left">
         <Link to="/">
           <img src={appLogo} alt="App Logo" className="logo-image" />
         </Link>
       </div>
 
-      {/* Right side */}
+
       <div className="navbar-right">
         {user ? (
           <>
