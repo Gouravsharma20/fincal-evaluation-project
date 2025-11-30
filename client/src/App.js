@@ -7,7 +7,7 @@ import SignUp from './Pages/SignUp/SignUp';
 import Login from './Pages/Login/Login';
 import Team from './Pages/Team/Team';
 import AuthContextProvider, { AuthContext } from './Context/AuthContext';
-import Dashboard from './Pages/Dashboard/Dashboard.js';
+import Dashboard from './Pages/DashBoard/Dashboard.js';
 import Messages from './Pages/Messages/Messages';
 import Analytics from './Pages/Analytics/Analytics';
 import TeamManagement from './Pages/TeamManagement/TeamManagement';
