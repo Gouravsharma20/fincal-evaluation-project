@@ -1,7 +1,7 @@
 /* ========================================
    Components/TicketDetail/TicketDetailStyles.css
    ======================================== */
-.ticket-detail {
+/* .ticket-detail {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -47,4 +47,363 @@
   border-top: 1px solid #ddd;
   padding-top: 15px;
 }
+ */
 
+
+
+ /* Components/TicketDetail/TicketDetailStyles.css */
+
+.ticket-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* TICKET HEADER INFO */
+.ticket-header-info {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #007bff;
+}
+
+.ticket-header-info h2 {
+  margin: 0 0 1rem 0;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.ticket-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ticket-meta p {
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+}
+
+.ticket-meta strong {
+  color: #333;
+  margin-right: 0.5rem;
+  min-width: 80px;
+}
+
+.status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status.unresolved {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status.resolved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status.assigned {
+  background: #cfe2ff;
+  color: #084298;
+}
+
+/* MESSAGES SECTION */
+.messages-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.messages-section h3 {
+  margin: 0 0 1rem 0;
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* MESSAGE BOX */
+.message-box {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-right: 0.5rem;
+}
+
+.message-box::-webkit-scrollbar {
+  width: 6px;
+}
+
+.message-box::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.message-box::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.message-box::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 6px;
+  background: #f5f5f5;
+}
+
+.message.admin {
+  background: #e3f2fd;
+  border-left: 3px solid #007bff;
+}
+
+.message.team {
+  background: #f3e5f5;
+  border-left: 3px solid #9c27b0;
+}
+
+.message.user {
+  background: #e8f5e9;
+  border-left: 3px solid #4caf50;
+}
+
+.message.internal {
+  opacity: 0.7;
+  border-left: 3px dashed #ff9800;
+}
+
+.message-header {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.sender-type {
+  font-weight: 600;
+  color: #333;
+  text-transform: uppercase;
+}
+
+.internal-badge {
+  background: #ffeb3b;
+  color: #000;
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.timestamp {
+  margin-left: auto;
+  color: #999;
+  font-size: 0.8rem;
+}
+
+.message-text {
+  margin: 0;
+  color: #333;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+/* ADD MESSAGE FORM */
+.add-message-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.add-message-form textarea {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.add-message-form textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.internal-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.internal-checkbox input {
+  cursor: pointer;
+}
+
+.add-message-form button,
+.admin-actions button,
+.team-actions button {
+  padding: 0.75rem 1.5rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.add-message-form button:hover:not(:disabled),
+.admin-actions button:hover:not(:disabled),
+.team-actions button:hover:not(:disabled) {
+  background: #0056b3;
+}
+
+.add-message-form button:disabled,
+.admin-actions button:disabled,
+.team-actions button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #dc3545;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+}
+
+/* ADMIN ACTIONS */
+.admin-actions,
+.team-actions {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-messages,
+.team-messages {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.admin-messages h4,
+.team-messages h4 {
+  margin: 0 0 1rem 0;
+  color: #333;
+  font-size: 1rem;
+}
+
+.admin-controls,
+.team-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.btn-assign {
+  background: #28a745;
+}
+
+.btn-assign:hover:not(:disabled) {
+  background: #218838;
+}
+
+.btn-resolve {
+  background: #dc3545;
+}
+
+.btn-resolve:hover:not(:disabled) {
+  background: #c82333;
+}
+
+.assign-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  margin-top: 0.75rem;
+}
+
+.assign-panel select,
+.assign-panel input {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.assign-panel select:focus,
+.assign-panel input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .ticket-detail {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .ticket-header-info,
+  .messages-section,
+  .admin-actions,
+  .team-actions {
+    padding: 1rem;
+  }
+
+  .ticket-header-info h2 {
+    font-size: 1.2rem;
+  }
+
+  .ticket-meta {
+    gap: 0.5rem;
+  }
+
+  .message-header {
+    flex-wrap: wrap;
+  }
+}

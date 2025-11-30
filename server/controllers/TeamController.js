@@ -27,6 +27,7 @@ const getAssignedTickets = async (req, res) => {
         userEmail: 1,
         userPhoneNumber: 1,
         status: 1,
+        isMissedChat: 1,
         lastMessageAt: 1,
         createdAt: 1,
         messages: { $slice: 1 }
@@ -50,6 +51,7 @@ const getAssignedTickets = async (req, res) => {
 /**
  * getTicketDetail (team member) - view specific assigned ticket
  * Can only view if assigned to them
+ * ✅ Returns isMissedChat flag so UI can show indicator
  */
 const getTicketDetail = async (req, res) => {
   try {
@@ -76,6 +78,7 @@ const getTicketDetail = async (req, res) => {
  * addTeamMessage (team member) - add message to assigned ticket
  * body: { text, internal }
  * internal = true for private notes
+ * ✅ FIX: Clear isMissedChat flag when team member replies to customer
  */
 const addTeamMessage = async (req, res) => {
   try {
@@ -100,6 +103,8 @@ const addTeamMessage = async (req, res) => {
 
     if (!internal) {
       ticket.status = "in_progress";
+      // ✅ FIX: Clear isMissedChat when team member sends customer-visible message
+      ticket.isMissedChat = false;
     }
     ticket.lastMessageAt = Date.now();
     await ticket.save();
@@ -107,7 +112,8 @@ const addTeamMessage = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: internal ? "Internal note added" : "Message sent to customer",
-      ticketId: ticket._id
+      ticketId: ticket._id,
+      ticket // ✅ Return updated ticket with isMissedChat flag
     });
   } catch (err) {
     console.error(err);
@@ -142,7 +148,8 @@ const resolveTicketByTeam = async (req, res) => {
     return res.json({
       success: true,
       message: "Ticket marked as resolved",
-      ticketId: ticket._id
+      ticketId: ticket._id,
+      ticket
     });
   } catch (err) {
     console.error(err);

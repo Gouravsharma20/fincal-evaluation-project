@@ -1,28 +1,18 @@
+/* LoginStyles.css - final corrected version */
 
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-
-
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Main Container */
 .loginForm,
 .signUpForm {
   display: flex;
   min-height: 100vh;
-  background-color: #f5f5f5;
-}
-
-/* Left Side - Form Section */
-.loginForm,
-.signUpForm {
   position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
+/* left white panel (50%) */
 .loginForm::before,
 .signUpForm::before {
   content: '';
@@ -31,196 +21,11 @@
   top: 0;
   width: 50%;
   height: 100%;
-  background-color: #ffffff;
+  background: #ffffff;
   z-index: 1;
 }
 
-.loginForm > *,
-.signUpForm > * {
-  position: relative;
-  z-index: 2;
-}
-
-/* Form Container */
-.loginForm,
-.signUpForm {
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.loginForm h1,
-.signUpForm h1 {
-  position: absolute;
-  top: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  max-width: 400px;
-  display: none;
-}
-
-/* Logo */
-.loginForm::after,
-.signUpForm::after {
-  content: '';
-  position: absolute;
-  top: 30px;
-  left: 40px;
-  width: 120px;
-  height: 50px;
-  background-image: var(--boy-img);
-  background-size: contain;
-  background-repeat: no-repeat;
-  z-index: 3;
-}
-
-/* Form Wrapper */
-.loginForm form,
-.signUpForm form {
-  background-color: #ffffff;
-  padding: 60px 50px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
-  margin-right: 25%;
-}
-
-/* Form Title */
-.loginForm h1,
-.signUpForm h1 {
-  font-size: 28px;
-  font-weight: 600;
-  margin-bottom: 30px;
-  color: #1a1a1a;
-  text-align: left;
-  display: block;
-  position: static;
-  transform: none;
-  top: auto;
-  left: auto;
-  width: 100%;
-  max-width: none;
-}
-
-/* Form Fields */
-.field {
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-.field label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #333333;
-  margin-bottom: 8px;
-  display: block;
-}
-
-.field input {
-  padding: 12px 14px;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  font-size: 14px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  transition: all 0.3s ease;
-  background-color: #fafafa;
-}
-
-.field input:focus {
-  outline: none;
-  border-color: #0066cc;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
-}
-
-.field input::placeholder {
-  color: #999999;
-}
-
-/* Submit Button */
-button[type='submit'],
-.loginForm button,
-.signUpForm button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 15px;
-  background-color: #b0b0b0;
-  color: #ffffff;
-  border: none;
-  border-radius: 25px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-}
-
-button[type='submit']:hover,
-.loginForm button:hover,
-.signUpForm button:hover {
-  background-color: #999999;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-button[type='submit']:active,
-.loginForm button:active,
-.signUpForm button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Sign Up Link */
-.loginForm p,
-.signUpForm p {
-  text-align: center;
-  font-size: 14px;
-  color: #666666;
-  margin-top: 20px;
-}
-
-.loginForm p a,
-.signUpForm p a {
-  color: #0066cc;
-  text-decoration: none;
-  font-weight: 500;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.loginForm p a:hover,
-.signUpForm p a:hover {
-  color: #0052a3;
-  text-decoration: underline;
-}
-
-/* Signup/Login Prompt */
-.loginForm::before-content,
-.signUpForm::before-content {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  text-align: center;
-}
-
-/* Error Message */
-.loginForm p:last-of-type,
-.signUpForm p:last-of-type {
-  color: #d32f2f;
-  font-size: 13px;
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #ffebee;
-  border-radius: 4px;
-  border-left: 4px solid #d32f2f;
-}
-
-/* Right Side - Image Section */
+/* right-side cover image using --boy-img (inline var preferred); fallback path corrected to ../../Assets */
 .loginForm::after,
 .signUpForm::after {
   content: '';
@@ -229,140 +34,195 @@ button[type='submit']:active,
   top: 0;
   width: 50%;
   height: 100%;
-  background-image: var(--app-logo);
+  background-image: var(--boy-img, url('../../Assets/LoginSignUpAssets/LoginSignUpBoy.png'));
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   z-index: 0;
 }
 
-/* Footer Text */
+/* small top-left logo (uses --app-logo; fallback corrected to ../../Assets) */
+.loginForm .brand-logo,
+.signUpForm .brand-logo {
+  position: absolute;
+  top: 30px;
+  left: 40px;
+  width: 120px;
+  height: 50px;
+  background-image: var(--app-logo, url('../../Assets/CommonAssets/appLogo.png'));
+  background-size: contain;
+  background-repeat: no-repeat;
+  z-index: 3;
+}
+
+/* LEFT: container for the form content — occupies left 50% */
+.loginForm .form-wrapper,
+.signUpForm .form-wrapper {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* vertical centering */
+  align-items: flex-start; /* left-aligned content */
+  padding-left: 6.5%;
+  padding-right: 4%;
+  z-index: 2;
+  gap: 12px;
+}
+
+/* Make sure the form itself is flat (no card, no border, no shadow) */
+.loginForm form,
+.signUpForm form {
+  width: 100%;
+  max-width: 480px;
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* page title sits above fields */
+.loginForm form h1,
+.signUpForm form h1 {
+  font-size: 28px;
+  margin-bottom: 18px;
+  color: #111;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+/* fields layout */
+.field {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* label */
+.field label {
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+  font-size: 13px;
+}
+
+/* input */
+.field input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #e6e6e6;
+  background: #ffffff;
+  font-size: 14px;
+  transition: all .15s ease;
+  box-shadow: none;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: #c2d9ff;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.03);
+  background: #fff;
+}
+
+.field input::placeholder {
+  color: #bdbdbd;
+}
+
+/* submit button */
+button[type='submit'] {
+  width: 100%;
+  max-width: 420px;
+  padding: 14px 18px;
+  margin-top: 10px;
+  border-radius: 28px;
+  border: none;
+  background: #bdbdbd;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-block;
+  transition: transform .12s ease, background .12s ease, box-shadow .12s ease;
+}
+
+button[type='submit']:hover {
+  background: #a9a9a9;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+button[type='submit']:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* small link under button */
+p {
+  margin-top: 12px;
+  color: #333;
+  font-size: 14px;
+}
+
+.link-button {
+  color: #0066cc;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: 6px;
+}
+
+/* error message (if any) */
+.error-message {
+  margin-top: 12px;
+  color: #b00020;
+  background: #fff0f0;
+  padding: 8px;
+  border-left: 4px solid #b00020;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+/* footer text bottom-left */
 .footer-text {
   position: absolute;
-  bottom: 20px;
+  bottom: 22px;
   left: 40px;
+  color: #9a9a9a;
   font-size: 12px;
-  color: #999999;
-  max-width: 400px;
-  line-height: 1.5;
+  z-index: 3;
+  max-width: 420px;
+  line-height: 1.35;
 }
 
-.footer-text a {
-  color: #0066cc;
-  text-decoration: none;
-}
-
-.footer-text a:hover {
-  text-decoration: underline;
-}
-
-/* ============================================
-   RESPONSIVE DESIGN
-   ============================================ */
-
+/* responsive: keep same breakpoints for both forms */
 @media (max-width: 1200px) {
-  .loginForm::after,
-  .signUpForm::after {
-    width: 45%;
-  }
+  .loginForm::after, .signUpForm::after { width: 45%; }
+  .loginForm::before, .signUpForm::before { width: 55%; }
+  .loginForm .form-wrapper, .signUpForm .form-wrapper { width: 55%; padding-left: 5.5%; }
+}
 
-  .loginForm form,
-  .signUpForm form {
-    margin-right: 20%;
-  }
+@media (max-width: 900px) {
+  .brand-logo { left: 24px; top: 18px; width: 100px; height: 44px; }
+  form h1 { font-size: 24px; }
 }
 
 @media (max-width: 768px) {
-  .loginForm,
-  .signUpForm {
-    flex-direction: column;
-    padding: 0;
-  }
-
-  .loginForm::before,
-  .signUpForm::before {
+  .loginForm, .signUpForm { flex-direction: column; }
+  .loginForm::before, .loginForm::after, .signUpForm::before, .signUpForm::after {
     width: 100%;
     height: 50%;
   }
-
-  .loginForm::after,
-  .signUpForm::after {
-    width: 100%;
-    height: 50%;
-    top: auto;
-    bottom: 0;
-    left: 0;
-  }
-
-  .loginForm form,
-  .signUpForm form {
-    width: 90%;
-    max-width: 500px;
-    margin: 30px auto;
-    padding: 50px 30px;
-  }
-
-  .loginForm h1,
-  .signUpForm h1 {
-    font-size: 24px;
-    margin-bottom: 25px;
-  }
-
-  .field {
-    margin-bottom: 18px;
-  }
-
-  .field input {
-    padding: 11px 12px;
-    font-size: 13px;
-  }
-
-  button[type='submit'],
-  .loginForm button,
-  .signUpForm button {
-    padding: 11px;
-    font-size: 15px;
-  }
-
-  .footer-text {
-    position: static;
-    margin-top: 30px;
-    text-align: center;
-    max-width: 100%;
-  }
+  .loginForm::after, .signUpForm::after { top: auto; bottom: 0; left: 0; right: auto; background-position: center; }
+  .loginForm .form-wrapper, .signUpForm .form-wrapper { width: 100%; padding: 28px 24px; align-items: stretch; }
+  .footer-text { position: static; margin-top: 12px; text-align: center; }
+  button[type='submit'] { max-width: 100%; }
 }
 
 @media (max-width: 480px) {
-  .loginForm form,
-  .signUpForm form {
-    width: 95%;
-    padding: 40px 20px;
-  }
-
-  .loginForm h1,
-  .signUpForm h1 {
-    font-size: 20px;
-    margin-bottom: 20px;
-  }
-
-  .field label {
-    font-size: 13px;
-  }
-
-  .field input {
-    padding: 10px 12px;
-    font-size: 12px;
-  }
-
-  button[type='submit'],
-  .loginForm button,
-  .signUpForm button {
-    padding: 10px;
-    font-size: 14px;
-  }
-
-  .loginForm p,
-  .signUpForm p {
-    font-size: 12px;
-  }
+  form h1 { font-size: 20px; margin-bottom: 14px; }
+  .brand-logo { width: 86px; height: 36px; left: 16px; top: 14px; }
+  .footer-text { font-size: 11px; line-height: 1.4; }
 }

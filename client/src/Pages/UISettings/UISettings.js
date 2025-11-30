@@ -1,8 +1,3 @@
-
-
-
-
-
 // import React, { useState, useEffect, useRef, useCallback } from 'react'
 // import axios from '../../config/axiosConfig'
 // import { useAuthContext } from '../../Hooks/useAuthContext'
@@ -553,12 +548,6 @@
 
 
 
-
-
-
-
-
-
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import axios from '../../config/axiosConfig'
 import { useAuthContext } from '../../Hooks/useAuthContext'
@@ -745,6 +734,9 @@ const UISettings = () => {
     <div className="ui-settings-wrapper">
       {/* Left Side - Chat Widget Display */}
       <div className="ui-settings-left">
+        {/* Chat Bot Label */}
+        <div className="ui-chat-bot-label">Chat Bot</div>
+
         {/* ═══════════════════════════════════════════════════════════════════ */}
         {/* CHAT WIDGET PREVIEW */}
         {/* ═══════════════════════════════════════════════════════════════════ */}

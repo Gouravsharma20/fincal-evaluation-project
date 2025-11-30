@@ -1,7 +1,7 @@
 /* Main Container - Side by Side Layout */
 .ui-settings-wrapper {
   display: flex;
-  gap: 40px;
+  gap: 80px;
   padding: 40px;
   background-color: #ffffff;
   min-height: 100vh;
@@ -17,6 +17,16 @@
   gap: 24px;
   position: relative;
   min-width: 350px;
+}
+
+/* Chat Bot Label */
+.ui-chat-bot-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 8px;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
 }
 
 /* Chat Widget Container */

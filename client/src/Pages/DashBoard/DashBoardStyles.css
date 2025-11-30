@@ -1,201 +1,275 @@
-/* ADMIN DASHBOARD - FINAL COMPLETE WITH DROPDOWNS */
+/* =====================================================
+   DASHBOARD STYLES - SINGLE COLUMN LAYOUT
+   ONE TICKET CARD PER ROW - ALWAYS
+   ===================================================== */
 
 * {
+  box-sizing: border-box;
+}
+
+body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .admin-dashboard {
   display: flex;
-  height: 100vh;
   width: 100%;
-  background-color: #f5f7fa;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  min-height: 100vh;
+  background-color: #f5f5f5;
 }
-
-.admin-sidebar {
-  width: 88px;
-  background-color: #ffffff;
-  border-right: 1px solid #e5e5e5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 24px 0;
-  flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.sidebar-top {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-.logo-section {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  margin-bottom: 40px;
-}
-
-.logo-icon {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 28px;
-  font-weight: 600;
-}
-
-.sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  flex: 1;
-  align-items: center;
-}
-
-.nav-item {
-  width: 52px;
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  cursor: pointer;
-  color: #b0b0b0;
-  transition: all 0.3s ease;
-  background-color: transparent;
-}
-
-.nav-item:hover {
-  background-color: #f0f0f0;
-  color: #667eea;
-}
-
-.nav-item.active {
-  background-color: #e3f2fd;
-  color: #667eea;
-}
-
-.nav-item svg {
-  width: 24px;
-  height: 24px;
-  stroke-width: 2;
-}
-
-.sidebar-bottom {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-
 
 .admin-main-content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  width: 100%;
   overflow: hidden;
 }
 
+/* =====================================================
+   SEARCH & FILTER
+   ===================================================== */
 
 .admin-search-header {
-  padding: 32px 48px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #e5e5e5;
-  flex-shrink: 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  background-color: white;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .search-wrapper {
-  position: relative;
   max-width: 600px;
-}
-
-.search-icon {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #999;
 }
 
 .search-input-main {
   width: 100%;
-  padding: 14px 16px 14px 44px;
-  border: 2px solid #e5e5e5;
-  border-radius: 10px;
-  font-size: 15px;
-  color: #1a1a1a;
-  background-color: #f8f9fa;
-  transition: all 0.3s;
-  font-family: inherit;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
 }
 
 .search-input-main:focus {
-  outline: none;
-  border-color: #667eea;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #1976d2;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
 }
-
-.search-input-main::placeholder {
-  color: #b0b0b0;
-}
-
 
 .filter-tabs-section {
-  padding: 16px 48px 0;
   display: flex;
-  gap: 12px;
-  flex-shrink: 0;
+  gap: 20px;
+  padding: 15px 20px;
+  background-color: white;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .filter-tab {
-  padding: 10px 20px;
-  background-color: #ffffff;
-  border: 2px solid #e5e5e5;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
+  padding: 0;
+  border: none;
+  background: transparent;
   color: #666;
   cursor: pointer;
-  transition: all 0.3s;
-  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  position: relative;
 }
 
 .filter-tab:hover {
-  border-color: #667eea;
-  color: #667eea;
+  color: #1976d2;
 }
 
 .filter-tab.active {
-  background-color: #667eea;
-  border-color: #667eea;
-  color: white;
+  color: #1976d2;
+  font-weight: 600;
 }
 
+.filter-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: #1976d2;
+  border-radius: 2px;
+}
+
+/* =====================================================
+   TICKETS CONTAINER - SINGLE COLUMN ONLY
+   ===================================================== */
 
 .tickets-cards-container {
   flex: 1;
   overflow-y: auto;
-  padding: 24px 48px;
+  padding: 20px;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 24px;
+  gap: 16px;
+  width: 100%;
+  max-width: 100%;
 }
 
+/* =====================================================
+   TICKET CARD - VERTICAL STACKING WITHIN CARD
+   ===================================================== */
+
+.ticket-card-box {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.2s;
+  cursor: pointer;
+  
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  width: 100%;
+}
+
+.ticket-card-box:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: #f9f9f9;
+  transform: translateY(-2px);
+}
+
+/* ===== TICKET ID & TIME ===== */
+
+.card-top-section {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+}
+
+.card-ticket-id {
+  margin: 0 0 6px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.card-posted-time {
+  font-size: 12px;
+  color: #999;
+}
+
+/* ===== MESSAGE ===== */
+
+.card-message-section {
+  display: block;
+  width: 100%;
+  padding: 0;
+  background-color: transparent;
+  margin: 0;
+}
+
+.card-initial-message {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ===== USER INFO ===== */
+
+.card-user-info {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.card-user-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.card-user-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-user-name {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-user-email {
+  margin: 0 0 4px 0;
+  font-size: 12px;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-user-phone {
+  margin: 0;
+  font-size: 12px;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== BUTTON - FULL WIDTH ===== */
+
+.open-ticket-btn-card {
+  padding: 10px 16px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  text-align: center;
+}
+
+.open-ticket-btn-card:hover {
+  background-color: #1565c0;
+}
+
+/* ===== STATUS MESSAGES ===== */
+
+.status-text {
+  text-align: center;
+  color: #999;
+  padding: 40px 20px;
+  font-size: 14px;
+  grid-column: 1 / -1;
+}
+
+.error-text {
+  color: #d32f2f;
+}
+
+/* =====================================================
+   SCROLLBAR
+   ===================================================== */
+
 .tickets-cards-container::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .tickets-cards-container::-webkit-scrollbar-track {
@@ -204,1125 +278,55 @@
 
 .tickets-cards-container::-webkit-scrollbar-thumb {
   background: #ddd;
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 .tickets-cards-container::-webkit-scrollbar-thumb:hover {
   background: #999;
 }
 
-.status-text {
-  text-align: center;
-  padding: 60px 20px;
-  color: #999;
-  font-size: 16px;
-  grid-column: 1 / -1;
-}
-
-.status-text.error-text {
-  color: #f44336;
-}
-
-
-.ticket-card-box {
-  background-color: #FEFEFE;
-  border: 1px solid #e5e5e5;
-  border-radius: 5px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  transition: all 0.3s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  cursor: pointer;
-}
-
-.ticket-card-box:hover {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  transform: translateY(-4px);
-  border-color: #667eea;
-}
-
-.card-top-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 4px;
-}
-
-.card-ticket-id {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a1a1a;
-}
-
-.card-posted-time {
-  font-size: 12px;
-  color: #999;
-  white-space: nowrap;
-  font-weight: 400;
-}
-
-.card-message-section {
-  padding: 0;
-  background-color: transparent;
-  border-radius: 0;
-  border-left: none;
-  margin-bottom: 12px;
-}
-
-.card-initial-message {
-  margin: 0;
-  padding: 0;
-  font-size: 14px;
-  color: #000000;
-  line-height: 1.3;
-  display: block;
-  word-wrap: break-word;
-  font-weight: bold;
-}
-
-
-.card-bottom-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-  padding-top: 0;
-  border-top: none;
-}
-
-.card-user-info {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 12px;
-  flex: 1;
-}
-
-.card-user-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  background-color: #f0f0f0;
-  flex-shrink: 0;
-}
-
-.card-user-details {
-  flex: 1;
-  display: flex;         
-  flex-direction: column;
-  gap: 0px;
-}
-
-.card-user-name {
-  margin: 0;
-  padding: 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: #999;
-  line-height: 1.2;
-}
-
-.card-user-email {
-  margin: 0;
-  padding: 0;
-  font-size: 11px;
-  color: #999;
-  line-height: 1.2;
-}
-
-.card-user-phone {
-  margin: 0;
-  padding: 0;
-  font-size: 11px;
-  color: #999;
-  line-height: 1.2;
-}
-
-.open-ticket-btn-card {
-  padding: 8px 16px;
-  background-color: transparent;
-  color: #184E7F;
-  border: none;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: inherit;
-  white-space: nowrap;
-  text-decoration: none;
-  align-self: center;
-}
-
-.open-ticket-btn-card:hover {
-  background-color: #f0f0f0;
-  color: #5568d3;
-}
-
-.open-ticket-btn-card:active {
-  transform: scale(0.98);
-}
-
-
-.three-panel-container {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 1.2fr 1fr 340px;
-  gap: 20px;
-  padding: 20px 48px;
-  overflow: hidden;
-  position: relative;
-}
-
-.back-btn {
-  position: absolute;
-  top: 20px;
-  left: 48px;
-  padding: 10px 18px;
-  background-color: #f5f5f5;
-  border: 1.5px solid #e5e5e5;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #666;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: inherit;
-  z-index: 10;
-}
-
-.back-btn:hover {
-  background-color: #667eea;
-  border-color: #667eea;
-  color: white;
-}
-
-
-.panel-chat,
-.panel-details,
-.panel-profile {
-  background-color: #ffffff;
-  border: 1px solid #e5e5e5;
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.panel-header {
-  padding: 16px 20px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e5e5e5;
-  flex-shrink: 0;
-}
-
-.panel-header h2 {
-  margin: 0;
-  font-size: 15px;
-  font-weight: 600;
-  color: #1a1a1a;
-}
-
-
-.panel-chat {
-  margin-top: 60px;
-}
-
-.messages-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.messages-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.messages-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.messages-list::-webkit-scrollbar-thumb {
-  background: #ddd;
-  border-radius: 3px;
-}
-
-.msg-item {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 12px;
-  border-radius: 8px;
-  max-width: 85%;
-}
-
-.msg-item.msg-user {
-  align-self: flex-end;
-  background-color: #e3f2fd;
-  border-left: 3px solid #667eea;
-}
-
-.msg-item.msg-admin {
-  align-self: flex-start;
-  background-color: #f5f5f5;
-  border-left: 3px solid #999;
-}
-
-.msg-info {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  align-items: center;
-}
-
-.msg-sender {
-  font-size: 11px;
-  font-weight: 600;
-  color: #666;
-  text-transform: uppercase;
-}
-
-.msg-timestamp {
-  font-size: 10px;
-  color: #999;
-}
-
-.msg-content {
-  margin: 0;
-  font-size: 13px;
-  color: #1a1a1a;
-  word-wrap: break-word;
-  line-height: 1.5;
-}
-
-.message-reply-box {
-  padding: 16px 20px;
-  border-top: 1px solid #e5e5e5;
-  background-color: #f8f9fa;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.reply-textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
-  font-size: 13px;
-  font-family: inherit;
-  resize: none;
-  transition: all 0.2s;
-}
-
-.reply-textarea:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.reply-send-btn {
-  padding: 10px 18px;
-  background-color: #667eea;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: inherit;
-}
-
-.reply-send-btn:hover {
-  background-color: #5568d3;
-}
-
-
-.panel-details {
-  margin-top: 60px;
-}
-
-.details-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.detail-item {
-  padding: 16px 0;
-  border-bottom: 1px solid #f0f0f0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.detail-item:last-child {
-  border-bottom: none;
-}
-
-.detail-item label {
-  font-size: 11px;
-  font-weight: 600;
-  color: #999;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.detail-item p {
-  margin: 0;
-  font-size: 14px;
-  color: #1a1a1a;
-  font-weight: 500;
-}
-
-.detail-item p.status-value {
-  padding: 4px 12px;
-  border-radius: 20px;
-  display: inline-block;
-  width: fit-content;
-  font-size: 12px;
-}
-
-.detail-item p.status-resolved {
-  background-color: #c8e6c9;
-  color: #2e7d32;
-}
-
-.detail-item p.status-unresolved {
-  background-color: #ffe0b2;
-  color: #e65100;
-}
-
-
-.panel-profile {
-  margin-top: 60px;
-  padding: 0;
-  overflow-y: auto;
-}
-
-.customer-profile-section {
-  padding: 20px;
-  border-bottom: 1px solid #e5e5e5;
-  text-align: center;
-}
-
-.profile-avatar-container {
-  margin-bottom: 16px;
-}
-
-.profile-avatar-large {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #667eea;
-}
-
-.profile-details-section h3 {
-  margin: 12px 0 0 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a1a1a;
-}
-
-.profile-info-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-top: 12px;
-  text-align: center;
-}
-
-.profile-info-item label {
-  font-size: 11px;
-  font-weight: 600;
-  color: #999;
-  text-transform: uppercase;
-}
-
-.profile-info-item p {
-  margin: 0;
-  font-size: 12px;
-  color: #666;
-  word-break: break-all;
-}
-
-
-.team-assignment-section,
-.status-dropdown-section {
-  padding: 20px;
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.section-heading {
-  margin: 0 0 12px 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: #1a1a1a;
-}
-
-
-.team-dropdown-wrapper,
-.status-dropdown-wrapper {
-  position: relative;
-}
-
-.team-dropdown-btn,
-.status-dropdown-btn {
-  width: 100%;
-  padding: 10px 12px;
-  background-color: #ffffff;
-  border: 1.5px solid #e5e5e5;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #1a1a1a;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: inherit;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.team-dropdown-btn:hover,
-.status-dropdown-btn:hover {
-  border-color: #667eea;
-  background-color: #f8f9fa;
-}
-
-.dropdown-text {
-  flex: 1;
-  text-align: left;
-}
-
-.dropdown-icon {
-  transition: transform 0.3s;
-  font-size: 12px;
-  color: #999;
-}
-
-.dropdown-icon.open {
-  transform: rotate(180deg);
-}
-
-.team-dropdown-menu,
-.status-dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background-color: #ffffff;
-  border: 1px solid #e5e5e5;
-  border-top: none;
-  border-radius: 0 0 8px 8px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  z-index: 100;
-  overflow: hidden;
-  margin-top: -2px;
-}
-
-
-.team-option {
-  width: 100%;
-  padding: 12px;
-  background-color: #ffffff;
-  border: none;
-  text-align: left;
-  font-size: 13px;
-  color: #1a1a1a;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: inherit;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.team-option:last-child {
-  border-bottom: none;
-}
-
-.team-option:hover {
-  background-color: #f8f9fa;
-  color: #667eea;
-}
-
-.team-option.selected {
-  background-color: #e3f2fd;
-  color: #667eea;
-  font-weight: 600;
-}
-
-.team-option-name {
-  flex: 1;
-}
-
-.assign-icon {
-  font-size: 14px;
-  opacity: 0.5;
-}
-
-.team-option:hover .assign-icon {
-  opacity: 1;
-}
-
-.status-option {
-  width: 100%;
-  padding: 12px;
-  background-color: #ffffff;
-  border: none;
-  text-align: left;
-  font-size: 13px;
-  color: #1a1a1a;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: inherit;
-  border-bottom: 1px solid #f0f0f0;
-  font-weight: 500;
-}
-
-.status-option:last-child {
-  border-bottom: none;
-}
-
-.status-option:hover {
-  background-color: #f8f9fa;
-}
-
-.status-option.active {
-  background-color: #e3f2fd;
-  color: #667eea;
-  font-weight: 600;
-}
-
-.status-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.status-badge.status-resolved {
-  background-color: #c8e6c9;
-  color: #2e7d32;
-}
-
-.status-badge.status-unresolved {
-  background-color: #ffe0b2;
-  color: #e65100;
-}
-
-
-.panel-left-chats {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background: #f8f8f8;
-  border-right: 1px solid #e0e0e0;
-}
-
-/* ===== HEADER ===== */
-.chats-header {
-  padding: 20px 16px;
-  border-bottom: 1px solid #e0e0e0;
-  background: #ffffff;
-}
-
-.chats-header h3 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #333333;
-  letter-spacing: -0.3px;
-}
-
-/* ===== CHATS LIST CONTAINER ===== */
-.chats-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 8px 0;
-  background: #f8f8f8;
-}
-
-/* ===== INDIVIDUAL CHAT ITEM ===== */
-.chat-list-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 12px;
-  margin: 4px 8px;
-  border-radius: 12px;
-  background: #ffffff;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: 1px solid transparent;
-}
-
-.chat-list-item:hover {
-  background: #f5f5f5;
-  border-color: #e8e8e8;
-}
-
-.chat-list-item.active {
-  background: #e8f0ff;
-  border-color: #d0e0ff;
-}
-
-/* ===== CHAT AVATAR ===== */
-.chat-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-}
-
-/* ===== CHAT INFO SECTION ===== */
-.chat-list-info {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.chat-name {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 600;
-  color: #0066cc;
-  letter-spacing: -0.2px;
-}
-
-.chat-preview {
-  margin: 0;
-  font-size: 13px;
-  color: #999999;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* ===== PROFILE SECTION (For openTicket display) ===== */
-.profile-section {
-  padding: 20px;
-  background: #ffffff;
-  border-bottom: 1px solid #e0e0e0;
-  text-align: center;
-}
-
-.profile-avatar-large {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.profile-name {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #333333;
-}
-
-/* ===== SCROLLBAR STYLING ===== */
-.chats-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.chats-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.chats-list::-webkit-scrollbar-thumb {
-  background: #d0d0d0;
-  border-radius: 3px;
-  transition: background 0.2s;
-}
-
-.chats-list::-webkit-scrollbar-thumb:hover {
-  background: #999999;
-}
-
-
-@media (max-width: 1600px) {
-  .three-panel-container {
-    gap: 16px;
-    padding: 20px 24px;
+/* =====================================================
+   RESPONSIVE - ONLY ADJUST SPACING, NOT LAYOUT
+   ===================================================== */
+
+@media (max-width: 768px) {
+  .admin-search-header {
+    padding: 15px;
   }
 
-  .admin-search-header {
-    padding: 24px 24px;
+  .search-input-main {
+    font-size: 16px;
   }
 
   .filter-tabs-section {
-    padding: 16px 24px 0;
+    gap: 15px;
   }
 
   .tickets-cards-container {
-    padding: 24px;
+    padding: 12px;
+    gap: 12px;
   }
 
-  .back-btn {
-    left: 24px;
-  }
-}
-
-@media (max-width: 1200px) {
-  .three-panel-container {
-    grid-template-columns: 1fr 1fr;
+  .ticket-card-box {
+    padding: 12px;
+    gap: 10px;
   }
 
-  .panel-profile {
-    display: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .admin-sidebar {
-    display: none;
+  .card-user-avatar {
+    width: 40px;
+    height: 40px;
   }
 
-  .three-panel-container {
-    grid-template-columns: 1fr;
+  .card-ticket-id {
+    font-size: 14px;
   }
 
-  .panel-details {
-    display: none;
+  .card-initial-message {
+    font-size: 13px;
   }
 
-  .panel-profile {
-    display: flex;
+  .open-ticket-btn-card {
+    padding: 8px 12px;
+    font-size: 12px;
   }
-
-  .tickets-cards-container {
-    grid-template-columns: 1fr;
-  }
-}
-
-
-/* =====================================================
-   MODAL STYLES
-   ===================================================== */
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  max-width: 450px;
-  width: 90%;
-  overflow: hidden;
-  animation: slideUp 0.3s ease-out;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.modal-header h2 {
-  margin: 0;
-  font-size: 1.3rem;
-  color: #333;
-  font-weight: 600;
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 28px;
-  color: #999;
-  cursor: pointer;
-  padding: 0;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  transition: all 0.2s;
-}
-
-.modal-close:hover {
-  background-color: #f5f5f5;
-  color: #333;
-}
-
-.modal-body {
-  padding: 24px 20px;
-}
-
-.modal-message {
-  margin: 0 0 16px 0;
-  font-size: 0.95rem;
-  color: #666;
-  line-height: 1.6;
-}
-
-.modal-member-info {
-  background-color: #f5f5f5;
-  border-left: 4px solid #007bff;
-  padding: 12px 16px;
-  border-radius: 4px;
-  margin-top: 12px;
-}
-
-.member-name {
-  display: block;
-  font-weight: 600;
-  color: #007bff;
-  font-size: 1rem;
-}
-
-.modal-footer {
-  display: flex;
-  gap: 12px;
-  padding: 16px 20px;
-  border-top: 1px solid #e0e0e0;
-  justify-content: flex-end;
-}
-
-.modal-btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  min-width: 100px;
-}
-
-.modal-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.modal-btn-cancel {
-  background-color: #f0f0f0;
-  color: #333;
-  border: 1px solid #d0d0d0;
-}
-
-.modal-btn-cancel:hover:not(:disabled) {
-  background-color: #e5e5e5;
-}
-
-.modal-btn-confirm {
-  background-color: #007bff;
-  color: white;
-}
-
-.modal-btn-confirm:hover:not(:disabled) {
-  background-color: #0056b3;
-  box-shadow: 0 2px 8px rgba(0, 86, 179, 0.3);
-}
-
-/* =====================================================
-   ASSIGNMENT BADGE STYLES
-   ===================================================== */
-
-.assignment-badge {
-  background-color: #d4edda;
-  border: 1px solid #c3e6cb;
-  color: #155724;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  margin-top: 8px;
-}
-
-.assignment-badge span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* =====================================================
-   DISABLED MESSAGE BOX STYLES
-   ===================================================== */
-
-.message-reply-box.disabled-box {
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  padding: 20px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100px;
-}
-
-.disabled-message {
-  color: #6c757d;
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-.disabled-message p {
-  margin: 0;
-  padding: 0;
-}
-
-/* =====================================================
-   ASSIGNED MEMBER SECTION STYLES
-   ===================================================== */
-
-.assigned-member-section {
-  margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px solid #e0e0e0;
-}
-
-.assigned-member-info {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  background-color: #f5f5f5;
-  padding: 16px;
-  border-radius: 8px;
-  margin-top: 12px;
-}
-
-.assigned-member-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #007bff;
-  flex-shrink: 0;
-}
-
-.assigned-member-details {
-  flex: 1;
-}
-
-.assigned-member-name {
-  font-weight: 600;
-  font-size: 1rem;
-  color: #333;
-  margin: 0 0 4px 0;
-}
-
-.assigned-member-email {
-  font-size: 0.85rem;
-  color: #666;
-  margin: 0 0 8px 0;
-}
-
-.assigned-badge {
-  display: inline-block;
-  background-color: #28a745;
-  color: white;
-  padding: 4px 12px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-/* =====================================================
-   PANEL HEADER STYLES
-   ===================================================== */
-
-.panel-header {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 16px;
-  border-bottom: 1px solid #e0e0e0;
-  background-color: #f9f9f9;
-}
-
-.panel-header p {
-  margin: 0;
-  font-weight: 600;
-  color: #333;
-}
-
-/* =====================================================
-   TEAM OPTION STYLES
-   ===================================================== */
-
-.team-option {
-  padding: 12px 16px;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-  transition: background-color 0.2s;
-  font-size: 0.9rem;
-  color: #333;
-}
-
-.team-option:hover:not(:disabled) {
-  background-color: #f0f0f0;
-}
-
-.team-option.selected {
-  background-color: #e7f3ff;
-  color: #007bff;
-  font-weight: 500;
-}
-
-.team-option-name {
-  flex: 1;
-}
-
-.assign-icon {
-  color: #007bff;
-  font-weight: bold;
-  margin-left: 8px;
 }

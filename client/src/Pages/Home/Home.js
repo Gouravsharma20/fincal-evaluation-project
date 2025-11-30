@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { useAuthContext } from '../../Hooks/useAuthContext'
 import { Link, useNavigate } from 'react-router-dom'
@@ -15,14 +14,17 @@ import AdobeLogo from '../../Assets/HomeAssets/CompanyLogo/AdobeLogo.png'
 import AirtableLogo from '../../Assets/HomeAssets/CompanyLogo/AirTable.png'
 import ElasticLogo from '../../Assets/HomeAssets/CompanyLogo/Elastic.png'
 import OpendoorLogo from '../../Assets/HomeAssets/CompanyLogo/OpenDoor.png'
+import HomePage2 from './HomePage2/HomePage2'
+import HomePage3 from './HomePage3/HomePage3'
+import LastPage from './LastPage/LastPage'
 
+/* ---------- Company Logos Bar ---------- */
 const CompanyLogos = () => {
   const logos = [
     { src: AdobeLogo, alt: 'Adobe' },
-    { src: ElasticLogo, alt: 'Elastic' },   // 2nd: Elastic
+    { src: ElasticLogo, alt: 'Elastic' },
     { src: OpendoorLogo, alt: 'Opendoor' },
     { src: AirtableLogo, alt: 'Airtable' },
-    { src: ElasticLogo, alt: 'Elastic' }    // 5th: Elastic (repeated)
   ]
 
   return (
@@ -42,8 +44,6 @@ const Home = () => {
   const { user } = useAuthContext()
   const navigate = useNavigate()
 
-
-
   const handleGetStarted = () => navigate('/signup')
   const handleWatchVideo = () => window.open('https://www.youtube.com', '_blank')
 
@@ -62,6 +62,7 @@ const Home = () => {
           </div>
         ) : null}
 
+        {/* HERO CONTENT - row layout */}
         <div className="hero-container">
           <div className="hero-left">
             <h1 className="hero-title">
@@ -90,15 +91,21 @@ const Home = () => {
             <div className="hero-photo">
               <img src={HeroPhoto} alt="People talking" className="hero-main-img" />
 
-              {/* Overlays: message bubble (top-right), graph (mid-right), calendar (bottom-left) */}
               <img src={MessageCard} alt="Message" className="overlay message-card" />
               <img src={GraphCard} alt="Graph" className="overlay graph-card" />
               <img src={CalendarCard} alt="Calendar" className="overlay calendar-card" />
             </div>
           </div>
         </div>
+
+        {/* COMPANIES BAR - OUTSIDE hero-container, full width, at bottom of hero-section */}
+        <CompanyLogos />
       </section>
-      <CompanyLogos />
+
+      {/* Page-2 */}
+      <HomePage2 />
+      <HomePage3/>
+      <LastPage/>
     </>
   )
 }

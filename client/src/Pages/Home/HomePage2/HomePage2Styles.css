@@ -1,0 +1,213 @@
+:root{
+  --dark: #30404D;
+  --muted: #394B59;
+  --card-bg: #f6fbff; /* subtle card background for right side */
+  --container-padding: 48px;
+  --radius: 18px;
+}
+
+.hp2-section{
+  max-width: 1200px;
+  margin: 48px auto;
+  padding: 0 20px;
+  font-family: Inter, "Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
+  color: var(--dark);
+}
+
+/* top title and paragraph */
+.hp2-top{
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.hp2-title{
+  color: var(--dark);
+  font-size: 32px;
+  line-height: 1.12;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.hp2-sub{
+  color: var(--dark);
+  max-width: 880px;
+  margin: 0 auto;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* main content card */
+.hp2-card{
+  display: flex;
+  gap: 28px;
+  background: white;
+  border-radius: 18px;
+  padding: 28px;
+  align-items: stretch;
+  box-shadow: 0 8px 30px rgba(10,20,30,0.04);
+  border: 1px solid rgba(148,165,176,0.12);
+}
+
+/* left column text */
+.hp2-left{
+  flex: 1 1 48%;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hp2-left-heading{
+  color: var(--dark);
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  letter-spacing: 0.2px;
+}
+
+.hp2-left-lead{
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 22px;
+}
+
+/* smaller features */
+.hp2-feature{
+  margin-bottom: 16px;
+}
+
+.feature-title{
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.feature-desc{
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+/* right column with image / funnel */
+.hp2-right{
+  flex: 1 1 52%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.hp2-right-inner{
+  width: 100%;
+  max-width: 520px;
+  position: relative;
+}
+
+/* advertisement icons at top-right inside card */
+.hp2-ad{
+  width: 140px;
+  display: block;
+  margin: 8px auto 18px auto;
+}
+
+/* frame that contains funnel + dumble images */
+.hp2-funnel-frame{
+  background: linear-gradient(180deg, rgba(243,248,255,1) 0%, rgba(246,249,255,1) 100%);
+  border-radius: 12px;
+  padding: 18px;
+  position: relative;
+  overflow: visible;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* underlying funnel image (the main art) - scale to fit */
+.hp2-funnel-img{
+  width: 320px;
+  display: block;
+  pointer-events: none;
+}
+
+/* dumble icons (small circular/arrow PNGs) - positioned over the funnel */
+.dumble{
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 4px 10px rgba(60,80,100,0.12);
+  border-radius: 999px;
+  background: white;
+  padding: 4px;
+}
+
+/* tune positions - approximate to match screenshot */
+.dumble-capture{
+  left: 72%;
+  top: 36%;
+  width: 36px;
+  height: 36px;
+}
+
+.dumble-nurture{
+  left: 68%;
+  top: 52%;
+  width: 36px;
+  height: 36px;
+}
+
+.dumble-close{
+  left: 64%;
+  top: 70%;
+  width: 36px;
+  height: 36px;
+}
+
+/* labels on right side of funnel */
+.funnel-label{
+  position: absolute;
+  right: -26px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: var(--dark);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.label-dot{
+  width: 10px;
+  height: 10px;
+  background: var(--muted);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(70,90,110,0.12);
+}
+
+/* each label vertical position */
+.label-capture{ top: 30%; }
+.label-nurture{ top: 50%; }
+.label-close{ top: 70%; }
+
+/* smaller screens */
+@media (max-width: 900px){
+  .hp2-card{ flex-direction: column; padding: 18px; }
+  .hp2-left{ padding: 14px; }
+  .hp2-right{ padding: 14px; }
+  .hp2-funnel-img{ width: 280px; }
+  .funnel-label{ right: 6px; font-size: 12px; }
+  .dumble-capture{ left: 68%; }
+  .dumble-nurture{ left: 64%; }
+  .dumble-close{ left: 60%; }
+}
+
+@media (max-width: 520px){
+  .hp2-title{ font-size: 22px; }
+  .hp2-sub{ font-size: 13px; }
+  .hp2-funnel-img{ width: 240px; }
+  .hp2-ad{ width: 120px; }
+}
