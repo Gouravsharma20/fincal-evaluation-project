@@ -735,6 +735,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import './MessagesStyles.css'
 import { useAuthContext } from '../../Hooks/useAuthContext'
+import {API_BASE_URL} from '../../config/api'
 
 const Messages = () => {
   const [tickets, setTickets] = useState([])
@@ -755,6 +756,7 @@ const Messages = () => {
   const [showAssignmentModal, setShowAssignmentModal] = useState(false)
   const [pendingAssignment, setPendingAssignment] = useState(null)
   const [assignmentLoading, setAssignmentLoading] = useState(false)
+  
 
   const { token } = useAuthContext()
 
@@ -767,7 +769,7 @@ const Messages = () => {
 
     setLoadingTeamMembers(true)
     try {
-      const response = await fetch('http://localhost:4000/api/admin/team-members', {
+      const response = await fetch(`${API_BASE_URL}/api/admin/team-members`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -786,12 +788,34 @@ const Messages = () => {
     }
   }, [token])
 
+  const fetchSingleTicket = useCallback(async (ticketId) => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/admin/tickets/${ticketId}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      if (response.ok) {
+        const data = await response.json()
+        return data.ticket || data
+      }
+      return null
+    } catch (err) {
+      console.error('Error fetching ticket:', err)
+      return null
+    }
+  }, [token])
+
   const fetchTickets = useCallback(async () => {
     if (!token) return
 
     setLoading(true)
     try {
-      const response = await fetch('http://localhost:4000/api/admin/tickets', {
+      const response = await fetch(`${API_BASE_URL}/api/admin/tickets`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -814,30 +838,10 @@ const Messages = () => {
     } finally {
       setLoading(false)
     }
-  }, [token, filter, searchQuery, openTicket])
+  }, [token, filter, searchQuery, openTicket,fetchSingleTicket])
 
   // ✅ FIX #1: Fetch fresh ticket to get isMissedChat
-  const fetchSingleTicket = useCallback(async (ticketId) => {
-    try {
-      const response = await fetch(
-        `http://localhost:4000/api/admin/tickets/${ticketId}`,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      )
-      if (response.ok) {
-        const data = await response.json()
-        return data.ticket || data
-      }
-      return null
-    } catch (err) {
-      console.error('Error fetching ticket:', err)
-      return null
-    }
-  }, [token])
+  
 
   const applyFilters = (ticketsToFilter, filterType, search) => {
     let filtered = ticketsToFilter
@@ -916,7 +920,7 @@ const Messages = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/api/admin/tickets/${openTicket._id}/messages`,
+        `${API_BASE_URL}/api/admin/tickets/${openTicket._id}/messages`,
         {
           method: 'POST',
           headers: {
@@ -936,7 +940,7 @@ const Messages = () => {
       }
 
       const updatedResponse = await fetch(
-        `http://localhost:4000/api/admin/tickets/${openTicket._id}`,
+        `${API_BASE_URL}/api/admin/tickets/${openTicket._id}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -975,7 +979,7 @@ const Messages = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/api/admin/tickets/${openTicket._id}/assign`,
+        `${API_BASE_URL}/api/admin/tickets/${openTicket._id}/assign`,
         {
           method: 'POST',
           headers: {
@@ -1028,7 +1032,7 @@ const Messages = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/api/admin/tickets/${openTicket._id}/resolve`,
+        `${API_BASE_URL}/api/admin/tickets/${openTicket._id}/resolve`,
         {
           method: 'PATCH',
           headers: {
@@ -1042,7 +1046,7 @@ const Messages = () => {
       if (!response.ok) throw new Error('Failed to resolve')
 
       const freshResponse = await fetch(
-        `http://localhost:4000/api/admin/tickets/${openTicket._id}`,
+        `${API_BASE_URL}/api/admin/tickets/${openTicket._id}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`,

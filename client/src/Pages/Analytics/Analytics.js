@@ -36,7 +36,7 @@
 //       try {
 //         setLoading(true);
 //         const response = await axios.get('http://localhost:4000/api/admin/analytics');
-        
+
 //         if (response.data.success) {
 //           setAnalytics(response.data.analytics);
 //         } else {
@@ -68,7 +68,7 @@
 //   // ════════════════════════════════════════════════════════════════════════
 //   // MISSED CHATS DATA - for Line Chart
 //   // ════════════════════════════════════════════════════════════════════════
-  
+
 //   const missedChatsData = analytics.missedChatsPerWeek && analytics.missedChatsPerWeek.length > 0
 //     ? analytics.missedChatsPerWeek
 //     : [
@@ -87,7 +87,7 @@
 //   // ════════════════════════════════════════════════════════════════════════
 //   // FORMAT AVERAGE REPLY TIME
 //   // ════════════════════════════════════════════════════════════════════════
-  
+
 //   const formatReplyTime = (milliseconds) => {
 //     if (!milliseconds) return '0 secs';
 //     const seconds = Math.floor(milliseconds / 1000);
@@ -106,7 +106,7 @@
 //   // ════════════════════════════════════════════════════════════════════════
 //   // CHART.JS DATA - MISSED CHATS LINE CHART
 //   // ════════════════════════════════════════════════════════════════════════
-  
+
 //   const missedChatsChartData = {
 //     labels: missedChatsData.map(d => d.week),
 //     datasets: [
@@ -186,7 +186,7 @@
 //   // ════════════════════════════════════════════════════════════════════════
 //   // CHART.JS DATA - RESOLVED TICKETS PIE CHART
 //   // ════════════════════════════════════════════════════════════════════════
-  
+
 //   const resolvedChartData = {
 //     labels: ['Resolved', 'Pending'],
 //     datasets: [
@@ -235,7 +235,7 @@
 //       {/* ════════════════════════════════════════════════════════════════════ */}
 //       {/* HEADER */}
 //       {/* ════════════════════════════════════════════════════════════════════ */}
-      
+
 //       <div className="analytics-header">
 //         <h1>Analytics</h1>
 //       </div>
@@ -243,7 +243,7 @@
 //       {/* ════════════════════════════════════════════════════════════════════ */}
 //       {/* TOP METRICS ROW */}
 //       {/* ════════════════════════════════════════════════════════════════════ */}
-      
+
 //       <div className="analytics-top-section">
 //         {/* MISSED CHATS TITLE */}
 //         <div className="missed-chats-title">
@@ -276,7 +276,7 @@
 //       {/* ════════════════════════════════════════════════════════════════════ */}
 //       {/* MAIN CONTENT - CHARTS */}
 //       {/* ════════════════════════════════════════════════════════════════════ */}
-      
+
 //       <div className="analytics-main">
 //         {/* LEFT SIDE - LINE CHART */}
 //         <div className="chart-section">
@@ -339,6 +339,7 @@ import {
 import axios from '../../config/axiosConfig';
 import './AnalyticsStyles.css';
 
+
 // Register ChartJS components
 ChartJS.register(
   CategoryScale,
@@ -360,8 +361,9 @@ const Analytics = () => {
     const fetchAnalytics = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:4000/api/admin/analytics');
-        
+        const response = await axios.get(`/api/admin/analytics`);
+
+
         if (response.data.success) {
           setAnalytics(response.data.analytics);
         } else {
@@ -393,26 +395,26 @@ const Analytics = () => {
   // ════════════════════════════════════════════════════════════════════════
   // MISSED CHATS DATA - for Line Chart
   // ════════════════════════════════════════════════════════════════════════
-  
+
   const missedChatsData = analytics.missedChatsPerWeek && analytics.missedChatsPerWeek.length > 0
     ? analytics.missedChatsPerWeek
     : [
-        { week: 'Week 1', missed: 13 },
-        { week: 'Week 2', missed: 11 },
-        { week: 'Week 3', missed: 8 },
-        { week: 'Week 4', missed: 6 },
-        { week: 'Week 5', missed: 10 },
-        { week: 'Week 6', missed: 3 },
-        { week: 'Week 7', missed: 7 },
-        { week: 'Week 8', missed: 15 },
-        { week: 'Week 9', missed: 18 },
-        { week: 'Week 10', missed: 16 }
-      ];
+      { week: 'Week 1', missed: 13 },
+      { week: 'Week 2', missed: 11 },
+      { week: 'Week 3', missed: 8 },
+      { week: 'Week 4', missed: 6 },
+      { week: 'Week 5', missed: 10 },
+      { week: 'Week 6', missed: 3 },
+      { week: 'Week 7', missed: 7 },
+      { week: 'Week 8', missed: 15 },
+      { week: 'Week 9', missed: 18 },
+      { week: 'Week 10', missed: 16 }
+    ];
 
   // ════════════════════════════════════════════════════════════════════════
   // FORMAT AVERAGE REPLY TIME
   // ════════════════════════════════════════════════════════════════════════
-  
+
   const formatReplyTime = (milliseconds) => {
     if (!milliseconds) return '0 secs';
     const seconds = Math.floor(milliseconds / 1000);
@@ -431,7 +433,7 @@ const Analytics = () => {
   // ════════════════════════════════════════════════════════════════════════
   // CHART.JS DATA - MISSED CHATS LINE CHART
   // ════════════════════════════════════════════════════════════════════════
-  
+
   const missedChatsChartData = {
     labels: missedChatsData.map(d => d.week),
     datasets: [
@@ -510,7 +512,7 @@ const Analytics = () => {
   // ════════════════════════════════════════════════════════════════════════
   // CHART.JS DATA - RESOLVED TICKETS PIE CHART
   // ════════════════════════════════════════════════════════════════════════
-  
+
   const resolvedChartData = {
     labels: ['Resolved', 'Pending'],
     datasets: [
@@ -556,7 +558,7 @@ const Analytics = () => {
       {/* ════════════════════════════════════════════════════════════════════ */}
       {/* HEADER */}
       {/* ════════════════════════════════════════════════════════════════════ */}
-      
+
       <div className="analytics-header">
         <h1>Analytics</h1>
       </div>
@@ -564,7 +566,7 @@ const Analytics = () => {
       {/* ════════════════════════════════════════════════════════════════════ */}
       {/* MISSED CHATS SECTION */}
       {/* ════════════════════════════════════════════════════════════════════ */}
-      
+
       <div className="analytics-section">
         <div className="section-header">
           <h2>Missed Chats</h2>
@@ -578,7 +580,7 @@ const Analytics = () => {
       {/* ════════════════════════════════════════════════════════════════════ */}
       {/* AVERAGE REPLY TIME SECTION */}
       {/* ════════════════════════════════════════════════════════════════════ */}
-      
+
       <div className="analytics-section info-section">
         <div className="info-section-content">
           <div className="info-left">
@@ -596,7 +598,7 @@ const Analytics = () => {
       {/* ════════════════════════════════════════════════════════════════════ */}
       {/* RESOLVED TICKETS SECTION */}
       {/* ════════════════════════════════════════════════════════════════════ */}
-      
+
       <div className="analytics-section">
         <div className="section-with-chart">
           <div className="section-left">
@@ -617,7 +619,7 @@ const Analytics = () => {
       {/* ════════════════════════════════════════════════════════════════════ */}
       {/* TOTAL CHATS SECTION */}
       {/* ════════════════════════════════════════════════════════════════════ */}
-      
+
       <div className="analytics-section info-section">
         <div className="info-section-content">
           <div className="info-left">

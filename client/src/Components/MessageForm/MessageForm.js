@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import axios from "axios";
+import axios from "../../config/axiosConfig"
 import "./MessageFormStyles.css"
 import messageButtonImage from "../../Assets/HomeAssets/messageButtonImage.png";
 import hublyIconImage from "../../Assets/CommonAssets/hublyIconImage.png";
+
 
 const MessageForm = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -85,7 +86,7 @@ const MessageForm = () => {
 
       // SEND TO BACKEND
       const response = await axios.post(
-        "http://localhost:4000/api/tickets",
+        "/api/tickets",
         payload
       );
       

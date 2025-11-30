@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import './DashBoardStyles.css'
+import './DashboardStyles.css?version=2'
 import { useAuthContext } from '../../Hooks/useAuthContext'
+import {API_BASE_URL} from '../../config/api'
 
 const Dashboard = () => {
   const [tickets, setTickets] = useState([])
@@ -12,11 +13,15 @@ const Dashboard = () => {
 
   const { token } = useAuthContext()
 
+
+  
+
+
   const fetchTickets = useCallback(async () => {
     if (!token) return
     setLoading(true)
     try {
-      const response = await fetch('http://localhost:4000/api/admin/tickets', {
+      const response = await fetch(`${API_BASE_URL}/api/admin/tickets`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -85,20 +90,20 @@ const Dashboard = () => {
 
         {/* FILTER TABS */}
         <div className="filter-tabs-section">
-          <button 
-            className={`filter-tab ${filter === 'all' ? 'active' : ''}`} 
+          <button
+            className={`filter-tab ${filter === 'all' ? 'active' : ''}`}
             onClick={() => handleFilterChange('all')}
           >
             All Tickets
           </button>
-          <button 
-            className={`filter-tab ${filter === 'resolved' ? 'active' : ''}`} 
+          <button
+            className={`filter-tab ${filter === 'resolved' ? 'active' : ''}`}
             onClick={() => handleFilterChange('resolved')}
           >
             Resolved
           </button>
-          <button 
-            className={`filter-tab ${filter === 'unresolved' ? 'active' : ''}`} 
+          <button
+            className={`filter-tab ${filter === 'unresolved' ? 'active' : ''}`}
             onClick={() => handleFilterChange('unresolved')}
           >
             Unresolved

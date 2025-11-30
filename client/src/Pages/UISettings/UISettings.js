@@ -587,7 +587,7 @@ const UISettings = () => {
     try {
       setSavingState('saving')
       const response = await axios.put(
-        'http://localhost:4000/api/admin/ui-settings',
+        `/api/admin/ui-settings`,
         settings
       )
       if (response.data.success) {
@@ -614,7 +614,7 @@ const UISettings = () => {
 
   const fetchTimerSettings = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/admin/timer-settings')
+      const response = await axios.get('/api/admin/timer-settings')
       if (response.data.success) {
         const minutes = response.data.settings.resolutionTimeLimit
         setTimerMinutes(minutes.toString())
@@ -627,7 +627,7 @@ const UISettings = () => {
   const fetchSettings = async () => {
     try {
       setLoading(true)
-      const response = await axios.get('http://localhost:4000/api/admin/ui-settings')
+      const response = await axios.get('/api/admin/ui-settings')
       if (response.data.success) {
         setSettings(response.data.settings)
       }
@@ -651,7 +651,7 @@ const UISettings = () => {
       }
 
       const response = await axios.patch(
-        'http://localhost:4000/api/admin/timer-settings',
+        '/api/admin/timer-settings',
         { resolutionTimeLimit: minutesValue }
       )
 

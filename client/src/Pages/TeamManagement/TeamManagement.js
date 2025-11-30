@@ -376,6 +376,7 @@
 import React, { useState, useEffect,useCallback } from 'react';
 import { useAuthContext } from '../../Hooks/useAuthContext';
 import './TeamManagementStyles.css';
+import {API_BASE_URL} from '../../config/api'
 
 const TeamManagement = () => {
   const { user, token } = useAuthContext();
@@ -407,7 +408,7 @@ const TeamManagement = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:4000/api/admin/team-members', {
+      const response = await fetch(`${API_BASE_URL}/api/admin/team-members`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -450,8 +451,8 @@ const TeamManagement = () => {
 
     try {
       const url = editingId
-        ? `http://localhost:4000/api/admin/team-members/${editingId}`
-        : 'http://localhost:4000/api/admin/team-members';
+        ? `${API_BASE_URL}/api/admin/team-members/${editingId}`
+        : `${API_BASE_URL}/api/admin/team-members`;
 
       const method = editingId ? 'PATCH' : 'POST';
 
@@ -495,7 +496,7 @@ const TeamManagement = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:4000/api/admin/team-members/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/team-members/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

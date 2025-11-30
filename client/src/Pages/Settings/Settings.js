@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthContext } from '../../Hooks/useAuthContext'
 import './SettingsStyles.css'
+import {API_BASE_URL} from '../../config/api'
 
 const Settings = () => {
   const navigate = useNavigate()
@@ -104,8 +105,8 @@ const Settings = () => {
       }
 
       const endpoint = pendingChanges.type === 'name' 
-        ? `http://localhost:4000/api/user/${userId}/profile/name`
-        : `http://localhost:4000/api/user/${userId}/profile/password`
+        ? `${API_BASE_URL}/api/user/${userId}/profile/name`
+        : `${API_BASE_URL}/api/user/${userId}/profile/password`
 
       // Send newPassword and confirmPassword for password updates
       const body = pendingChanges.type === 'name'
