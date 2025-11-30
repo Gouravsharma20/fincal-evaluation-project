@@ -1,6 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "cd client && npm run build && mkdir -p ../public && cp -r build/* ../public/",
-  "outputDirectory": "public",
-  "installCommand": "npm install && cd client && npm install"
+  "buildCommand": "npm install && npm --prefix client install && npm --prefix client run build",
+  "outputDirectory": "client/build",
+  "env": {
+    "REACT_APP_API_URL": "@react_app_api_url"
+  }
 }
