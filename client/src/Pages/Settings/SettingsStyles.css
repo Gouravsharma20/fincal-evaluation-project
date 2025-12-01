@@ -11,7 +11,7 @@
 .app-sidebar {
   width: 92px; /* adjust to match your app sidebar */
   background: #fff;
-  border-right: 1px solid rgb(0 0 0 / 4%);
+  border-right: 1px solid rgba(0,0,0,0.0400);
   display: block;
   flex-shrink: 0;
 }
@@ -99,7 +99,7 @@
   height: 48px;
   padding: 0 16px;
   border-radius: 12px;
-  border: 1.5px solid rgb(33 45 52 / 12%);
+  border: 1.5px solid rgba(33,45,52,0.1200);
   background: #fff;
   font-size: 14px;
   outline: none;
@@ -110,8 +110,8 @@
 
 /* focus */
 .form-input:focus {
-  border-color: rgb(33 69 120 / 18%);
-  box-shadow: 0 6px 18px rgb(33 69 120 / 6%);
+  border-color: rgba(33,69,120,0.1800);
+  box-shadow: 0 6px 18px rgba(33,69,120,0.0600);
 }
 
 /* disabled style (email) */
@@ -138,8 +138,8 @@
   gap: 8px;
   padding: 10px 14px;
   border-radius: 12px;
-  background: linear-gradient(180deg, rgb(255 244 230 / 60%), rgb(255 244 230 / 40%));
-  border: 1px solid rgb(233 183 52 / 18%);
+  background: linear-gradient(180deg, rgba(255,244,230,0.6000), rgba(255,244,230,0.4000));
+  border: 1px solid rgba(233,183,52,0.1800);
   color: #6f4b00;
   font-size: 13px;
 }
@@ -161,7 +161,7 @@
   border-radius: 18px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 6px 18px rgb(31 79 120 / 12%);
+  box-shadow: 0 6px 18px rgba(31,79,120,0.1200);
 }
 
 .btn-primary:disabled {
@@ -192,7 +192,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgb(33 45 52 / 14%);
+  border: 1px solid rgba(33,45,52,0.1400);
   background: #fff;
   font-size: 12px;
   color: #2b3942;
@@ -212,8 +212,8 @@
   padding: 10px 14px;
   border-radius: 12px;
   background: #fff;
-  border: 1px solid rgb(24 36 48 / 8%);
-  box-shadow: 0 10px 30px rgb(16 30 40 / 12%);
+  border: 1px solid rgba(24,36,48,0.0800);
+  box-shadow: 0 10px 30px rgba(16,30,40,0.1200);
   font-size: 13px;
   color: #3b4850;
   opacity: 0;
@@ -248,7 +248,7 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgb(6 12 20 / 45%);
+  background: rgba(6,12,20,0.4500);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -262,8 +262,8 @@
   background: #fff;
   border-radius: 12px;
   padding: 18px;
-  box-shadow: 0 20px 50px rgb(24 39 60 / 18%);
-  border: 1px solid rgb(6 12 20 / 4%);
+  box-shadow: 0 20px 50px rgba(24,39,60,0.1800);
+  border: 1px solid rgba(6,12,20,0.0400);
 }
 .modal-header { display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .modal-header h2 { margin:0; font-size:18px; }

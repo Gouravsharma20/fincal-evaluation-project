@@ -108,14 +108,14 @@
 }
 
 .lp-social-btn:focus {
-  outline: 2px solid rgb(25 118 210 / 18%);
+  outline: 2px solid rgba(25,118,210,0.1800);
   outline-offset: 2px;
 }
 
 .lp-social-btn:hover {
   transform: translateY(-3px);
   opacity: 0.95;
-  background: rgb(0 0 0 / 2%);
+  background: rgba(0,0,0,0.0200);
 }
 
 .lp-social-img{

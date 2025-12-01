@@ -69,7 +69,7 @@
   overflow: visible;
   padding: 30px 24px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 8%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.0800);
   font-size: 16px;
   color: #333;
   max-width: 300px;
@@ -122,7 +122,7 @@
   height: 600px;
   background-color: white;
   border-radius: 12px;
-  box-shadow: 0 2px 12px rgb(0 0 0 / 10%);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1000);
   display: flex;
   flex-direction: column;
   animation: ui-slideUp 0.3s ease-out;
@@ -209,7 +209,7 @@
   overflow-wrap: break-word;
   font-size: 14px;
   color: #333;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 5%);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.0500);
 }
 
 
@@ -306,7 +306,7 @@
   background: white;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.0800);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -406,7 +406,7 @@
 .ui-welcome-textarea:focus {
   outline: none;
   border-color: #2C4A6E;
-  box-shadow: 0 0 0 3px rgb(44 74 110 / 10%);
+  box-shadow: 0 0 0 3px rgba(44,74,110,0.1000);
 }
 
 
@@ -426,7 +426,7 @@
   background: white;
   border-radius: 12px;
   border: 1px solid #eee;
-  box-shadow: 0 1px 6px rgb(0 0 0 / 6%);
+  box-shadow: 0 1px 6px rgba(0,0,0,0.0600);
   display: flex;
   flex-direction: column;
   gap: 12px;

@@ -4,8 +4,8 @@
   --muted: #98A8B3;
   --cta-blue: #244779;
   --card-bg: #fff;
-  --card-border: rgb(46 60 74 / 6%);
-  --card-shadow: 0 10px 20px rgb(46 60 74 / 6%);
+  --card-border: rgba(46,60,74,0.0600);
+  --card-shadow: 0 10px 20px rgba(46,60,74,0.0600);
 }
 
 .hp3-section{
@@ -140,7 +140,7 @@
   width: 100%;
   border-radius: 30px;
   padding: 16px 20px;
-  border: 1.5px solid rgb(36 71 121 / 12%);
+  border: 1.5px solid rgba(36,71,121,0.1200);
   background: transparent;
   color: var(--cta-blue);
   font-weight: 700;

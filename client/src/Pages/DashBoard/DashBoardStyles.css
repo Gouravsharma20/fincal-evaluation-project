@@ -54,7 +54,7 @@ body {
 
 .search-input-main:focus {
   border-color: #1976d2;
-  box-shadow: 0 0 0 3px rgb(25 118 210 / 10%);
+  box-shadow: 0 0 0 3px rgba(25,118,210,0.1000);
 }
 
 /* Filters styled as links */
@@ -86,7 +86,7 @@ body {
 }
 
 .filter-link:focus-visible {
-  box-shadow: 0 0 0 3px rgb(24 78 127 / 12%);
+  box-shadow: 0 0 0 3px rgba(24,78,127,0.1200);
   border-radius: 4px;
 }
 
@@ -140,7 +140,7 @@ body {
 
 
 .ticket-row:hover {
-  box-shadow: 0 6px 18px rgb(0 0 0 / 8%);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.0800);
   background-color: #fafafa;
 }
 
@@ -266,8 +266,8 @@ body {
 .ticket-actions { width: 140px; display:flex; align-items:center; justify-content:flex-end; }
 .ticket-status { font-weight:600; padding:2px 8px; border-radius:8px; font-size:14px; display:inline-flex; align-items:center; gap:6px; }
 .ticket-status.open { background:transparent; color:#0b66c3; border:none; cursor:pointer; }
-.ticket-status.open:hover { background:rgb(11 102 195 / 5%); transform:translateY(-1px); }
-.ticket-status.resolved { background:rgb(46 125 50 / 10%); color:#2e7d32; border:none; cursor:default; }
+.ticket-status.open:hover { background:rgba(11,102,195,0.0500); transform:translateY(-1px); }
+.ticket-status.resolved { background:rgba(46,125,50,0.1000); color:#2e7d32; border:none; cursor:default; }
 .ticket-status .arrow { margin-left:6px; font-weight:700; transform:translateY(-1px); }
 
 @media (width <=680px){ .ticket-row{flex-direction:column} .ticket-actions{width:100%; justify-content:flex-start} }

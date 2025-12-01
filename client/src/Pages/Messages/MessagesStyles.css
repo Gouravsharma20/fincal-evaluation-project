@@ -87,14 +87,14 @@
 .ticket-card-box {
   background-color: white;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1000);
   overflow: hidden;
   transition: all 0.3s;
   cursor: pointer;
 }
 
 .ticket-card-box:hover {
-  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1500);
   transform: translateY(-2px);
 }
 
@@ -520,7 +520,7 @@
 .reply-textarea:focus {
   outline: none;
   border-color: #1976d2;
-  box-shadow: 0 0 0 3px rgb(25 118 210 / 10%);
+  box-shadow: 0 0 0 3px rgba(25,118,210,0.1000);
 }
 
 .reply-textarea::placeholder {
@@ -546,7 +546,7 @@
 }
 
 .reply-send-btn:hover:not(:disabled) {
-  background: rgb(25 118 210 / 10%);
+  background: rgba(25,118,210,0.1000);
   transform: scale(1.1);
 }
 
@@ -698,12 +698,12 @@
 
 .detail-row:hover {
   border-color: #dbeffc;
-  box-shadow: 0 4px 12px rgb(11 22 40 / 4%);
+  box-shadow: 0 4px 12px rgba(11,22,40,0.0400);
 }
 
 .detail-row:focus-within {
   border-color: #cfe4ff;
-  box-shadow: 0 6px 20px rgb(31 111 235 / 8%);
+  box-shadow: 0 6px 20px rgba(31,111,235,0.0800);
   outline: none;
 }
 
@@ -836,7 +836,7 @@
   max-height: 200px;
   overflow-y: auto;
   z-index: 100;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1000);
 }
 
 /* .team-option {
@@ -985,7 +985,7 @@
   border-radius: 6px;
   margin-top: 4px;
   z-index: 100;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1000);
 }
 
 .status-option {
@@ -1014,7 +1014,7 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgb(0 0 0 / 50%);
+  background-color: rgba(0,0,0,0.5000);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1024,7 +1024,7 @@
 .modal-content {
   background-color: white;
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgb(0 0 0 / 20%);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2000);
   max-width: 500px;
   width: 90%;
   overflow: hidden;

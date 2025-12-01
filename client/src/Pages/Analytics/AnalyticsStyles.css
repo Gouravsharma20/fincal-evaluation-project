@@ -314,7 +314,7 @@ canvas {
 }
 
 .chartjs-tooltip {
-  background: rgb(0 0 0 / 90%) !important;
+  background: rgba(0,0,0,0.9000) !important;
   color: white !important;
   border-radius: 6px !important;
   padding: 10px !important;

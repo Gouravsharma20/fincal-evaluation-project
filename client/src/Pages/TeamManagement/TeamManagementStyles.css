@@ -18,7 +18,7 @@
   border-radius: 0; /* flat like screenshot */
   padding: 0;
   box-shadow: none;
-  border-top: 1px solid rgb(0 0 0 / 6%);
+  border-top: 1px solid rgba(0,0,0,0.0600);
   box-sizing: border-box;
 }
 
@@ -63,7 +63,7 @@
   align-items: center;
   padding: 12px 32px;
   background-color: transparent;
-  border-bottom: 1px solid rgb(230 233 236 / 80%);
+  border-bottom: 1px solid rgba(230,233,236,0.8000);
   gap: 12px;
 }
 
@@ -104,7 +104,7 @@
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  background: rgb(255 255 255 / 6%);
+  background: rgba(255,255,255,0.0600);
   color: #fff;
 }
 .add-member-btn:hover { background-color: #233f81; }
@@ -135,7 +135,7 @@
 /* Table header row - thin line and subtle background */
 .team-table thead {
   background-color: transparent;
-  border-bottom: 1px solid rgb(230 233 236 / 90%);
+  border-bottom: 1px solid rgba(230,233,236,0.9000);
 }
 
 .team-table th {
@@ -154,7 +154,7 @@
 }
 
 .team-table tbody tr:hover {
-  background-color: rgb(245 247 249 / 80%);
+  background-color: rgba(245,247,249,0.8000);
 }
 
 .team-table td {
@@ -241,7 +241,7 @@
 .modal-overlay-team {
   position: fixed;
   inset: 0; /* top:0; right:0; bottom:0; left:0; */
-  background-color: rgb(0 0 0 / 45%);
+  background-color: rgba(0,0,0,0.4500);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -253,7 +253,7 @@
 .modal-dialog-team {
   background-color: #fff;
   border-radius: 10px;
-  box-shadow: 0 12px 40px rgb(0 0 0 / 25%);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2500);
   width: 100%;
   max-width: 520px;
   max-height: 90vh;
@@ -295,7 +295,7 @@
   justify-content: center;
   border-radius: 6px;
 }
-.modal-close-btn:hover { background: rgb(0 0 0 / 4%); color: #0f1720; }
+.modal-close-btn:hover { background: rgba(0,0,0,0.0400); color: #0f1720; }
 
 /* content area */
 .modal-form {
@@ -353,7 +353,7 @@
 .btn-cancel-team {
   background-color: #f3f4f6;
   color: #374151;
-  border: 1px solid rgb(17 24 39 / 6%);
+  border: 1px solid rgba(17,24,39,0.0600);
   padding: 10px 14px;
   border-radius: 8px;
   font-size: 14px;
@@ -391,8 +391,8 @@
 .form-input-team:focus,
 .form-select-team:focus {
   outline: none;
-  box-shadow: 0 0 0 4px rgb(31 58 112 / 8%);
-  border-color: rgb(31 58 112 / 90%);
+  box-shadow: 0 0 0 4px rgba(31,58,112,0.0800);
+  border-color: rgba(31,58,112,0.9000);
 }
 
 /* ensure the modal dialog content doesn't overflow hidden buttons on small screens */
@@ -410,7 +410,7 @@
 }
 
 .modal-close-btn:focus,
-.modal-close-btn:hover { background: rgb(0 0 0 / 4%); }
+.modal-close-btn:hover { background: rgba(0,0,0,0.0400); }
 
 /* ensure inputs and selects are full width in modal */
 .form-input-team,
@@ -423,7 +423,7 @@
 .delete-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgb(0 0 0 / 45%);
+  background: rgba(0,0,0,0.4500);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -436,7 +436,7 @@
   max-width: 420px;
   padding: 22px 26px;
   border-radius: 10px;
-  box-shadow: 0 10px 38px rgb(0 0 0 / 30%);
+  box-shadow: 0 10px 38px rgba(0,0,0,0.3000);
 }
 
 .delete-modal h3 {
