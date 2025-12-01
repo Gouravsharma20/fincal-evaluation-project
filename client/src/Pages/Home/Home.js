@@ -11,6 +11,7 @@ import CalendarCard from '../../Assets/HomeAssets/HomeCalendar.png'
 import PlayIcon from '../../Assets/HomeAssets/HomePlay.png'
 
 import AdobeLogo from '../../Assets/HomeAssets/CompanyLogo/AdobeLogo.png'
+import Framer from '../../Assets/HomeAssets/CompanyLogo/Framer.png'
 import AirtableLogo from '../../Assets/HomeAssets/CompanyLogo/AirTable.png'
 import ElasticLogo from '../../Assets/HomeAssets/CompanyLogo/Elastic.png'
 import OpendoorLogo from '../../Assets/HomeAssets/CompanyLogo/OpenDoor.png'
@@ -25,6 +26,8 @@ const CompanyLogos = () => {
     { src: ElasticLogo, alt: 'Elastic' },
     { src: OpendoorLogo, alt: 'Opendoor' },
     { src: AirtableLogo, alt: 'Airtable' },
+    { src: ElasticLogo, alt: 'ElasticLogo' },
+    { src: Framer, alt: 'Framer' }
   ]
 
   return (
@@ -109,3 +112,8 @@ const Home = () => {
 }
 
 export default Home
+
+
+
+
+

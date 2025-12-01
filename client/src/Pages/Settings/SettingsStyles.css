@@ -1,492 +1,266 @@
-/* =====================================================
-   SETTINGS CONTAINER & LAYOUT
-   ===================================================== */
-
+/* ===== Page layout ===== */
 .settings-container {
-  width: 100%;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  padding: 20px;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  background: #f6f8fa; /* light background like screenshot */
+  color: #263238;
+  font-family: Inter, "Helvetica Neue", Arial, sans-serif;
 }
 
+/* Left sidebar placeholder (so content aligns similar to screenshot) */
+.app-sidebar {
+  width: 92px; /* adjust to match your app sidebar */
+  background: #fff;
+  border-right: 1px solid rgba(0,0,0,0.04);
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Main content area */
 .settings-content {
-  width: 100%;
-  max-width: 700px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  padding: 40px;
-  margin-top: 30px;
-}
-
-/* =====================================================
-   HEADER
-   ===================================================== */
-
-.settings-header {
-  margin-bottom: 30px;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 20px;
-}
-
-.settings-header h1 {
-  font-size: 28px;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin: 0 0 8px 0;
-  letter-spacing: -0.5px;
-}
-
-.settings-subtitle {
-  font-size: 14px;
-  color: #666;
-  margin: 0;
-  font-weight: 400;
-}
-
-/* =====================================================
-   ALERTS
-   ===================================================== */
-
-.alert {
-  padding: 14px 16px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 14px;
-  animation: slideIn 0.3s ease-out;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.alert-error {
-  background-color: #fee;
-  border: 1px solid #fcc;
-  color: #c33;
-}
-
-.alert-success {
-  background-color: #efe;
-  border: 1px solid #cfc;
-  color: #3c3;
-}
-
-.alert-icon {
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.alert-message {
   flex: 1;
-  font-weight: 500;
+  padding: 36px 56px;
+  box-sizing: border-box;
 }
 
-.alert-close {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-  color: inherit;
-  padding: 0;
-  opacity: 0.7;
-  transition: opacity 0.2s;
-}
-
-.alert-close:hover {
-  opacity: 1;
-}
-
-/* =====================================================
-   SECTION
-   ===================================================== */
-
-.settings-section {
-  margin-bottom: 30px;
-}
-
-.section-header {
-  margin-bottom: 24px;
-}
-
-.section-header h2 {
+/* Header inside card area */
+.settings-header h1 {
+  margin: 0;
   font-size: 20px;
   font-weight: 600;
-  color: #1a1a1a;
-  margin: 0;
+  color: #2b3942;
+}
+.settings-subtitle {
+  margin-top: 6px;
+  color: #677780;
+  font-size: 13px;
 }
 
-/* =====================================================
-   FORM
-   ===================================================== */
-
-.settings-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+/* Card/container that holds the form to match the rounded, inset card in screenshot */
+.settings-section {
+  margin-top: 20px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 28px 40px;
+  box-shadow: 0 4px 12px rgba(19, 37, 47, 0.04);
+  border: 1px solid rgba(15, 38, 74, 0.04);
+  max-width: 1100px; /* content width */
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.form-label {
-  font-size: 14px;
+/* Section header styles (tab like) */
+.section-header h2 {
+  margin: 0 0 18px 0;
+  font-size: 16px;
   font-weight: 600;
-  color: #333;
-  letter-spacing: 0.3px;
+  color: #21455a;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(33, 68, 90, 0.06);
+}
+
+/* Form layout: create left column and right empty space like screenshot */
+.settings-form {
+  display: grid;
+  grid-template-columns: 1fr 280px; /* left column for inputs, right column for spacing or future help area */
+  gap: 12px 40px;
+  align-items: start;
+}
+
+/* Make inputs span the left column */
+.settings-form .form-group {
+  grid-column: 1 / 2;
+  margin-bottom: 14px;
+}
+
+/* Label and input */
+.form-label {
+  display: block;
+  font-size: 13px;
+  color: #677480;
+  margin-bottom: 8px;
 }
 
 .form-input {
-  padding: 12px 14px;
-  border: 1.5px solid #e0e0e0;
-  border-radius: 6px;
-  font-size: 14px;
-  font-family: inherit;
-  transition: all 0.2s ease;
-  background-color: #fafafa;
-  color: #333;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: #0066cc;
-  background-color: white;
-  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
-}
-
-.form-input::placeholder {
-  color: #999;
-}
-
-.form-input.disabled {
-  background-color: #f5f5f5;
-  color: #666;
-  cursor: not-allowed;
-  border-color: #ddd;
-}
-
-.form-input.disabled:focus {
-  border-color: #ddd;
-  box-shadow: none;
-}
-
-.form-helper {
-  font-size: 12px;
-  color: #999;
-  margin-top: -4px;
-}
-
-.form-warning {
-  background-color: #fff3cd;
-  border: 1px solid #ffe69c;
-  border-radius: 6px;
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  color: #856404;
-  margin-top: -4px;
-}
-
-.warning-icon {
-  flex-shrink: 0;
-  font-size: 16px;
-}
-
-/* =====================================================
-   FORM ACTIONS
-   ===================================================== */
-
-.form-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.btn {
-  padding: 12px 24px;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  letter-spacing: 0.5px;
-}
-
-.btn-primary {
-  background-color: #0066cc;
-  color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background-color: #0052a3;
-  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
-  transform: translateY(-2px);
-}
-
-.btn-primary:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(0, 102, 204, 0.2);
-}
-
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* =====================================================
-   MODAL OVERLAY
-   ===================================================== */
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-/* =====================================================
-   MODAL CONTENT
-   ===================================================== */
-
-.modal-content {
-  background: white;
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
   border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  max-width: 450px;
-  width: 90%;
-  animation: modalSlideIn 0.3s ease-out;
-}
-
-@keyframes modalSlideIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95) translateY(-20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 24px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.modal-header h2 {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin: 0;
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 28px;
-  color: #999;
-  cursor: pointer;
-  padding: 0;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-}
-
-.modal-close:hover:not(:disabled) {
-  color: #333;
-  background-color: #f5f5f5;
-  border-radius: 4px;
-}
-
-.modal-close:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-/* =====================================================
-   MODAL BODY
-   ===================================================== */
-
-.modal-body {
-  padding: 24px;
-}
-
-.modal-message {
+  border: 1.5px solid rgba(33,45,52,0.12);
+  background: #ffffff;
   font-size: 14px;
-  color: #333;
-  margin: 0 0 16px 0;
-  line-height: 1.6;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color .12s ease, box-shadow .12s ease;
+  color: #142428;
 }
 
-.modal-message strong {
-  color: #0066cc;
-  font-weight: 600;
+/* focus */
+.form-input:focus {
+  border-color: rgba(33,69,120,0.18);
+  box-shadow: 0 6px 18px rgba(33,69,120,0.06);
 }
 
-.modal-warning {
-  background-color: #fff3cd;
-  border-radius: 6px;
-  padding: 12px;
+/* disabled style (email) */
+.form-input.disabled {
+  background: #fafbfb;
+  color: #8b9498;
+  cursor: not-allowed;
+}
+
+/* helper text below input */
+.form-helper {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #9aa6ad;
+}
+
+/* Warning box (inline) */
+.form-warning {
+  grid-column: 1 / 2;
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,244,230,0.6), rgba(255,244,230,0.4));
+  border: 1px solid rgba(233,183,52,0.18);
+  color: #6f4b00;
   font-size: 13px;
-  color: #856404;
-  margin: 12px 0 0 0;
-  border-left: 4px solid #ffc107;
 }
 
-.change-details {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* =====================================================
-   MODAL FOOTER
-   ===================================================== */
-
-.modal-footer {
+/* Form actions (Save button aligned bottom-right inside card) */
+.form-actions {
+  grid-column: 1 / -1;
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
-  padding: 24px;
-  border-top: 1px solid #f0f0f0;
-  background-color: #fafafa;
+  margin-top: 18px;
 }
 
-.modal-btn {
-  padding: 10px 18px;
+/* Primary button (rounded pill like screenshot) */
+.btn-primary {
+  background: #1f4f78;
+  color: #fff;
   border: none;
-  border-radius: 6px;
-  font-size: 13px;
+  padding: 12px 28px;
+  border-radius: 18px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
-  letter-spacing: 0.3px;
+  box-shadow: 0 6px 18px rgba(31,79,120,0.12);
 }
-
-.modal-btn-cancel {
-  background-color: #f0f0f0;
-  color: #333;
-  border: 1px solid #ddd;
-}
-
-.modal-btn-cancel:hover:not(:disabled) {
-  background-color: #e8e8e8;
-  border-color: #ccc;
-}
-
-.modal-btn-confirm {
-  background-color: #0066cc;
-  color: white;
-}
-
-.modal-btn-confirm:hover:not(:disabled) {
-  background-color: #0052a3;
-  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
-}
-
-.modal-btn:disabled {
+.btn-primary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* =====================================================
-   RESPONSIVE DESIGN
-   ===================================================== */
-
-@media (max-width: 768px) {
-  .settings-container {
-    padding: 10px;
-  }
-
-  .settings-content {
-    padding: 20px;
-  }
-
-  .settings-header h1 {
-    font-size: 24px;
-  }
-
-  .settings-header {
-    margin-bottom: 20px;
-  }
-
-  .modal-content {
-    max-width: 90%;
-  }
-
-  .form-actions {
-    flex-direction: column;
-  }
-
-  .btn {
-    width: 100%;
-  }
-
-  .modal-footer {
-    flex-direction: column;
-  }
-
-  .modal-btn {
-    width: 100%;
-  }
+/* =========================================================
+   Info icon + tooltip (non-fullscreen small bubble on hover)
+   ========================================================= */
+.input-with-info {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-@media (max-width: 480px) {
-  .settings-content {
-    padding: 15px;
-    border-radius: 8px;
-  }
+/* make input take remaining width when used with icon wrapper */
+.input-with-info .form-input {
+  flex: 1 1 auto;
+}
 
-  .settings-header h1 {
-    font-size: 20px;
-  }
+/* info icon */
+.info-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(33,45,52,0.14);
+  background: #fff;
+  font-size: 12px;
+  color: #2b3942;
+  cursor: default;
+  position: relative;
+  flex-shrink: 0;
+}
 
-  .form-input {
-    font-size: 16px;
-  }
+/* tooltip bubble (hidden by default) */
+.info-icon::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 28px;              /* appears right to the icon */
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: 180px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid rgba(24,36,48,0.08);
+  box-shadow: 0 10px 30px rgba(16,30,40,0.12);
+  font-size: 13px;
+  color: #3b4850;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  transform-origin: left center;
+  z-index: 60;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-  .modal-header {
-    padding: 16px;
-  }
+/* show tooltip on hover */
+.input-with-info:hover .info-icon::after,
+.info-icon:hover::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+  pointer-events: auto;
+}
 
-  .modal-body {
-    padding: 16px;
-  }
+/* small circle i icon style (text inside) */
+.info-icon::before {
+  content: "i";
+  font-weight: 700;
+  display: block;
+  transform: translateY(-1px);
+}
 
-  .modal-footer {
-    padding: 16px;
-  }
+/* =========================================================
+   Modal styles (confirmation modal) — keep it centered and not fullscreen
+   ========================================================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6,12,20,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 24px;
+}
+.modal-content.settings-modal {
+  width: 100%;
+  max-width: 540px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 20px 50px rgba(24,39,60,0.18);
+  border: 1px solid rgba(6,12,20,0.04);
+}
+.modal-header { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.modal-header h2 { margin:0; font-size:18px; }
+.modal-close { background:transparent; border: none; font-size:22px; cursor:pointer; }
+
+/* modal footer buttons */
+.modal-footer { display:flex; justify-content:flex-end; gap:12px; margin-top:12px; }
+.modal-btn { padding:10px 16px; border-radius:8px; border:none; cursor:pointer; }
+.modal-btn-cancel { background:#f3f5f7; color:#2b3942; }
+.modal-btn-confirm { background:#1f4f78; color:#fff; }
+
+/* small responsive adjustments */
+@media (max-width: 980px) {
+  .settings-form { grid-template-columns: 1fr; }
+  .settings-section { padding: 18px; }
+  .input-with-info .info-icon::after { left: calc(100% + 8px); top: 40px; transform: translateY(0); }
 }

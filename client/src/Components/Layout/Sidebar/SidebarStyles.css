@@ -1,4 +1,4 @@
-/* 
+
 .sidebar-wrapper {
   width: 90px;
   background: #ffffff;
@@ -77,8 +77,8 @@
 
 
 
-/* .sidebar-bottom {
+.sidebar-bottom {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
-} */
+}

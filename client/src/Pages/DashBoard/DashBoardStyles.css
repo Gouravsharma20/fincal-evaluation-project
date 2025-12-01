@@ -1,4 +1,4 @@
-/* 
+
 
 * {
   box-sizing: border-box;
@@ -236,15 +236,15 @@ body {
 
 
 
-.ticket-right-action {
+/* .ticket-right-action {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   flex-shrink: 0;
   height: 100%;
-}
+} */
 
-.open-ticket-link {
+/* .open-ticket-link {
   padding: 0;
   background: none;
   border: none;
@@ -255,12 +255,12 @@ body {
   text-decoration: none;
   transition: color 0.2s;
   white-space: nowrap;
-}
+} */
 
-.open-ticket-link:hover {
+/* .open-ticket-link:hover {
   color: #1565c0;
   text-decoration: underline;
-}
+} */
 
 
 
@@ -449,4 +449,4 @@ body {
   .open-ticket-link {
     font-size: 11px;
   }
-} */
+}

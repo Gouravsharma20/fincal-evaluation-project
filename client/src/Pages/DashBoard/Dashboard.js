@@ -151,11 +151,11 @@ const Dashboard = () => {
               </div>
 
               {/* RIGHT SECTION - ACTION */}
-              <div className="ticket-right-action">
+              {/* <div className="ticket-right-action">
                 <a href={`/tickets/${ticket._id}`} className="open-ticket-link">
                   Open Ticket
                 </a>
-              </div>
+              </div> */}
             </div>
           ))}
         </div>

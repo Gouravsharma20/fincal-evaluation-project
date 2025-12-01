@@ -1,382 +1,10 @@
-// import React, { useState, useEffect } from 'react';
-// import { useAuthContext } from '../../Hooks/useAuthContext';
-// import './TeamManagementStyles.css';
-
-// const TeamManagement = () => {
-//   const { user, token } = useAuthContext();
-//   const [teamMembers, setTeamMembers] = useState([]);
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState(null);
-//   const [showModal, setShowModal] = useState(false);
-//   const [editingId, setEditingId] = useState(null);
-//   const [formData, setFormData] = useState({
-//     name: '',
-//     email: '',
-//     designation: ''
-//   });
-//   const [searchTerm, setSearchTerm] = useState('');
-//   const [filterDesignation, setFilterDesignation] = useState('all');
-
-//   // Fetch team members
-//   const fetchTeamMembers = async () => {
-//     setLoading(true);
-//     setError(null);
-//     try {
-//       const response = await fetch('http://localhost:4000/api/admin/team-members', {
-//         method: 'GET',
-//         headers: {
-//           'Authorization': `Bearer ${token}`,
-//           'Content-Type': 'application/json'
-//         }
-//       });
-
-//       if (!response.ok) {
-//         throw new Error('Failed to fetch team members');
-//       }
-
-//       const data = await response.json();
-//       setTeamMembers(data.users || []);
-//     } catch (err) {
-//       setError(err.message);
-//       console.error('Fetch error:', err);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   // Initial fetch on mount
-//   useEffect(() => {
-//     fetchTeamMembers();
-//   }, []);
-
-//   // Check admin access - after all hooks
-//   if (!user || !user.isAdmin) {
-//     return <div className="unauthorized">⛔ Admin access only</div>;
-//   }
-
-//   // Handle form submission (Create or Update)
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     if (!formData.name || !formData.email || !formData.designation) {
-//       setError('All fields are required');
-//       return;
-//     }
-
-//     try {
-//       const url = editingId
-//         ? `http://localhost:4000/api/admin/team-members/${editingId}`
-//         : 'http://localhost:4000/api/admin/team-members';
-
-//       const method = editingId ? 'PATCH' : 'POST';
-
-//       const response = await fetch(url, {
-//         method,
-//         headers: {
-//           'Authorization': `Bearer ${token}`,
-//           'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(formData)
-//       });
-
-//       if (!response.ok) {
-//         const errorData = await response.json();
-//         throw new Error(errorData.error || 'Operation failed');
-//       }
-
-//       const data = await response.json();
-
-//       if (editingId) {
-//         setTeamMembers(teamMembers.map(member =>
-//           member._id === editingId ? data.teamMember : member
-//         ));
-//       } else {
-//         setTeamMembers([...teamMembers, data.teamMember]);
-//       }
-
-//       resetForm();
-//       setShowModal(false);
-//       setError(null);
-//     } catch (err) {
-//       setError(err.message);
-//       console.error('Submit error:', err);
-//     }
-//   };
-
-//   // Handle delete
-//   const handleDelete = async (id) => {
-//     if (!window.confirm('Are you sure you want to delete this team member?')) {
-//       return;
-//     }
-
-//     try {
-//       const response = await fetch(`http://localhost:4000/api/admin/team-members/${id}`, {
-//         method: 'DELETE',
-//         headers: {
-//           'Authorization': `Bearer ${token}`,
-//           'Content-Type': 'application/json'
-//         }
-//       });
-
-//       if (!response.ok) {
-//         const errorData = await response.json();
-//         throw new Error(errorData.error || 'Delete failed');
-//       }
-
-//       setTeamMembers(teamMembers.filter(member => member._id !== id));
-//       setError(null);
-//     } catch (err) {
-//       setError(err.message);
-//       console.error('Delete error:', err);
-//     }
-//   };
-
-//   // Handle edit
-//   const handleEdit = (member) => {
-//     setFormData({
-//       name: member.name,
-//       email: member.email,
-//       designation: member.designation
-//     });
-//     setEditingId(member._id);
-//     setShowModal(true);
-//   };
-
-//   // Handle open new member modal
-//   const handleOpenNewMember = () => {
-//     resetForm();
-//     setShowModal(true);
-//   };
-
-//   // Reset form
-//   const resetForm = () => {
-//     setFormData({
-//       name: '',
-//       email: '',
-//       designation: ''
-//     });
-//     setEditingId(null);
-//   };
-
-//   // Filter team members
-//   const filteredMembers = teamMembers.filter(member => {
-//     const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//       member.email.toLowerCase().includes(searchTerm.toLowerCase());
-//     const matchesFilter = filterDesignation === 'all' || member.designation === filterDesignation;
-//     return matchesSearch && matchesFilter;
-//   });
-
-//   // Get unique designations for filter
-//   const designations = ['all', ...new Set(teamMembers.map(m => m.designation))];
-
-//   return (
-//     <div className="team-management">
-//       <div className="team-management-header">
-//         <div className="header-content">
-//           <h1 className="page-title">Team Management</h1>
-//           <p className="page-subtitle">Manage and oversee your team members</p>
-//         </div>
-//         <button className="btn-add-member" onClick={handleOpenNewMember}>
-//           <span className="icon">➕</span> Add Team Member
-//         </button>
-//       </div>
-
-//       {/* Error Message */}
-//       {error && (
-//         <div className="error-banner">
-//           <span className="error-icon">⚠️</span>
-//           <span className="error-text">{error}</span>
-//           <button className="btn-close-error" onClick={() => setError(null)}>✕</button>
-//         </div>
-//       )}
-
-//       {/* Search and Filter Section */}
-//       <div className="controls-section">
-//         <div className="search-box">
-//           <span className="search-icon">🔍</span>
-//           <input
-//             type="text"
-//             placeholder="Search by name or email..."
-//             value={searchTerm}
-//             onChange={(e) => setSearchTerm(e.target.value)}
-//             className="search-input"
-//           />
-//         </div>
-
-//         <div className="filter-box">
-//           <label htmlFor="designation-filter">Designation:</label>
-//           <select
-//             id="designation-filter"
-//             value={filterDesignation}
-//             onChange={(e) => setFilterDesignation(e.target.value)}
-//             className="filter-select"
-//           >
-//             {designations.map(designation => (
-//               <option key={designation} value={designation}>
-//                 {designation === 'all' ? 'All Designations' : designation}
-//               </option>
-//             ))}
-//           </select>
-//         </div>
-
-//         <div className="members-count">
-//           {filteredMembers.length} of {teamMembers.length} members
-//         </div>
-//       </div>
-
-//       {/* Team Members Table */}
-//       <div className="team-members-container">
-//         {loading ? (
-//           <div className="loading-state">
-//             <div className="spinner"></div>
-//             <p>Loading team members...</p>
-//           </div>
-//         ) : filteredMembers.length === 0 ? (
-//           <div className="empty-state">
-//             <div className="empty-icon">👥</div>
-//             <h3>No team members found</h3>
-//             <p>
-//               {teamMembers.length === 0
-//                 ? 'Start by adding your first team member'
-//                 : 'Try adjusting your search or filter criteria'}
-//             </p>
-//           </div>
-//         ) : (
-//           <div className="table-wrapper">
-//             <table className="team-table">
-//               <thead>
-//                 <tr>
-//                   <th className="col-name">Name</th>
-//                   <th className="col-email">Email</th>
-//                   <th className="col-designation">Designation</th>
-//                   <th className="col-status">Status</th>
-//                   <th className="col-actions">Actions</th>
-//                 </tr>
-//               </thead>
-//               <tbody>
-//                 {filteredMembers.map((member) => (
-//                   <tr key={member._id} className="member-row">
-//                     <td className="col-name">
-//                       <div className="member-avatar">{member.name.charAt(0).toUpperCase()}</div>
-//                       <span>{member.name}</span>
-//                     </td>
-//                     <td className="col-email">{member.email}</td>
-//                     <td className="col-designation">
-//                       <span className="designation-badge">{member.designation}</span>
-//                     </td>
-//                     <td className="col-status">
-//                       <span className={`status-badge status-${member.accountLockedUntil ? 'locked' : 'active'}`}>
-//                         {member.accountLockedUntil ? '🔒 Locked' : '✓ Active'}
-//                       </span>
-//                     </td>
-//                     <td className="col-actions">
-//                       <button
-//                         className="btn-action btn-edit"
-//                         onClick={() => handleEdit(member)}
-//                         title="Edit member"
-//                       >
-//                         ✏️
-//                       </button>
-//                       <button
-//                         className="btn-action btn-delete"
-//                         onClick={() => handleDelete(member._id)}
-//                         title="Delete member"
-//                       >
-//                         🗑️
-//                       </button>
-//                     </td>
-//                   </tr>
-//                 ))}
-//               </tbody>
-//             </table>
-//           </div>
-//         )}
-//       </div>
-
-//       {/* Modal for Create/Edit */}
-//       {showModal && (
-//         <div className="modal-overlay" onClick={() => setShowModal(false)}>
-//           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-//             <div className="modal-header">
-//               <h2>{editingId ? 'Edit Team Member' : 'Add New Team Member'}</h2>
-//               <button className="btn-modal-close" onClick={() => setShowModal(false)}>✕</button>
-//             </div>
-
-//             <form onSubmit={handleSubmit} className="team-form">
-//               <div className="form-group">
-//                 <label htmlFor="name">Full Name *</label>
-//                 <input
-//                   id="name"
-//                   type="text"
-//                   placeholder="Enter full name"
-//                   value={formData.name}
-//                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-//                   className="form-input"
-//                   required
-//                 />
-//               </div>
-
-//               <div className="form-group">
-//                 <label htmlFor="email">Email Address *</label>
-//                 <input
-//                   id="email"
-//                   type="email"
-//                   placeholder="Enter email address"
-//                   value={formData.email}
-//                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-//                   className="form-input"
-//                   required
-//                   disabled={!!editingId}
-//                 />
-//                 {editingId && <small className="form-hint">Email cannot be changed</small>}
-//               </div>
-
-//               <div className="form-group">
-//                 <label htmlFor="designation">Designation *</label>
-//                 <select
-//                   id="designation"
-//                   value={formData.designation}
-//                   onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-//                   className="form-select"
-//                   required
-//                 >
-//                   <option value="">Select a designation</option>
-//                   <option value="Member">Member</option>
-//                   <option value="Lead">Lead</option>
-//                   <option value="Manager">Manager</option>
-//                   <option value="Senior">Senior</option>
-//                 </select>
-//               </div>
-
-//               <div className="form-actions">
-//                 <button
-//                   type="button"
-//                   className="btn-cancel"
-//                   onClick={() => setShowModal(false)}
-//                 >
-//                   Cancel
-//                 </button>
-//                 <button type="submit" className="btn-submit">
-//                   {editingId ? 'Update Member' : 'Create Member'}
-//                 </button>
-//               </div>
-//             </form>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default TeamManagement;
-
-
-
-
-import React, { useState, useEffect,useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuthContext } from '../../Hooks/useAuthContext';
 import './TeamManagementStyles.css';
-import {API_BASE_URL} from '../../config/api'
+import { API_BASE_URL } from '../../config/api';
+
+import deleteMember from "../../Assets/TeamManagementAssets/deleteMember.png";
+import editMember from "../../Assets/TeamManagementAssets/editMember.png";
 
 const TeamManagement = () => {
   const { user, token } = useAuthContext();
@@ -390,45 +18,49 @@ const TeamManagement = () => {
     email: '',
     designation: ''
   });
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterDesignation, setFilterDesignation] = useState('all');
 
+  // delete modal state
+  const [deleteConfirm, setDeleteConfirm] = useState({
+    open: false,
+    id: null,
+    name: ""
+  });
+  // loading state for delete action
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
-
-
-
-
-
-
-
+  // ---- Search/filter states (commented-out per request) ----
+  // const [searchTerm, setSearchTerm] = useState('');
+  // const [filterDesignation, setFilterDesignation] = useState('all');
+  // ----------------------------------------------------------
 
   // Fetch team members
   const fetchTeamMembers = useCallback(
     async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/admin/team-members`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/admin/team-members`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch team members');
         }
-      });
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch team members');
+        const data = await response.json();
+        setTeamMembers(data.users || []);
+      } catch (err) {
+        setError(err.message);
+        console.error('Fetch error:', err);
+      } finally {
+        setLoading(false);
       }
-
-      const data = await response.json();
-      setTeamMembers(data.users || []);
-    } catch (err) {
-      setError(err.message);
-      console.error('Fetch error:', err);
-    } finally {
-      setLoading(false);
-    }
-  },[token]); 
+    }, [token]
+  );
 
   // Initial fetch on mount
   useEffect(() => {
@@ -489,12 +121,12 @@ const TeamManagement = () => {
     }
   };
 
-  // Handle delete
-  const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this team member?')) {
-      return;
-    }
+  // Handle delete (now only performs deletion — confirmation opens modal)
+  const handleDelete = async () => {
+    const id = deleteConfirm.id;
+    if (!id) return;
 
+    setDeleteLoading(true);
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/team-members/${id}`, {
         method: 'DELETE',
@@ -509,11 +141,14 @@ const TeamManagement = () => {
         throw new Error(errorData.error || 'Delete failed');
       }
 
-      setTeamMembers(teamMembers.filter(member => member._id !== id));
+      setTeamMembers(prev => prev.filter(member => member._id !== id));
+      setDeleteConfirm({ open: false, id: null, name: "" });
       setError(null);
     } catch (err) {
       setError(err.message);
       console.error('Delete error:', err);
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -544,16 +179,10 @@ const TeamManagement = () => {
     setEditingId(null);
   };
 
-  // Filter team members
-  const filteredMembers = teamMembers.filter(member => {
-    const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      member.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterDesignation === 'all' || member.designation === filterDesignation;
-    return matchesSearch && matchesFilter;
-  });
-
-  // Get unique designations for filter
-  const designations = ['all', ...new Set(teamMembers.map(m => m.designation))];
+  // ------------------
+  // Use full list (no search/filter) per request
+  // ------------------
+  const filteredMembers = teamMembers;
 
   return (
     <div className="team-management-wrapper">
@@ -571,32 +200,8 @@ const TeamManagement = () => {
         )}
 
         {/* Controls Section */}
-        <div className="team-controls">
-          <div className="search-filter-container">
-            <input
-              type="text"
-              placeholder="Search by name or email"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input-field"
-            />
-
-            <select
-              value={filterDesignation}
-              onChange={(e) => setFilterDesignation(e.target.value)}
-              className="filter-select-field"
-            >
-              {designations.map(designation => (
-                <option key={designation} value={designation}>
-                  {designation === 'all' ? 'All Designations' : designation}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <button className="add-member-btn" onClick={handleOpenNewMember}>
-            <span className="plus-icon">+</span> Add Team members
-          </button>
+        <div className="team-controls ">
+          {/* kept empty — add button moved into table area */}
         </div>
 
         {/* Loading State */}
@@ -609,7 +214,7 @@ const TeamManagement = () => {
             <p>No team members found</p>
           </div>
         ) : (
-          <div className="team-table-wrapper">
+          <div className="team-table-wrapper team-table-container">
             <table className="team-table">
               <thead>
                 <tr>
@@ -643,14 +248,15 @@ const TeamManagement = () => {
                             onClick={() => handleEdit(member)}
                             title="Edit member"
                           >
-                            ✏️
+                            <img src={editMember} alt="edit" className="action-icon" />
                           </button>
+
                           <button
                             className="action-btn delete-btn"
-                            onClick={() => handleDelete(member._id)}
+                            onClick={() => setDeleteConfirm({ open: true, id: member._id, name: member.name })}
                             title="Delete member"
                           >
-                            🗑️
+                            <img src={deleteMember} alt="delete" className="action-icon" />
                           </button>
                         </>
                       )}
@@ -659,81 +265,120 @@ const TeamManagement = () => {
                 ))}
               </tbody>
             </table>
+
+            {/* Add button placed inside table area so it shows below rows (adjust via CSS) */}
+            <div className="add-member-wrapper table-add-btn">
+              <button className="add-member-btn" onClick={handleOpenNewMember}>
+                <span className="plus-icon">+</span> Add Team members
+              </button>
+            </div>
           </div>
         )}
-      </div>
 
-      {/* Modal for Create/Edit */}
-      {showModal && (
-        <div className="modal-overlay-team" onClick={() => setShowModal(false)}>
-          <div className="modal-dialog-team" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header-team">
-              <h2>{editingId ? 'Edit Team Member' : 'Add New Team Member'}</h2>
-              <button className="modal-close-btn" onClick={() => setShowModal(false)}>×</button>
-            </div>
+        {/* Delete Confirmation Modal — moved inside return so it renders */}
+        {deleteConfirm.open && (
+          <div className="delete-modal-overlay">
+            <div className="delete-modal" role="dialog" aria-modal="true" aria-labelledby="delete-modal-title">
+              <h3 id="delete-modal-title">Delete Team Member</h3>
 
-            <form onSubmit={handleSubmit} className="modal-form">
-              <div className="form-group-team">
-                <label htmlFor="name">Full Name</label>
-                <input
-                  id="name"
-                  type="text"
-                  placeholder="Enter full name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="form-input-team"
-                  required
-                />
-              </div>
+              <p>
+                Do you want to delete <strong>{deleteConfirm.name}</strong>? It will be deleted permanently.
+              </p>
 
-              <div className="form-group-team">
-                <label htmlFor="email">Email Address</label>
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="Enter email address"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="form-input-team"
-                  required
-                  disabled={!!editingId}
-                />
-                {editingId && <small className="form-hint">Email cannot be changed</small>}
-              </div>
-
-              <div className="form-group-team">
-                <label htmlFor="designation">Designation</label>
-                <select
-                  id="designation"
-                  value={formData.designation}
-                  onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-                  className="form-select-team"
-                  required
-                >
-                  <option value="">Select a designation</option>
-                  <option value="Member">Member</option>
-                  <option value="Lead">Lead</option>
-                  <option value="Manager">Manager</option>
-                  <option value="Senior">Senior</option>
-                </select>
-              </div>
-
-              <div className="form-actions-team">
+              <div className="delete-modal-actions">
                 <button
-                  type="button"
                   className="btn-cancel-team"
-                  onClick={() => setShowModal(false)}
+                  onClick={() => setDeleteConfirm({ open: false, id: null, name: "" })}
+                  disabled={deleteLoading}
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn-submit-team">
-                  {editingId ? 'Update Member' : 'Create Member'}
+
+                <button
+                  className="btn-delete-team"
+                  onClick={handleDelete}
+                  disabled={deleteLoading}
+                >
+                  {deleteLoading ? 'Deleting...' : 'Delete'}
                 </button>
               </div>
-            </form>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+
+        {/* Modal for Create/Edit */}
+        {showModal && (
+          <div className="modal-overlay-team" onClick={() => setShowModal(false)}>
+            <div className="modal-dialog-team" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-header-team">
+                <h2>{editingId ? 'Edit Team Member' : 'Add New Team Member'}</h2>
+                <button className="modal-close-btn" onClick={() => setShowModal(false)}>×</button>
+              </div>
+
+              <form onSubmit={handleSubmit} className="modal-form">
+                <div className="form-group-team">
+                  <label htmlFor="name">Full Name</label>
+                  <input
+                    id="name"
+                    type="text"
+                    placeholder="Enter full name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="form-input-team"
+                    required
+                  />
+                </div>
+
+                <div className="form-group-team">
+                  <label htmlFor="email">Email Address</label>
+                  <input
+                    id="email"
+                    type="email"
+                    placeholder="Enter email address"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="form-input-team"
+                    required
+                    disabled={!!editingId}
+                  />
+                  {editingId && <small className="form-hint">Email cannot be changed</small>}
+                </div>
+
+                <div className="form-group-team">
+                  <label htmlFor="designation">Designation</label>
+                  <select
+                    id="designation"
+                    value={formData.designation}
+                    onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
+                    className="form-select-team"
+                    required
+                  >
+                    <option value="">Select a designation</option>
+                    <option value="Member">Member</option>
+                    <option value="Lead">Lead</option>
+                    <option value="Manager">Manager</option>
+                    <option value="Senior">Senior</option>
+                  </select>
+                </div>
+
+                <div className="form-actions-team">
+                  <button
+                    type="button"
+                    className="btn-cancel-team"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn-submit-team">
+                    {editingId ? 'Update Member' : 'Create Member'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+      </div>
     </div>
   );
 };
