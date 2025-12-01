@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect, useCallback } from 'react'
 import './DashBoardStyles.css'
 import { useAuthContext } from '../../Hooks/useAuthContext'
@@ -147,7 +149,7 @@ const Dashboard = () => {
                 {/* MESSAGE (redesigned box look) */}
                 <div className="ticket-message-box">
                   <p className="ticket-message">
-                    {ticket.messages && ticket.messages.length ? ticket.messages[0].text : 'No message'}
+                    {ticket.messages[ticket.messages.length - 1]?.text}
                   </p>
 
                   <div className="ticket-meta-right">
@@ -172,6 +174,21 @@ const Dashboard = () => {
                     <p className="user-email">{ticket.userEmail || '-'}</p>
                   </div>
                 </div>
+              </div>
+
+              {/* << ADDED: actions column (minimal insertion) */}
+              <div className="ticket-actions">
+                {ticket.status === 'resolved' ? (
+                  <div className="ticket-status resolved">Resolved</div>
+                ) : (
+                  <button
+                    type="button"
+                    className="ticket-status open"
+                    // onClick={() => openTicket(ticket)}  // << OPTIONAL: enable if you have handler
+                  >
+                    Open Ticket <span className="arrow">→</span>
+                  </button>
+                )}
               </div>
             </div>
           ))}

@@ -27,12 +27,12 @@ const MessageForm = () => {
   };
 
   const handleSendMessage = () => {
-    
+
     if (userMessage.trim()) {
-      
+
       // SAVE THE INITIAL MESSAGE
       setInitialMessage(userMessage);
-      
+
       // Add user message to chat
       setMessages(prev => [...prev, {
         type: 'user',
@@ -49,25 +49,27 @@ const MessageForm = () => {
     }
   };
 
+
+
   const createCustomer = async (e) => {
     e.preventDefault();
     console.log('🔵 [7] Form submit button clicked');
-    
+
     try {
-      
+
       // VALIDATE ALL FIELDS ARE FILLED
       if (!customerForm.name.trim()) {
         console.log(' Name is empty');
         alert('Please enter your name');
         return;
       }
-      
+
       if (!customerForm.phoneNumber.trim()) {
         console.log(' Phone number is empty');
         alert('Please enter your phone number');
         return;
       }
-      
+
       if (!customerForm.emailAddress.trim()) {
         console.log(' Email is empty');
         alert('Please enter your email');
@@ -89,12 +91,12 @@ const MessageForm = () => {
         "/api/tickets",
         payload
       );
-      
+
       // CHECK IF SUCCESSFUL
       if (response.data.success || response.status === 201) {
         console.log('   Ticket ID:', response.data.ticketId);
         console.log('   Client Secret:', response.data.clientSecret);
-        
+
         // ADD THANK YOU MESSAGE TO CHAT
         setMessages(prev => [...prev, {
           type: 'bot',
@@ -106,14 +108,14 @@ const MessageForm = () => {
         setShowForm(false);
         setCustomerForm({ name: "", phoneNumber: "", emailAddress: "" });
         setInitialMessage("");
-        
+
       } else {
         throw new Error('Unexpected response from server');
       }
 
     } catch (error) {
       console.log('Axios error:', error.message);
-      
+
       if (error.response) {
         console.log('Response status:', error.response.status);
         console.log('Response data:', error.response.data);
@@ -132,7 +134,7 @@ const MessageForm = () => {
 
   const updateCustomerForm = (e) => {
     const { name, value } = e.target;
-    
+
     setCustomerForm({
       ...customerForm,
       [name]: value
@@ -158,13 +160,13 @@ const MessageForm = () => {
       {/* Message Box - Shows by default, can be closed */}
       {!isOpen && showMessageBox && (
         <div className="message-box">
-          <img 
-            src={hublyIconImage} 
-            alt="Hubly" 
+          <img
+            src={hublyIconImage}
+            alt="Hubly"
             className="message-box-icon"
           />
           <span>{messageBoxText}</span>
-          <button 
+          <button
             className="message-box-close"
             onClick={() => setShowMessageBox(false)}
           >
@@ -175,13 +177,13 @@ const MessageForm = () => {
 
       {/* Chat Button - Shows by default */}
       {!isOpen && (
-        <button 
-          className="chat-button" 
+        <button
+          className="chat-button"
           onClick={handleChatOpen}
         >
-          <img 
+          <img
             src={messageButtonImage}
-            alt="Chat" 
+            alt="Chat"
           />
         </button>
       )}
@@ -192,14 +194,14 @@ const MessageForm = () => {
           {/* Header */}
           <div className="chat-modal-header">
             <div className="header-content">
-              <img 
-                src={hublyIconImage} 
-                alt="Hubly" 
+              <img
+                src={hublyIconImage}
+                alt="Hubly"
                 className="hubly-icon"
               />
               <span className="hubly-title">Hubly</span>
             </div>
-            <button 
+            <button
               className="close-btn"
               onClick={resetChat}
             >
@@ -219,9 +221,9 @@ const MessageForm = () => {
                 </div>
               ) : (
                 <div key={index} className="bot-message-wrapper">
-                  <img 
+                  <img
                     src={hublyIconImage}
-                    alt="Hubly" 
+                    alt="Hubly"
                     className="bot-icon"
                   />
                   <div className="bot-message">
@@ -237,7 +239,7 @@ const MessageForm = () => {
                 <div className="form-title">
                   Introduce Yourself
                 </div>
-                
+
                 <div className="form-group">
                   <label>Your name</label>
                   <input
@@ -274,7 +276,7 @@ const MessageForm = () => {
                   />
                 </div>
 
-                <button 
+                <button
                   className="form-submit-btn"
                   onClick={handleSubmit}
                   disabled={isLoading}
@@ -287,7 +289,7 @@ const MessageForm = () => {
 
           {/* Message Input Area */}
           <div className="message-input-container">
-            <input 
+            <input
               type="text"
               className="message-input"
               placeholder="Write a message"
@@ -304,6 +306,22 @@ const MessageForm = () => {
               ➤
             </button>
           </div>
+
+
+          <button
+            className="floating-close"
+            onClick={resetChat}
+            aria-label="Close chat"
+            title="Close"
+          >
+            ✕
+          </button>
+
+
+
+
+
+
         </div>
       )}
     </>

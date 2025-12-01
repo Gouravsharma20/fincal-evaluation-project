@@ -27,9 +27,12 @@ const Messages = () => {
   const [showAssignmentModal, setShowAssignmentModal] = useState(false)
   const [pendingAssignment, setPendingAssignment] = useState(null)
   const [assignmentLoading, setAssignmentLoading] = useState(false)
+  // const [resolutionTimeLimit, setResolutionTimeLimit] = useState(10);
 
 
   const { token } = useAuthContext()
+
+  
 
   // Determine ticket state
   const isTicketAssigned = openTicket?.assignedTo !== null && openTicket?.assignedTo !== undefined
@@ -114,6 +117,32 @@ const Messages = () => {
   // ✅ FIX #1: Fetch fresh ticket to get isMissedChat
 
 
+
+
+
+//   const fetchSettings = useCallback(async () => {
+//   if (!token) return;
+  
+//   try {
+//     const response = await fetch(`${API_BASE_URL}/api/admin/settings`, {
+//       headers: {
+//         'Authorization': `Bearer ${token}`,
+//         'Content-Type': 'application/json'
+//       }
+//     });
+    
+//     if (response.ok) {
+//       const data = await response.json();
+//       setResolutionTimeLimit(data.settings?.resolutionTimeLimit || 10);
+//     }
+//   } catch (err) {
+//     console.error('Error fetching settings:', err);
+//   }
+// }, [token]);
+
+
+
+
   const applyFilters = (ticketsToFilter, filterType, search) => {
     let filtered = ticketsToFilter
 
@@ -138,6 +167,7 @@ const Messages = () => {
   useEffect(() => {
     fetchTickets()
     fetchTeamMembers()
+    // fetchSettings()
   }, [fetchTickets, fetchTeamMembers])
 
   useEffect(() => {
@@ -157,7 +187,14 @@ const Messages = () => {
     try {
       const freshTicket = await fetchSingleTicket(ticket._id)
       const finalTicket = freshTicket || ticket;
-      setOpenTicket({...finalTicket})
+
+
+      
+
+
+
+
+      setOpenTicket({ ...finalTicket })
       setSelectedTeamMember(null)
       setTicketStatus(freshTicket?.status || ticket.status || 'unresolved')
       console.log('Ticket opened, isMissedChat:', freshTicket?.isMissedChat)
@@ -299,6 +336,52 @@ const Messages = () => {
     setPendingAssignment(null)
   }
 
+  // const handleStatusChange = async () => {
+  //   if (!openTicket) return
+
+  //   try {
+  //     const response = await fetch(
+  //       `${API_BASE_URL}/api/admin/tickets/${openTicket._id}/resolve`,
+  //       {
+  //         method: 'PATCH',
+  //         headers: {
+  //           'Authorization': `Bearer ${token}`,
+  //           'Content-Type': 'application/json'
+  //         },
+  //         body: JSON.stringify({ resolutionNote: "" })
+  //       }
+  //     )
+
+  //     if (!response.ok) throw new Error('Failed to resolve')
+
+  //     const freshResponse = await fetch(
+  //       `${API_BASE_URL}/api/admin/tickets/${openTicket._id}`,
+  //       {
+  //         headers: {
+  //           'Authorization': `Bearer ${token}`,
+  //           'Content-Type': 'application/json'
+  //         }
+  //       }
+  //     )
+
+  //     if (freshResponse.ok) {
+  //       const freshData = await freshResponse.json()
+  //       const freshTicket = freshData.ticket || freshData
+  //       setOpenTicket(freshTicket)
+  //       setTickets(tickets.map(t => t._id === freshTicket._id ? freshTicket : t))
+  //       setFilteredTickets(filteredTickets.map(t => t._id === freshTicket._id ? freshTicket : t))
+  //       setTicketStatus('resolved')
+  //       setShowStatusDropdown(false)
+  //     }
+  //   } catch (err) {
+  //     console.error('Error:', err)
+  //     setError(err.message)
+  //     setTimeout(() => setError(''), 3000)
+  //   }
+  // }
+
+
+
   const handleStatusChange = async () => {
     if (!openTicket) return
 
@@ -317,6 +400,7 @@ const Messages = () => {
 
       if (!response.ok) throw new Error('Failed to resolve')
 
+      // ✅ FIX: Fetch fresh ticket data immediately
       const freshResponse = await fetch(
         `${API_BASE_URL}/api/admin/tickets/${openTicket._id}`,
         {
@@ -330,9 +414,19 @@ const Messages = () => {
       if (freshResponse.ok) {
         const freshData = await freshResponse.json()
         const freshTicket = freshData.ticket || freshData
-        setOpenTicket(freshTicket)
-        setTickets(tickets.map(t => t._id === freshTicket._id ? freshTicket : t))
-        setFilteredTickets(filteredTickets.map(t => t._id === freshTicket._id ? freshTicket : t))
+
+        // ✅ FIX: Log to verify isMissedChat is present
+        console.log('Resolved ticket data:', freshTicket)
+        console.log('isMissedChat value:', freshTicket.isMissedChat)
+
+        // ✅ FIX: Force a complete state update with a new object reference
+        setOpenTicket({
+          ...freshTicket,
+          status: 'resolved' // Ensure status is set
+        })
+
+        setTickets(tickets.map(t => t._id === freshTicket._id ? { ...freshTicket } : t))
+        setFilteredTickets(filteredTickets.map(t => t._id === freshTicket._id ? { ...freshTicket } : t))
         setTicketStatus('resolved')
         setShowStatusDropdown(false)
       }
@@ -420,7 +514,9 @@ const Messages = () => {
                   </div>
                   <div className="card-message-section">
                     <p className="card-initial-message">
-                      {ticket.messages[0]?.text || 'No message'}
+                      {ticket.messages[ticket.messages.length - 1]?.text}
+
+                      {/* {ticket.messages[0]?.text || 'No message'} */}
                     </p>
                   </div>
                   <div className="card-bottom-section">
@@ -456,7 +552,7 @@ const Messages = () => {
 
               <div className="chats-list">
                 {filteredTickets.map((ticket, idx) => {
-                  let chatBadgeText = ticket.messages[0]?.text || 'No message'
+                  let chatBadgeText = ticket.messages[ticket.messages.length - 1]?.text || 'No message'
                   let showBadge = false
                   if (ticket.status === 'resolved') {
                     chatBadgeText = 'Resolved'
@@ -539,9 +635,9 @@ const Messages = () => {
                 )}
 
                 {/* ✅ isMissedChat Indicator */}
-                {openTicket?.isMissedChat && !isTicketAssigned && !isTicketResolved && (
+                {openTicket?.isMissedChat && (
                   <div className="missed-chat-indicator">
-                    <p>Replying to missed chat</p>
+                    <p>{isTicketResolved ? 'This was a missed chat' : 'Replying to missed chat'}</p>
                   </div>
                 )}
               </div>

@@ -1,13 +1,21 @@
 
+
+
+
+
+
 .ui-settings-wrapper {
   display: flex;
-  gap: 80px;
+  gap: 300px;
   padding: 40px;
   background-color: #ffffff;
   min-height: 100vh;
   max-width: 1600px;
   margin: 0 auto;
 }
+
+
+
 
 
 .ui-settings-left {
@@ -104,6 +112,7 @@
   flex-direction: column;
   animation: ui-slideUp 0.3s ease-out;
   order: 1;
+  margin-bottom: 150px
 }
 
 
