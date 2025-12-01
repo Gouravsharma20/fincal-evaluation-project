@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react'
 import './DashBoardStyles.css'
 import { useAuthContext } from '../../Hooks/useAuthContext'
 import {API_BASE_URL} from '../../config/api'
+import EnvelopeIcon from '../../Assets/DashBoardAssets/envolope.png'
+import itemLister from '../../Assets/DashBoardAssets/itemLister.png'
 
 const Dashboard = () => {
   const [tickets, setTickets] = useState([])
@@ -12,10 +14,6 @@ const Dashboard = () => {
   const [filter, setFilter] = useState('all')
 
   const { token } = useAuthContext()
-
-
-  
-
 
   const fetchTickets = useCallback(async () => {
     if (!token) return
@@ -47,10 +45,10 @@ const Dashboard = () => {
     }
     if (search.trim()) {
       filtered = filtered.filter(t =>
-        t.userName.toLowerCase().includes(search.toLowerCase()) ||
-        t.userEmail.toLowerCase().includes(search.toLowerCase()) ||
-        t.userPhoneNumber.includes(search) ||
-        t._id.includes(search)
+        (t.userName || '').toLowerCase().includes(search.toLowerCase()) ||
+        (t.userEmail || '').toLowerCase().includes(search.toLowerCase()) ||
+        (t.userPhoneNumber || '').includes(search) ||
+        (t._id || '').includes(search)
       )
     }
     setFilteredTickets(filtered)
@@ -77,6 +75,7 @@ const Dashboard = () => {
       <div className="admin-main-content">
         {/* SEARCH HEADER */}
         <div className="admin-search-header">
+          <h2 className="dashboard-title">Dashboard</h2>
           <div className="search-wrapper">
             <input
               type="text"
@@ -88,25 +87,37 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* FILTER TABS */}
-        <div className="filter-tabs-section">
+        {/* FILTER TABS - styled as links */}
+        <div className="filter-tabs-section" role="tablist" aria-label="Ticket filters">
           <button
-            className={`filter-tab ${filter === 'all' ? 'active' : ''}`}
+            type="button"
+            className={`filter-link ${filter === 'all' ? 'active' : ''}`}
             onClick={() => handleFilterChange('all')}
+            role="tab"
+            aria-selected={filter === 'all'}
           >
-            All Tickets
+            <img src={EnvelopeIcon} alt="" className="filter-icon-img" aria-hidden="true" />
+            <span className="filter-text">All Tickets</span>
           </button>
+
           <button
-            className={`filter-tab ${filter === 'resolved' ? 'active' : ''}`}
+            type="button"
+            className={`filter-link ${filter === 'resolved' ? 'active' : ''}`}
             onClick={() => handleFilterChange('resolved')}
+            role="tab"
+            aria-selected={filter === 'resolved'}
           >
-            Resolved
+            <span className="filter-text">Resolved</span>
           </button>
+
           <button
-            className={`filter-tab ${filter === 'unresolved' ? 'active' : ''}`}
+            type="button"
+            className={`filter-link ${filter === 'unresolved' ? 'active' : ''}`}
             onClick={() => handleFilterChange('unresolved')}
+            role="tab"
+            aria-selected={filter === 'unresolved'}
           >
-            Unresolved
+            <span className="filter-text">Unresolved</span>
           </button>
         </div>
 
@@ -118,44 +129,50 @@ const Dashboard = () => {
 
           {!loading && filteredTickets.map((ticket, idx) => (
             <div key={ticket._id} className="ticket-row">
-              {/* LEFT SECTION - TICKET INFO */}
               <div className="ticket-left-content">
-                {/* TOP: Ticket ID and Posted Time */}
+                {/* HEADER: dot + Ticket ID (left)  — posted time (right) */}
                 <div className="ticket-header-row">
-                  <h3 className="ticket-id">Ticket# 2023-{String(idx + 1).padStart(5, '0')}</h3>
-                  <span className="ticket-posted-time">Posted at {new Date(ticket.createdAt).toLocaleTimeString('en-US', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: true
-                  })}</span>
+                  <div className="ticket-id-wrap">
+                    <img src={itemLister} alt="" className="ticket-list-dot" />
+                    <h3 className="ticket-id">Ticket# 2023-{String(idx + 1).padStart(5, '0')}</h3>
+                  </div>
+
+                  <span className="ticket-posted-time">
+                    Posted at {new Date(ticket.createdAt || Date.now()).toLocaleTimeString('en-US', {
+                      hour: '2-digit', minute: '2-digit', hour12: true
+                    })}
+                  </span>
                 </div>
 
-                {/* MIDDLE: Message */}
-                <p className="ticket-message">
-                  {ticket.messages[0]?.text || 'No message'}
-                </p>
+                {/* MESSAGE (redesigned box look) */}
+                <div className="ticket-message-box">
+                  <p className="ticket-message">
+                    {ticket.messages && ticket.messages.length ? ticket.messages[0].text : 'No message'}
+                  </p>
 
-                {/* BOTTOM: User Info */}
+                  <div className="ticket-meta-right">
+                    {/* If you later want to show an inline time/count, you can use this */}
+                  </div>
+                </div>
+
+                {/* SEPARATOR */}
+                <div className="ticket-separator" />
+
+                {/* USER INFO (avatar + details) */}
                 <div className="ticket-user-section">
                   <img
-                    src={`https://ui-avatars.com/api/?name=${ticket.userName}&background=random&color=fff&size=40`}
-                    alt={ticket.userName}
+                    src={`https://ui-avatars.com/api/?name=${encodeURIComponent(ticket.userName || '')}&background=random&color=fff&size=40`}
+                    alt={ticket.userName || 'user'}
                     className="ticket-avatar"
                   />
+
                   <div className="ticket-user-details">
-                    <p className="user-name">{ticket.userName}</p>
-                    <p className="user-phone">+{ticket.userPhoneNumber}</p>
-                    <p className="user-email">{ticket.userEmail}</p>
+                    <p className="user-name">{ticket.userName || '-'}</p>
+                    <p className="user-phone">{ticket.userPhoneNumber ? `+${ticket.userPhoneNumber}` : '-'}</p>
+                    <p className="user-email">{ticket.userEmail || '-'}</p>
                   </div>
                 </div>
               </div>
-
-              {/* RIGHT SECTION - ACTION */}
-              {/* <div className="ticket-right-action">
-                <a href={`/tickets/${ticket._id}`} className="open-ticket-link">
-                  Open Ticket
-                </a>
-              </div> */}
             </div>
           ))}
         </div>

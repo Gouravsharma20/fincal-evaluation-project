@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import './SidebarStyles.css'
 
 import HomeIcon from '../../../Assets/SideBarAssets/DashBoard.png'
-import ChatBoxIcon from '../../../Assets/SideBarAssets/ChatBoxy.png'
+import ChatBoxIcon from '../../../Assets/SideBarAssets/ChatBox.png'
 import AnalyticsIcon from '../../../Assets/SideBarAssets/Analytics.png'
 import TeamMemberIcon from '../../../Assets/SideBarAssets/TeamMembers.png'
 import HomePageSettingIcon from '../../../Assets/SideBarAssets/HomePageSetting.png'
