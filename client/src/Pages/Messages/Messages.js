@@ -27,12 +27,8 @@ const Messages = () => {
   const [showAssignmentModal, setShowAssignmentModal] = useState(false)
   const [pendingAssignment, setPendingAssignment] = useState(null)
   const [assignmentLoading, setAssignmentLoading] = useState(false)
-  // const [resolutionTimeLimit, setResolutionTimeLimit] = useState(10);
-
 
   const { token } = useAuthContext()
-
-  
 
   // Determine ticket state
   const isTicketAssigned = openTicket?.assignedTo !== null && openTicket?.assignedTo !== undefined
@@ -114,35 +110,6 @@ const Messages = () => {
     }
   }, [token, filter, searchQuery, openTicket, fetchSingleTicket])
 
-  // ✅ FIX #1: Fetch fresh ticket to get isMissedChat
-
-
-
-
-
-//   const fetchSettings = useCallback(async () => {
-//   if (!token) return;
-  
-//   try {
-//     const response = await fetch(`${API_BASE_URL}/api/admin/settings`, {
-//       headers: {
-//         'Authorization': `Bearer ${token}`,
-//         'Content-Type': 'application/json'
-//       }
-//     });
-    
-//     if (response.ok) {
-//       const data = await response.json();
-//       setResolutionTimeLimit(data.settings?.resolutionTimeLimit || 10);
-//     }
-//   } catch (err) {
-//     console.error('Error fetching settings:', err);
-//   }
-// }, [token]);
-
-
-
-
   const applyFilters = (ticketsToFilter, filterType, search) => {
     let filtered = ticketsToFilter
 
@@ -167,7 +134,6 @@ const Messages = () => {
   useEffect(() => {
     fetchTickets()
     fetchTeamMembers()
-    // fetchSettings()
   }, [fetchTickets, fetchTeamMembers])
 
   useEffect(() => {
@@ -182,22 +148,24 @@ const Messages = () => {
     setFilter(newFilter)
   }
 
-  // ✅ FIX #1: Fetch fresh ticket on open to get isMissedChat
+  // ✅ FIX #1: Properly fetch and preserve isMissedChat
   const handleOpenTicket = async (ticket) => {
     try {
       const freshTicket = await fetchSingleTicket(ticket._id)
-      const finalTicket = freshTicket || ticket;
+      const finalTicket = freshTicket || ticket
 
+      // ✅ Explicitly preserve isMissedChat and all ticket data
+      const updatedTicket = {
+        ...finalTicket,
+        isMissedChat: freshTicket?.isMissedChat ?? ticket.isMissedChat ?? false
+      }
 
-      
-
-
-
-
-      setOpenTicket({ ...finalTicket })
+      setOpenTicket(updatedTicket)
       setSelectedTeamMember(null)
       setTicketStatus(freshTicket?.status || ticket.status || 'unresolved')
-      console.log('Ticket opened, isMissedChat:', freshTicket?.isMissedChat)
+      
+      console.log('Ticket opened, isMissedChat:', updatedTicket.isMissedChat)
+      console.log('Full ticket object:', updatedTicket)
     } catch (err) {
       console.error('Error opening ticket:', err)
       setOpenTicket(ticket)
@@ -261,9 +229,16 @@ const Messages = () => {
       if (updatedResponse.ok) {
         const updatedData = await updatedResponse.json()
         const updatedTicket = updatedData.ticket || updatedData
-        setOpenTicket(updatedTicket)
-        setTickets(tickets.map(t => t._id === updatedTicket._id ? updatedTicket : t))
-        setFilteredTickets(filteredTickets.map(t => t._id === updatedTicket._id ? updatedTicket : t))
+        
+        // ✅ FIX #2: Preserve isMissedChat when updating after message
+        const finalTicket = {
+          ...updatedTicket,
+          isMissedChat: updatedTicket.isMissedChat ?? openTicket.isMissedChat
+        }
+        
+        setOpenTicket(finalTicket)
+        setTickets(tickets.map(t => t._id === finalTicket._id ? finalTicket : t))
+        setFilteredTickets(filteredTickets.map(t => t._id === finalTicket._id ? finalTicket : t))
       }
 
       setNewMessage('')
@@ -336,52 +311,6 @@ const Messages = () => {
     setPendingAssignment(null)
   }
 
-  // const handleStatusChange = async () => {
-  //   if (!openTicket) return
-
-  //   try {
-  //     const response = await fetch(
-  //       `${API_BASE_URL}/api/admin/tickets/${openTicket._id}/resolve`,
-  //       {
-  //         method: 'PATCH',
-  //         headers: {
-  //           'Authorization': `Bearer ${token}`,
-  //           'Content-Type': 'application/json'
-  //         },
-  //         body: JSON.stringify({ resolutionNote: "" })
-  //       }
-  //     )
-
-  //     if (!response.ok) throw new Error('Failed to resolve')
-
-  //     const freshResponse = await fetch(
-  //       `${API_BASE_URL}/api/admin/tickets/${openTicket._id}`,
-  //       {
-  //         headers: {
-  //           'Authorization': `Bearer ${token}`,
-  //           'Content-Type': 'application/json'
-  //         }
-  //       }
-  //     )
-
-  //     if (freshResponse.ok) {
-  //       const freshData = await freshResponse.json()
-  //       const freshTicket = freshData.ticket || freshData
-  //       setOpenTicket(freshTicket)
-  //       setTickets(tickets.map(t => t._id === freshTicket._id ? freshTicket : t))
-  //       setFilteredTickets(filteredTickets.map(t => t._id === freshTicket._id ? freshTicket : t))
-  //       setTicketStatus('resolved')
-  //       setShowStatusDropdown(false)
-  //     }
-  //   } catch (err) {
-  //     console.error('Error:', err)
-  //     setError(err.message)
-  //     setTimeout(() => setError(''), 3000)
-  //   }
-  // }
-
-
-
   const handleStatusChange = async () => {
     if (!openTicket) return
 
@@ -400,7 +329,7 @@ const Messages = () => {
 
       if (!response.ok) throw new Error('Failed to resolve')
 
-      // ✅ FIX: Fetch fresh ticket data immediately
+      // ✅ FIX #3: Fetch fresh ticket data and preserve isMissedChat
       const freshResponse = await fetch(
         `${API_BASE_URL}/api/admin/tickets/${openTicket._id}`,
         {
@@ -415,18 +344,19 @@ const Messages = () => {
         const freshData = await freshResponse.json()
         const freshTicket = freshData.ticket || freshData
 
-        // ✅ FIX: Log to verify isMissedChat is present
         console.log('Resolved ticket data:', freshTicket)
         console.log('isMissedChat value:', freshTicket.isMissedChat)
 
-        // ✅ FIX: Force a complete state update with a new object reference
-        setOpenTicket({
+        // ✅ FIX: Preserve isMissedChat in resolved ticket
+        const finalTicket = {
           ...freshTicket,
-          status: 'resolved' // Ensure status is set
-        })
+          status: 'resolved',
+          isMissedChat: freshTicket.isMissedChat ?? openTicket.isMissedChat
+        }
 
-        setTickets(tickets.map(t => t._id === freshTicket._id ? { ...freshTicket } : t))
-        setFilteredTickets(filteredTickets.map(t => t._id === freshTicket._id ? { ...freshTicket } : t))
+        setOpenTicket(finalTicket)
+        setTickets(tickets.map(t => t._id === finalTicket._id ? finalTicket : t))
+        setFilteredTickets(filteredTickets.map(t => t._id === finalTicket._id ? finalTicket : t))
         setTicketStatus('resolved')
         setShowStatusDropdown(false)
       }
@@ -515,8 +445,6 @@ const Messages = () => {
                   <div className="card-message-section">
                     <p className="card-initial-message">
                       {ticket.messages[ticket.messages.length - 1]?.text}
-
-                      {/* {ticket.messages[0]?.text || 'No message'} */}
                     </p>
                   </div>
                   <div className="card-bottom-section">
@@ -633,9 +561,7 @@ const Messages = () => {
                     ))}
                   </>
                 )}
-
-                {/* ✅ isMissedChat Indicator */}
-                {openTicket?.isMissedChat && (
+                {openTicket?.isMissedChat === true && (
                   <div className="missed-chat-indicator">
                     <p>{isTicketResolved ? 'This was a missed chat' : 'Replying to missed chat'}</p>
                   </div>
@@ -716,16 +642,6 @@ const Messages = () => {
                       <p>+{openTicket.userPhoneNumber}</p>
                     </div>
                   </div>
-
-                  {/* <div className="detail-row">
-                    <img src= {TicketStatus} alt="Status" className="detail-icon" />
-                    <div className="detail-text">
-                      <label>Status</label>
-                      <p className={`status-value status-${ticketStatus}`}>
-                        {ticketStatus.charAt(0).toUpperCase() + ticketStatus.slice(1)}
-                      </p>
-                    </div>
-                  </div> */}
                 </div>
               </div>
 
@@ -796,15 +712,6 @@ const Messages = () => {
                         <span className={`dropdown-icon ${showStatusDropdown ? 'open' : ''}`}>▼</span>
                       </button>
 
-                      {/* <button
-                        className="status-dropdown-btn"
-                        onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-                      >
-                          <span className={`status-badge status-${ticketStatus}`}>
-                            {ticketStatus.charAt(0).toUpperCase() + ticketStatus.slice(1)}
-                          </span>
-                          <span className={`dropdown-icon ${showStatusDropdown ? 'open' : ''}`}>▼</span>
-                      </button> */}
                       {showStatusDropdown && (
                         <div className="status-dropdown-menu">
 

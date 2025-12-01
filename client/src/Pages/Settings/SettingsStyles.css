@@ -2,7 +2,7 @@
 .settings-container {
   min-height: 100vh;
   display: flex;
-  background: #f6f8fa; /* light background like screenshot */
+  background: transparent;
   color: #263238;
   font-family: Inter, "Helvetica Neue", Arial, sans-serif;
 }
@@ -19,16 +19,24 @@
 /* Main content area */
 .settings-content {
   flex: 1;
-  padding: 36px 56px;
+  padding: 0;
   box-sizing: border-box;
+  background: transparent;
+}
+
+.settings-header {
+  background: #ffffff;      /* same white as card */
+  padding: 18px 40px;      /* left/right padding — adjust as needed (matches card inner padding) */
+  border-bottom: 1px solid #e6e9ec; /* single underline for the whole header area */
 }
 
 /* Header inside card area */
 .settings-header h1 {
   margin: 0;
-  font-size: 20px;
+  font-size: 35px;
   font-weight: 600;
   color: #2b3942;
+  padding-left: 0;
 }
 .settings-subtitle {
   margin-top: 6px;
@@ -37,15 +45,21 @@
 }
 
 /* Card/container that holds the form to match the rounded, inset card in screenshot */
+
 .settings-section {
-  margin-top: 20px;
-  background: #fff;
-  border-radius: 18px;
+  margin: 0;                /* remove vertical gap so header and card appear as single white slab (like Team area) */
+  background: #ffffff;
+  border-radius: 0;         /* flat like screenshot — change to 18px if you still want rounded card */
   padding: 28px 40px;
-  box-shadow: 0 4px 12px rgba(19, 37, 47, 0.04);
-  border: 1px solid rgba(15, 38, 74, 0.04);
-  max-width: 1100px; /* content width */
+  box-shadow: none;         /* remove shadow so header + section look as one */
+  border: none;             /* remove card border so only header's bottom border appears as the underline */
+  max-width: 100%;
+  box-sizing: border-box;
 }
+
+
+
+
 
 /* Section header styles (tab like) */
 .section-header h2 {
@@ -54,7 +68,7 @@
   font-weight: 600;
   color: #21455a;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(33, 68, 90, 0.06);
+  border-bottom: none
 }
 
 /* Form layout: create left column and right empty space like screenshot */

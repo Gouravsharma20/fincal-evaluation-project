@@ -7,11 +7,21 @@
 .ui-settings-wrapper {
   display: flex;
   gap: 300px;
-  padding: 40px;
-  background-color: #ffffff;
+  padding: 0px;
+  background-color: transparent;
   min-height: 100vh;
   max-width: 1600px;
   margin: 0 auto;
+}
+
+.ui-chat-bot-label {
+  font-size: 18px;
+  font-weight: 600;
+  color: #21303a;
+  margin: 0 0 16px 0;
+  padding: 0;
+  text-align: left;
+  display: block;
 }
 
 
@@ -25,6 +35,11 @@
   gap: 24px;
   position: relative;
   min-width: 350px;
+  background: #ffffff;             /* same white as chat widgets/cards */
+  padding: 18px 40px;              /* room so heading is not flush-left */
+  border-bottom: 1px solid #e6e9ec; /* single underline for the slab */
+  box-shadow: none;                /* flat look */
+  border-radius: 0;    
 }
 
 

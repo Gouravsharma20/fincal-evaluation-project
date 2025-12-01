@@ -355,9 +355,6 @@ const TeamManagement = () => {
                   >
                     <option value="">Select a designation</option>
                     <option value="Member">Member</option>
-                    <option value="Lead">Lead</option>
-                    <option value="Manager">Manager</option>
-                    <option value="Senior">Senior</option>
                   </select>
                 </div>
 
