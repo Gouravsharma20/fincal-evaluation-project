@@ -46,7 +46,8 @@ const listAllTickets = async (req, res) => {
         status: 1,
         lastMessageAt: 1,
         createdAt: 1,
-        messages: { $slice: 1 }
+        messages: { $slice: 1 },
+        isMissedChat: 1
       });
     const total = await Ticket.countDocuments(filter);
     return res.json({

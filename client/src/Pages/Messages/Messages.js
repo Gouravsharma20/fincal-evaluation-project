@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react'
 import './MessagesStyles.css'
 import { useAuthContext } from '../../Hooks/useAuthContext'
@@ -60,6 +61,7 @@ const Messages = () => {
 
   const fetchSingleTicket = useCallback(async (ticketId) => {
     try {
+      console.log('🔍 fetchSingleTicket: Fetching ticket', ticketId)
       const response = await fetch(
         `${API_BASE_URL}/api/admin/tickets/${ticketId}`,
         {
@@ -71,7 +73,13 @@ const Messages = () => {
       )
       if (response.ok) {
         const data = await response.json()
-        return data.ticket || data
+        const ticket = data.ticket || data
+        console.log('🔍 fetchSingleTicket: Success', {
+          ticketId,
+          isMissedChat: ticket?.isMissedChat,
+          hasField: 'isMissedChat' in (ticket || {})
+        })
+        return ticket
       }
       return null
     } catch (err) {
@@ -148,24 +156,63 @@ const Messages = () => {
     setFilter(newFilter)
   }
 
-  // ✅ FIX #1: Properly fetch and preserve isMissedChat
   const handleOpenTicket = async (ticket) => {
     try {
+      console.log('\n\n')
+      console.log('═══════════════════════════════════════════════════')
+      console.log('🟢 STEP 1: Original ticket from list')
+      console.log('═══════════════════════════════════════════════════')
+      console.log('ticket._id:', ticket._id)
+      console.log('ticket.isMissedChat:', ticket.isMissedChat)
+      console.log('ticket keys:', Object.keys(ticket).slice(0, 15))
+
       const freshTicket = await fetchSingleTicket(ticket._id)
+      
+      console.log('\n🟢 STEP 2: Fresh ticket from API')
+      console.log('═══════════════════════════════════════════════════')
+      console.log('freshTicket._id:', freshTicket?._id)
+      console.log('freshTicket.isMissedChat:', freshTicket?.isMissedChat)
+      console.log('freshTicket type:', typeof freshTicket)
+      console.log('freshTicket === null:', freshTicket === null)
+      console.log('freshTicket === undefined:', freshTicket === undefined)
+      if (freshTicket) {
+        console.log('freshTicket keys:', Object.keys(freshTicket).slice(0, 15))
+      }
+
       const finalTicket = freshTicket || ticket
 
-      // ✅ Explicitly preserve isMissedChat and all ticket data
+      console.log('\n🟢 STEP 3: Final ticket (before spread)')
+      console.log('═══════════════════════════════════════════════════')
+      console.log('finalTicket._id:', finalTicket._id)
+      console.log('finalTicket.isMissedChat:', finalTicket.isMissedChat)
+
       const updatedTicket = {
         ...finalTicket,
         isMissedChat: freshTicket?.isMissedChat ?? ticket.isMissedChat ?? false
       }
 
+      console.log('\n🟢 STEP 4: Updated ticket (after spread and explicit set)')
+      console.log('═══════════════════════════════════════════════════')
+      console.log('updatedTicket._id:', updatedTicket._id)
+      console.log('updatedTicket.isMissedChat:', updatedTicket.isMissedChat)
+      console.log('Has isMissedChat key:', 'isMissedChat' in updatedTicket)
+      console.log('Keys in updatedTicket:', Object.keys(updatedTicket).slice(0, 15))
+
       setOpenTicket(updatedTicket)
       setSelectedTeamMember(null)
       setTicketStatus(freshTicket?.status || ticket.status || 'unresolved')
       
-      console.log('Ticket opened, isMissedChat:', updatedTicket.isMissedChat)
-      console.log('Full ticket object:', updatedTicket)
+      // Check state after React processes update
+      setTimeout(() => {
+        console.log('\n🟢 STEP 5: After state update (async check)')
+        console.log('═══════════════════════════════════════════════════')
+        console.log('openTicket (from state):', openTicket)
+        console.log('openTicket?.isMissedChat:', openTicket?.isMissedChat)
+        console.log('updatedTicket.isMissedChat:', updatedTicket.isMissedChat)
+        console.log('Are they equal?', openTicket?.isMissedChat === updatedTicket.isMissedChat)
+        console.log('═══════════════════════════════════════════════════\n')
+      }, 0)
+      
     } catch (err) {
       console.error('Error opening ticket:', err)
       setOpenTicket(ticket)
@@ -230,7 +277,6 @@ const Messages = () => {
         const updatedData = await updatedResponse.json()
         const updatedTicket = updatedData.ticket || updatedData
         
-        // ✅ FIX #2: Preserve isMissedChat when updating after message
         const finalTicket = {
           ...updatedTicket,
           isMissedChat: updatedTicket.isMissedChat ?? openTicket.isMissedChat
@@ -329,7 +375,6 @@ const Messages = () => {
 
       if (!response.ok) throw new Error('Failed to resolve')
 
-      // ✅ FIX #3: Fetch fresh ticket data and preserve isMissedChat
       const freshResponse = await fetch(
         `${API_BASE_URL}/api/admin/tickets/${openTicket._id}`,
         {
@@ -347,7 +392,6 @@ const Messages = () => {
         console.log('Resolved ticket data:', freshTicket)
         console.log('isMissedChat value:', freshTicket.isMissedChat)
 
-        // ✅ FIX: Preserve isMissedChat in resolved ticket
         const finalTicket = {
           ...freshTicket,
           status: 'resolved',
@@ -523,6 +567,16 @@ const Messages = () => {
                 <p>Ticket#2025-{openTicket._id.slice(0, 5)}</p>
               </div>
 
+              {/* 🔍 DEBUG: Render check */}
+              {console.log('🎨 RENDER TIME:', {
+                'openTicket._id': openTicket?._id,
+                'openTicket.isMissedChat': openTicket?.isMissedChat,
+                'isTicketResolved': isTicketResolved,
+                'type of isMissedChat': typeof openTicket?.isMissedChat,
+                'strictEquality': openTicket?.isMissedChat === true,
+                'truthyCheck': openTicket?.isMissedChat ? 'true' : 'false'
+              })}
+
               <div className="messages-list">
                 {openTicket.messages && openTicket.messages.length > 0 && (
                   <>
@@ -561,14 +615,24 @@ const Messages = () => {
                     ))}
                   </>
                 )}
-                {openTicket?.isMissedChat === true && (
-                  <div className="missed-chat-indicator">
-                    <p>{isTicketResolved ? 'This was a missed chat' : 'Replying to missed chat'}</p>
-                  </div>
-                )}
               </div>
 
-              {/* ✅ Message Input Area */}
+              {/* ✅ INDICATOR - MOVED OUTSIDE messages condition */}
+              {openTicket?.isMissedChat === true && (
+                <div className="missed-chat-indicator" style={{
+                  backgroundColor: '#fff3cd',
+                  border: '2px solid #ffc107',
+                  padding: '15px',
+                  borderRadius: '5px',
+                  marginTop: '10px'
+                }}>
+                  <p style={{ color: '#856404', margin: 0, fontWeight: 'bold' }}>
+                    {isTicketResolved ? 'This was a missed chat' : 'Replying to missed chat'}
+                  </p>
+                </div>
+              )}
+
+              {/* Message Input Area */}
               {isTicketResolved ? (
                 <div className="message-reply-box resolved-state">
                   <div className="no-access-message">
