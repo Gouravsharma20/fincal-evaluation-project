@@ -117,7 +117,7 @@
   font-size: 2rem;
 }
 
-/
+
 .section-with-chart {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -320,7 +320,6 @@ canvas {
   padding: 10px !important;
 }
 
-/* Hide legend */
 .chartjs-legend {
   display: none !important;
 }
