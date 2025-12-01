@@ -29,7 +29,6 @@
 }
 
 .hp2-sub{
-  color: var(--dark);
   max-width: 880px;
   margin: 0 auto;
   font-size: 14px;
@@ -45,8 +44,8 @@
   border-radius: 18px;
   padding: 28px;
   align-items: stretch;
-  box-shadow: 0 8px 30px rgba(10,20,30,0.04);
-  border: 1px solid rgba(148,165,176,0.12);
+  box-shadow: 0 8px 30px rgb(10 20 30 / 4%);
+  border: 1px solid rgb(148 165 176 / 12%);
 }
 
 /* left column text */
@@ -110,12 +109,12 @@
 .hp2-ad{
   width: 140px;
   display: block;
-  margin: 8px auto 18px auto;
+  margin: 8px auto 18px;
 }
 
 /* frame that contains funnel + dumble images */
 .hp2-funnel-frame{
-  background: linear-gradient(180deg, rgba(243,248,255,1) 0%, rgba(246,249,255,1) 100%);
+  background: linear-gradient(180deg, rgb(243 248 255 / 100%) 0%, rgb(246 249 255 / 100%) 100%);
   border-radius: 12px;
   padding: 18px;
   position: relative;
@@ -139,7 +138,7 @@
   height: 36px;
   object-fit: contain;
   transform: translate(-50%, -50%);
-  box-shadow: 0 4px 10px rgba(60,80,100,0.12);
+  box-shadow: 0 4px 10px rgb(60 80 100 / 12%);
   border-radius: 999px;
   background: white;
   padding: 4px;
@@ -185,7 +184,7 @@
   height: 10px;
   background: var(--muted);
   border-radius: 50%;
-  box-shadow: 0 2px 6px rgba(70,90,110,0.12);
+  box-shadow: 0 2px 6px rgb(70 90 110 / 12%);
 }
 
 /* each label vertical position */
@@ -194,7 +193,7 @@
 .label-close{ top: 70%; }
 
 /* smaller screens */
-@media (max-width: 900px){
+@media (width <= 900px){
   .hp2-card{ flex-direction: column; padding: 18px; }
   .hp2-left{ padding: 14px; }
   .hp2-right{ padding: 14px; }
@@ -205,7 +204,7 @@
   .dumble-close{ left: 60%; }
 }
 
-@media (max-width: 520px){
+@media (width <= 520px){
   .hp2-title{ font-size: 22px; }
   .hp2-sub{ font-size: 13px; }
   .hp2-funnel-img{ width: 240px; }

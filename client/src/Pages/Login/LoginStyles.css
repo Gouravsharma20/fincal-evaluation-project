@@ -8,7 +8,7 @@
   min-height: 100vh;
   position: relative;
   overflow: hidden;
-  background: #ffffff;
+  background: #fff;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
@@ -21,7 +21,7 @@
   top: 0;
   width: 50%;
   height: 100%;
-  background: #ffffff;
+  background: #fff;
   z-index: 1;
 }
 
@@ -114,7 +114,7 @@
   padding: 12px 14px;
   border-radius: 8px;
   border: 1px solid #e6e6e6;
-  background: #ffffff;
+  background: #fff;
   font-size: 14px;
   transition: all .15s ease;
   box-shadow: none;
@@ -123,7 +123,7 @@
 .field input:focus {
   outline: none;
   border-color: #c2d9ff;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.03);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 3%);
   background: #fff;
 }
 
@@ -171,7 +171,7 @@ button[type='submit'] {
 button[type='submit']:hover {
   background: #a9a9a9;
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 6%);
 }
 
 button[type='submit']:active {
@@ -187,7 +187,7 @@ p {
 }
 
 .link-button {
-  color: #0066cc;
+  color: #06c;
   cursor: pointer;
   font-weight: 600;
   text-decoration: none;
@@ -209,7 +209,6 @@ p {
 .footer-text {
   position: absolute;
   bottom: 22px;
-  left: 40px;
   color: #9a9a9a;
   font-size: 12px;
   z-index: 3;
@@ -220,30 +219,31 @@ p {
 }
 
 
-@media (max-width: 1200px) {
+@media (width <= 1200px) {
   .loginForm::after, .signUpForm::after { width: 45%; }
   .loginForm::before, .signUpForm::before { width: 55%; }
   .loginForm .form-wrapper, .signUpForm .form-wrapper { width: 55%; padding-left: 5.5%; }
 }
 
-@media (max-width: 900px) {
+@media (width <= 900px) {
   .brand-logo { left: 24px; top: 18px; width: 100px; height: 44px; }
   form h1 { font-size: 24px; }
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .loginForm, .signUpForm { flex-direction: column; }
+
   .loginForm::before, .loginForm::after, .signUpForm::before, .signUpForm::after {
     width: 100%;
     height: 50%;
   }
-  .loginForm::after, .signUpForm::after { top: auto; bottom: 0; left: 0; right: auto; background-position: center; }
+  .loginForm::after, .signUpForm::after { inset: auto auto 0 0; background-position: center; }
   .loginForm .form-wrapper, .signUpForm .form-wrapper { width: 100%; padding: 28px 24px; align-items: stretch; }
   .footer-text { position: static; margin-top: 12px; text-align: center; }
   button[type='submit'] { max-width: 100%; }
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   form h1 { font-size: 20px; margin-bottom: 14px; }
   .brand-logo { width: 86px; height: 36px; left: 16px; top: 14px; }
   .footer-text { font-size: 11px; line-height: 1.4; }

@@ -2,9 +2,9 @@
 
 .analytics-page {
   padding: 40px;
-  background: #ffffff;
+  background: #fff;
   min-height: 100vh;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 
@@ -23,7 +23,7 @@
 
 .analytics-section {
   margin-bottom: 60px;
-  background: #ffffff;
+  background: #fff;
 }
 
 .section-header {
@@ -55,7 +55,7 @@
 
 .line-chart-container {
   height: 320px;
-  background: #ffffff;
+  background: #fff;
   border-radius: 0;
   padding: 20px 0;
 }
@@ -87,7 +87,7 @@
   font-size: 1.5rem;
   font-weight: 700;
   color: #10b981;
-  margin: 0 0 16px 0;
+  margin: 0 0 16px;
   letter-spacing: -0.5px;
 }
 
@@ -136,7 +136,7 @@
   font-size: 1.5rem;
   font-weight: 700;
   color: #10b981;
-  margin: 0 0 16px 0;
+  margin: 0 0 16px;
   letter-spacing: -0.5px;
 }
 
@@ -182,7 +182,7 @@
 
 
 
-@media (max-width: 1024px) {
+@media (width <= 1024px) {
   .analytics-page {
     padding: 30px;
   }
@@ -203,7 +203,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .analytics-page {
     padding: 20px;
   }
@@ -254,7 +254,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .analytics-page {
     padding: 16px;
   }
@@ -314,7 +314,7 @@ canvas {
 }
 
 .chartjs-tooltip {
-  background: rgba(0, 0, 0, 0.9) !important;
+  background: rgb(0 0 0 / 90%) !important;
   color: white !important;
   border-radius: 6px !important;
   padding: 10px !important;

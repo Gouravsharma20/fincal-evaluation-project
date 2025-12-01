@@ -13,12 +13,12 @@
   background: white;
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
   border-left: 4px solid #007bff;
 }
 
 .ticket-header-info h2 {
-  margin: 0 0 1rem 0;
+  margin: 0 0 1rem;
   color: #333;
   font-size: 1.5rem;
   font-weight: 600;
@@ -72,7 +72,7 @@
   background: white;
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
   flex: 1;
   overflow: hidden;
   display: flex;
@@ -80,7 +80,7 @@
 }
 
 .messages-section h3 {
-  margin: 0 0 1rem 0;
+  margin: 0 0 1rem;
   color: #333;
   font-size: 1.1rem;
   font-weight: 600;
@@ -176,7 +176,7 @@
   margin: 0;
   color: #333;
   line-height: 1.5;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 
@@ -202,7 +202,7 @@
 .add-message-form textarea:focus {
   outline: none;
   border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 3px rgb(0 123 255 / 25%);
 }
 
 .internal-checkbox {
@@ -260,7 +260,7 @@
   background: white;
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
 }
 
 .admin-messages,
@@ -272,7 +272,7 @@
 
 .admin-messages h4,
 .team-messages h4 {
-  margin: 0 0 1rem 0;
+  margin: 0 0 1rem;
   color: #333;
   font-size: 1rem;
 }
@@ -322,11 +322,11 @@
 .assign-panel input:focus {
   outline: none;
   border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 3px rgb(0 123 255 / 25%);
 }
 
 /* RESPONSIVE */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .ticket-detail {
     padding: 1rem;
     gap: 1rem;

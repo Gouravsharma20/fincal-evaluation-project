@@ -3,9 +3,9 @@
   --accent-blue: #3A7ABD;
   --muted: #98A8B3;
   --cta-blue: #244779;
-  --card-bg: #ffffff;
-  --card-border: rgba(46,60,74,0.06);
-  --card-shadow: 0 10px 20px rgba(46,60,74,0.06);
+  --card-bg: #fff;
+  --card-border: rgb(46 60 74 / 6%);
+  --card-shadow: 0 10px 20px rgb(46 60 74 / 6%);
 }
 
 .hp3-section{
@@ -140,7 +140,7 @@
   width: 100%;
   border-radius: 30px;
   padding: 16px 20px;
-  border: 1.5px solid rgba(36,71,121,0.12);
+  border: 1.5px solid rgb(36 71 121 / 12%);
   background: transparent;
   color: var(--cta-blue);
   font-weight: 700;
@@ -150,7 +150,7 @@
 }
 
 /* small screens */
-@media (max-width: 900px){
+@media (width <= 900px){
   .hp3-cards{
     grid-template-columns: 1fr;
   }
