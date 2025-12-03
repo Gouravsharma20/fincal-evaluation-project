@@ -1,4 +1,4 @@
-/* ===== Page layout ===== */
+
 .settings-container {
   min-height: 100vh;
   display: flex;
@@ -7,16 +7,15 @@
   font-family: Inter, "Helvetica Neue", Arial, sans-serif;
 }
 
-/* Left sidebar placeholder (so content aligns similar to screenshot) */
 .app-sidebar {
-  width: 92px; /* adjust to match your app sidebar */
+  width: 92px; 
   background: #fff;
   border-right: 1px solid rgba(0,0,0,0.0400);
   display: block;
   flex-shrink: 0;
 }
 
-/* Main content area */
+
 .settings-content {
   flex: 1;
   padding: 0;
@@ -25,12 +24,12 @@
 }
 
 .settings-header {
-  background: #fff;      /* same white as card */
-  padding: 18px 40px;      /* left/right padding — adjust as needed (matches card inner padding) */
-  border-bottom: 1px solid #e6e9ec; /* single underline for the whole header area */
+  background: #fff;      
+  padding: 18px 40px;      
+  border-bottom: 1px solid #e6e9ec; 
 }
 
-/* Header inside card area */
+
 .settings-header h1 {
   margin: 0;
   font-size: 35px;
@@ -45,15 +44,15 @@
   font-size: 13px;
 }
 
-/* Card/container that holds the form to match the rounded, inset card in screenshot */
+
 
 .settings-section {
-  margin: 0;                /* remove vertical gap so header and card appear as single white slab (like Team area) */
+  margin: 0;                
   background: #fff;
-  border-radius: 0;         /* flat like screenshot — change to 18px if you still want rounded card */
+  border-radius: 0;         
   padding: 28px 40px;
-  box-shadow: none;         /* remove shadow so header + section look as one */
-  border: none;             /* remove card border so only header's bottom border appears as the underline */
+  box-shadow: none;         
+  border: none;             
   max-width: 100%;
   box-sizing: border-box;
 }
@@ -62,7 +61,7 @@
 
 
 
-/* Section header styles (tab like) */
+
 .section-header h2 {
   margin: 0 0 18px;
   font-size: 16px;
@@ -72,21 +71,21 @@
   border-bottom: none
 }
 
-/* Form layout: create left column and right empty space like screenshot */
+
 .settings-form {
   display: grid;
-  grid-template-columns: 1fr 280px; /* left column for inputs, right column for spacing or future help area */
+  grid-template-columns: 1fr 280px;
   gap: 12px 40px;
   align-items: start;
 }
 
-/* Make inputs span the left column */
+
 .settings-form .form-group {
   grid-column: 1 / 2;
   margin-bottom: 14px;
 }
 
-/* Label and input */
+
 .form-label {
   display: block;
   font-size: 13px;
@@ -108,20 +107,20 @@
   color: #142428;
 }
 
-/* focus */
+
 .form-input:focus {
   border-color: rgba(33,69,120,0.1800);
   box-shadow: 0 6px 18px rgba(33,69,120,0.0600);
 }
 
-/* disabled style (email) */
+
 .form-input.disabled {
   background: #fafbfb;
   color: #8b9498;
   cursor: not-allowed;
 }
 
-/* helper text below input */
+
 .form-helper {
   display: block;
   margin-top: 8px;
@@ -129,7 +128,7 @@
   color: #9aa6ad;
 }
 
-/* Warning box (inline) */
+
 .form-warning {
   grid-column: 1 / 2;
   margin-top: 6px;
@@ -144,7 +143,7 @@
   font-size: 13px;
 }
 
-/* Form actions (Save button aligned bottom-right inside card) */
+
 .form-actions {
   grid-column: 1 / -1;
   display: flex;
@@ -152,7 +151,7 @@
   margin-top: 18px;
 }
 
-/* Primary button (rounded pill like screenshot) */
+
 .btn-primary {
   background: #1f4f78;
   color: #fff;
@@ -169,9 +168,7 @@
   cursor: not-allowed;
 }
 
-/* =========================================================
-   Info icon + tooltip (non-fullscreen small bubble on hover)
-   ========================================================= */
+
 .input-with-info {
   position: relative;
   display: flex;
@@ -179,12 +176,11 @@
   gap: 12px;
 }
 
-/* make input take remaining width when used with icon wrapper */
 .input-with-info .form-input {
   flex: 1 1 auto;
 }
 
-/* info icon */
+
 .info-icon {
   width: 20px;
   height: 20px;
@@ -201,11 +197,11 @@
   flex-shrink: 0;
 }
 
-/* tooltip bubble (hidden by default) */
+
 .info-icon::after {
   content: attr(data-tooltip);
   position: absolute;
-  left: 28px;              /* appears right to the icon */
+  left: 28px;              
   top: 50%;
   transform: translateY(-50%);
   min-width: 180px;
@@ -226,7 +222,7 @@
   text-overflow: ellipsis;
 }
 
-/* show tooltip on hover */
+
 .input-with-info:hover .info-icon::after,
 .info-icon:hover::after {
   opacity: 1;
@@ -234,7 +230,7 @@
   pointer-events: auto;
 }
 
-/* small circle i icon style (text inside) */
+
 .info-icon::before {
   content: "i";
   font-weight: 700;
@@ -242,9 +238,7 @@
   transform: translateY(-1px);
 }
 
-/* =========================================================
-   Modal styles (confirmation modal) — keep it centered and not fullscreen
-   ========================================================= */
+
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -269,13 +263,12 @@
 .modal-header h2 { margin:0; font-size:18px; }
 .modal-close { background:transparent; border: none; font-size:22px; cursor:pointer; }
 
-/* modal footer buttons */
+
 .modal-footer { display:flex; justify-content:flex-end; gap:12px; margin-top:12px; }
 .modal-btn { padding:10px 16px; border-radius:8px; border:none; cursor:pointer; }
 .modal-btn-cancel { background:#f3f5f7; color:#2b3942; }
 .modal-btn-confirm { background:#1f4f78; color:#fff; }
 
-/* small responsive adjustments */
 @media (width <= 980px) {
   .settings-form { grid-template-columns: 1fr; }
   .settings-section { padding: 18px; }

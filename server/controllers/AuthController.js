@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/UserModel"); 
+const User = require("../models/UserModel");
 const adminConst = require('../constants/admin');
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -8,7 +8,7 @@ const ADMIN_EMAIL = "gouravsharma20a@gmail.com";
 
 const signToken = (user) => {
   const isAdmin = user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
-  return jwt.sign({ _id: user._id, email: user.email, isAdmin:isAdmin }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+  return jwt.sign({ _id: user._id, email: user.email, isAdmin: isAdmin }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 };
 
 const signup = async (req, res) => {
@@ -20,7 +20,7 @@ const signup = async (req, res) => {
       return res.status(403).json({ error: "Admin account cannot be created via signup." });
     }
 
-    const newUser = await User.register(name,email,password);
+    const newUser = await User.register(name, email, password);
 
     if (teamId) {
       newUser.teamId = teamId;
@@ -28,8 +28,10 @@ const signup = async (req, res) => {
     }
 
     const token = signToken(newUser);
-    res.status(201).json({ success: true,message: "User created successfully",
-       user: {id: newUser._id, name: newUser.name, email: newUser.email, teamId: newUser.teamId }, token });
+    res.status(201).json({
+      success: true, message: "User created successfully",
+      user: { id: newUser._id, name: newUser.name, email: newUser.email, teamId: newUser.teamId }, token
+    });
   } catch (err) {
     console.error(err);
     if (err.message.includes("Email already exists")) {
@@ -41,7 +43,7 @@ const signup = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { email, password} = req.body;
+    const { email, password } = req.body;
 
     if (!email || !password) return res.status(400).json({ error: "email and password required" });
 
@@ -51,17 +53,17 @@ const login = async (req, res) => {
     const token = signToken(user);
     const isAdmin = user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
 
-    res.status(200).json({ 
-      success: true, 
-      message: "Login successful", 
-      user: { 
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      user: {
         id: user._id,
-        name: user.name, 
+        name: user.name,
         email: user.email,
         isAdmin: isAdmin,
-        teamId: user.teamId 
-      }, 
-      token 
+        teamId: user.teamId
+      },
+      token
     });
   } catch (err) {
     console.error("LOGIN Error:", err.message);

@@ -1,21 +1,18 @@
-// models/SettingsModel.js
+
 const mongoose = require("mongoose");
 
 const settingsSchema = new mongoose.Schema({
-  // Global resolution time limit in minutes
   resolutionTimeLimit: {
     type: Number,
-    default: 10, // default 10 minutes
+    default: 10, 
     required: true,
-    min: 1 // minimum 1 minute
+    min: 1 
   },
-
-  // Metadata
-  lastUpdatedBy: { type: String, default: null }, // admin email or ID
+  lastUpdatedBy: { type: String, default: null }, 
   lastUpdatedAt: { type: Date, default: Date.now }
 }, { timestamps: true });
 
-// Ensure only one settings document exists
+
 settingsSchema.statics.getInstance = async function() {
   let settings = await this.findOne();
   if (!settings) {

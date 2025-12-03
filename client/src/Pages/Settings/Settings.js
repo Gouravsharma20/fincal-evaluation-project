@@ -8,7 +8,7 @@ const Settings = () => {
   const navigate = useNavigate()
   const { user, token, dispatch } = useAuthContext()
 
-  // Form States
+  
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
@@ -17,13 +17,13 @@ const Settings = () => {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
-  // Modal States
+
   const [showConfirmModal, setShowConfirmModal] = useState(false)
-  const [confirmationType, setConfirmationType] = useState(null) // 'name' or 'password'
+  const [confirmationType, setConfirmationType] = useState(null) 
   const [pendingChanges, setPendingChanges] = useState(null)
   const [modalLoading, setModalLoading] = useState(false)
 
-  // Initialize form with user data
+
   useEffect(() => {
     if (user) {
       const nameParts = user.name ? user.name.split(' ') : ['', '']
@@ -42,7 +42,7 @@ const Settings = () => {
     e.preventDefault()
     clearMessages()
 
-    // Validate name change
+
     if (firstName !== (user?.name?.split(' ')[0] || '') || 
         lastName !== (user?.name?.split(' ').slice(1).join(' ') || '')) {
       
@@ -62,7 +62,7 @@ const Settings = () => {
       return
     }
 
-    // Validate password change
+
     if (password.trim() || confirmPassword.trim()) {
       if (!password.trim() || !confirmPassword.trim()) {
         setError('Both password fields are required')
@@ -97,7 +97,6 @@ const Settings = () => {
     setModalLoading(true)
 
     try {
-      // Get user ID - try different possible formats
       const userId = user.id || user._id || user.userId
       
       if (!userId) {
@@ -108,7 +107,6 @@ const Settings = () => {
         ? `${API_BASE_URL}/api/user/${userId}/profile/name`
         : `${API_BASE_URL}/api/user/${userId}/profile/password`
 
-      // Send newPassword and confirmPassword for password updates
       const body = pendingChanges.type === 'name'
         ? { name: pendingChanges.newValue }
         : { 
@@ -133,41 +131,35 @@ const Settings = () => {
         body: JSON.stringify(body)
       })
 
-      console.log('📥 Response received:')
-      console.log('  Status:', response.status)
-      console.log('  OK:', response.ok)
 
       const data = await response.json()
-      console.log('  Response data:', data)
 
       if (!response.ok) {
-        console.log('❌ Error response:', data)
+        console.log(' Error response:', data)
         throw new Error(data.message || data.error || `Failed to update ${pendingChanges.type}`)
       }
 
-      console.log('✅ Update successful:', data)
 
-      // Show success message
       setSuccess(`${pendingChanges.type === 'name' ? 'Name' : 'Password'} updated successfully!`)
       
-      // Clear modal and form
+      
       setShowConfirmModal(false)
       setPendingChanges(null)
 
-      // Auto logout after 2 seconds
+      
       setTimeout(() => {
         setPassword('')
         setConfirmPassword('')
         
-        // Dispatch logout action
+        
         dispatch({ type: 'LOGOUT' })
         
-        // Redirect to login
+        
         navigate('/login', { replace: true })
       }, 2000)
 
     } catch (err) {
-      console.error('❌ Error updating profile:', err)
+      console.error(' Error updating profile:', err)
       setError(err.message || 'Failed to update profile. Please try again.')
     } finally {
       setModalLoading(false)
@@ -180,9 +172,6 @@ const Settings = () => {
     setConfirmationType(null)
   }
 
-  // =====================================================
-  // CONFIRMATION MODAL COMPONENT
-  // =====================================================
   const ConfirmationModal = ({ isOpen, type, pendingData }) => {
     if (!isOpen) return null
 
@@ -215,7 +204,7 @@ const Settings = () => {
                   Are you sure you want to change your password?
                 </p>
                 <p className="modal-warning">
-                  ⚠️ You will be logged out immediately after this change and will need to login again with your new password.
+                  You will be logged out immediately after this change and will need to login again with your new password.
                 </p>
               </div>
             )}
@@ -244,7 +233,6 @@ const Settings = () => {
 
   return (
     <div className="settings-container">
-      {/* Confirmation Modal */}
       <ConfirmationModal 
         isOpen={showConfirmModal} 
         type={confirmationType}
@@ -256,8 +244,6 @@ const Settings = () => {
           <h1>Settings</h1>
           <p className="settings-subtitle">Manage your profile and account settings</p>
         </div>
-
-        {/* Error Alert */}
         {error && (
           <div className="alert alert-error">
             <span className="alert-icon">✕</span>
@@ -270,8 +256,6 @@ const Settings = () => {
             </button>
           </div>
         )}
-
-        {/* Success Alert */}
         {success && (
           <div className="alert alert-success">
             <span className="alert-icon">✓</span>
@@ -284,15 +268,12 @@ const Settings = () => {
             </button>
           </div>
         )}
-
-        {/* Edit Profile Section */}
         <div className="settings-section">
           <div className="section-header">
             <h2>Edit Profile</h2>
           </div>
 
           <form className="settings-form" onSubmit={handleSaveClick}>
-            {/* First Name */}
             <div className="form-group">
               <label htmlFor="firstName" className="form-label">
                 First Name
@@ -307,7 +288,6 @@ const Settings = () => {
               />
             </div>
 
-            {/* Last Name */}
             <div className="form-group">
               <label htmlFor="lastName" className="form-label">
                 Last Name
@@ -322,7 +302,6 @@ const Settings = () => {
               />
             </div>
 
-            {/* Email (Non-editable) */}
             <div className="form-group">
               <label htmlFor="email" className="form-label">
                 Email
@@ -338,7 +317,6 @@ const Settings = () => {
               <span className="form-helper">Email cannot be changed</span>
             </div>
 
-            {/* Password */}
             <div className="form-group">
               <label htmlFor="password" className="form-label">
                 Password
@@ -354,7 +332,6 @@ const Settings = () => {
               <span className="form-helper">Minimum 8 characters</span>
             </div>
 
-            {/* Confirm Password */}
             <div className="form-group">
               <label htmlFor="confirmPassword" className="form-label">
                 Confirm Password
@@ -369,15 +346,13 @@ const Settings = () => {
               />
             </div>
 
-            {/* Warning Message */}
             {(password.trim() || confirmPassword.trim()) && (
               <div className="form-warning">
-                <span className="warning-icon">⚠️</span>
+                <span className="warning-icon"></span>
                 <span>User will be logged out immediately after password change</span>
               </div>
             )}
 
-            {/* Submit Button */}
             <div className="form-actions">
               <button 
                 type="submit" 

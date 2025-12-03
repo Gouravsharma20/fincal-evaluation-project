@@ -1,39 +1,30 @@
-// models/UISettingsModel.js
+
 const mongoose = require('mongoose');
 
 const uiSettingsSchema = new mongoose.Schema(
   {
-    // ════════════════════════════════════════════════════════════════════════
-    // HEADER COLOR SETTINGS
-    // ════════════════════════════════════════════════════════════════════════
     
     headerColor: {
       type: String,
       enum: [
-        '#FFFFFF',     // White
-        '#000000',     // Black
-        '#33475B',     // Default Blue
+        '#FFFFFF',     
+        '#000000',     
+        '#33475B',     
       ],
       default: '#33475B'
     },
 
-    // ════════════════════════════════════════════════════════════════════════
-    // BACKGROUND COLOR SETTINGS
-    // ════════════════════════════════════════════════════════════════════════
     
     backgroundColor: {
       type: String,
       enum: [
-        '#FFFFFF',     // White
-        '#000000',     // Black
-        '#FAFBFC',     // Light Gray
+        '#FFFFFF',     
+        '#000000',     
+        '#FAFBFC',     
       ],
       default: '#FAFBFC'
     },
 
-    // ════════════════════════════════════════════════════════════════════════
-    // INTRODUCTION FORM PLACEHOLDERS (NEW)
-    // ════════════════════════════════════════════════════════════════════════
     
     formPlaceholders: {
       type: {
@@ -66,9 +57,6 @@ const uiSettingsSchema = new mongoose.Schema(
       }
     },
 
-    // ════════════════════════════════════════════════════════════════════════
-    // WELCOME MESSAGE SETTINGS
-    // ════════════════════════════════════════════════════════════════════════
     
     welcomeMessage: {
       type: String,
@@ -76,9 +64,6 @@ const uiSettingsSchema = new mongoose.Schema(
       maxlength: 200
     },
 
-    // ════════════════════════════════════════════════════════════════════════
-    // CUSTOM/SUCCESS MESSAGE SETTINGS
-    // ════════════════════════════════════════════════════════════════════════
     
     customMessage: {
       type: String,
@@ -86,18 +71,12 @@ const uiSettingsSchema = new mongoose.Schema(
       maxlength: 200
     },
 
-    // ════════════════════════════════════════════════════════════════════════
-    // MISSED CHAT TIMER SETTINGS
-    // ════════════════════════════════════════════════════════════════════════
     
     missedChatTimerEnabled: {
       type: Boolean,
       default: true
     },
 
-    // ════════════════════════════════════════════════════════════════════════
-    // METADATA
-    // ════════════════════════════════════════════════════════════════════════
     
     lastUpdatedBy: {
       type: mongoose.Schema.Types.ObjectId,

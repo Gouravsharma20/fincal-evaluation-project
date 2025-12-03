@@ -617,22 +617,16 @@ const Messages = () => {
                 )}
               </div>
 
-              {/* ✅ INDICATOR - MOVED OUTSIDE messages condition */}
+              
               {openTicket?.isMissedChat === true && (
-                <div className="missed-chat-indicator" style={{
-                  backgroundColor: '#fff3cd',
-                  border: '2px solid #ffc107',
-                  padding: '15px',
-                  borderRadius: '5px',
-                  marginTop: '10px'
-                }}>
-                  <p style={{ color: '#856404', margin: 0, fontWeight: 'bold' }}>
+                <div className="missed-chat-indicator">
+                  <p className="missed-chat-text">
                     {isTicketResolved ? 'This was a missed chat' : 'Replying to missed chat'}
                   </p>
                 </div>
               )}
 
-              {/* Message Input Area */}
+             
               {isTicketResolved ? (
                 <div className="message-reply-box resolved-state">
                   <div className="no-access-message">
@@ -672,7 +666,7 @@ const Messages = () => {
               )}
             </div>
 
-            {/* RIGHT PANEL - PROFILE */}
+            
             <div className="panel-profile">
               <div className="customer-profile-section">
 
@@ -800,3 +794,9 @@ const Messages = () => {
 }
 
 export default Messages
+
+
+
+
+
+

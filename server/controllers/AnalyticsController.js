@@ -1,17 +1,10 @@
-// controllers/analyticsController.js
+
 const AnalyticsUtils = require("../utils/AnalyticsUtils");
 const Settings = require("../models/SettingsModel");
 
-// ✅ ═══════════════════════════════════════════════════════════════════════════
-// ✅ TIMER SETTINGS CONTROLLERS
-// ✅ ═══════════════════════════════════════════════════════════════════════════
 
-/**
- * ✅ NEW: Get global resolution time limit settings
- * @route GET /api/admin/timer-settings
- * @access Admin
- * @returns {Object} - resolutionTimeLimit, lastUpdatedAt, lastUpdatedBy
- */
+
+
 const getTimerSettings = async (req, res) => {
   try {
     let settings = await Settings.getInstance();
@@ -34,18 +27,11 @@ const getTimerSettings = async (req, res) => {
   }
 };
 
-/**
- * ✅ NEW: Update global resolution time limit
- * @route PATCH /api/admin/timer-settings
- * @access Admin
- * @body {number} resolutionTimeLimit - Time limit in minutes (must be positive)
- * @returns {Object} - Updated settings
- */
+
 const updateTimerSettings = async (req, res) => {
   try {
     const { resolutionTimeLimit } = req.body;
 
-    // Validate resolutionTimeLimit
     if (resolutionTimeLimit !== undefined) {
       if (typeof resolutionTimeLimit !== 'number' || resolutionTimeLimit <= 0) {
         return res.status(400).json({
@@ -81,16 +67,9 @@ const updateTimerSettings = async (req, res) => {
   }
 };
 
-// ✅ ═══════════════════════════════════════════════════════════════════════════
-// ✅ ANALYTICS CONTROLLERS
-// ✅ ═══════════════════════════════════════════════════════════════════════════
 
-/**
- * ✅ NEW: Get all analytics data for dashboard
- * @route GET /api/admin/analytics
- * @access Admin
- * @returns {Object} - totalChats, averageReplyTime, resolvedTicketsPercentage, missedChatsPerWeek
- */
+
+
 const getAnalytics = async (req, res) => {
   try {
     const analyticsData = await AnalyticsUtils.getAllAnalytics();
@@ -109,15 +88,9 @@ const getAnalytics = async (req, res) => {
   }
 };
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// MODULE EXPORTS
-// ═══════════════════════════════════════════════════════════════════════════════
 
 module.exports = {
-  // ✅ Timer Settings
   getTimerSettings,
   updateTimerSettings,
-
-  // ✅ Analytics
   getAnalytics
 };

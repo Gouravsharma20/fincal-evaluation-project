@@ -1,21 +1,20 @@
-// controllers/uiSettingsController.js
+
 const UISettings = require('../models/Uisettingsmodel');
 
-// Enum values for header colors
 const HEADER_COLOR_ENUM = [
-  '#FFFFFF',      // White
-  '#000000',      // Black
-  '#33475B'       // Default Blue
+  '#FFFFFF',      
+  '#000000',      
+  '#33475B'       
 ];
 
-// Enum values for background colors
+
 const BACKGROUND_COLOR_ENUM = [
-  '#FFFFFF',      // White
-  '#000000',      // Black
-  '#FAFBFC'       // Light Gray
+  '#FFFFFF',      
+  '#000000',      
+  '#FAFBFC'       
 ];
 
-// Default settings
+
 const DEFAULT_SETTINGS = {
   headerColor: '#33475B',
   backgroundColor: '#FAFBFC',
@@ -30,10 +29,7 @@ const DEFAULT_SETTINGS = {
   missedChatTimerEnabled: true
 };
 
-/**
- * GET current UI settings - PUBLIC (no auth required)
- * Returns: settings, headerColorEnum, backgroundColorEnum
- */
+
 const getUISettings = async (req, res) => {
   try {
     let settings = await UISettings.findOne();
@@ -68,10 +64,7 @@ const getUISettings = async (req, res) => {
   }
 };
 
-/**
- * UPDATE UI settings - ADMIN ONLY (middleware handles auth + admin verification)
- * Can update: headerColor, backgroundColor, formPlaceholders, welcomeMessage, customMessage, missedChatTimerEnabled
- */
+
 const updateUISettings = async (req, res) => {
   try {
     const { 
@@ -83,11 +76,9 @@ const updateUISettings = async (req, res) => {
       missedChatTimerEnabled 
     } = req.body;
 
-    // ════════════════════════════════════════════════════════════════════════
-    // VALIDATION
-    // ════════════════════════════════════════════════════════════════════════
+    
 
-    // Validate header color is in enum
+    
     if (headerColor && !HEADER_COLOR_ENUM.includes(headerColor)) {
       return res.status(400).json({
         success: false,
@@ -95,7 +86,6 @@ const updateUISettings = async (req, res) => {
       });
     }
 
-    // Validate background color is in enum
     if (backgroundColor && !BACKGROUND_COLOR_ENUM.includes(backgroundColor)) {
       return res.status(400).json({
         success: false,
@@ -103,7 +93,6 @@ const updateUISettings = async (req, res) => {
       });
     }
 
-    // Validate form placeholders if provided
     if (formPlaceholders) {
       if (typeof formPlaceholders !== 'object') {
         return res.status(400).json({
@@ -112,7 +101,6 @@ const updateUISettings = async (req, res) => {
         });
       }
 
-      // Check individual placeholder fields
       if (formPlaceholders.namePlaceholder && formPlaceholders.namePlaceholder.length > 100) {
         return res.status(400).json({
           success: false,
@@ -142,7 +130,6 @@ const updateUISettings = async (req, res) => {
       }
     }
 
-    // Validate welcome message length
     if (welcomeMessage && welcomeMessage.length > 200) {
       return res.status(400).json({
         success: false,
@@ -150,7 +137,6 @@ const updateUISettings = async (req, res) => {
       });
     }
 
-    // Validate custom message length
     if (customMessage && customMessage.length > 200) {
       return res.status(400).json({
         success: false,
@@ -158,14 +144,10 @@ const updateUISettings = async (req, res) => {
       });
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    // UPDATE SETTINGS
-    // ════════════════════════════════════════════════════════════════════════
 
     let settings = await UISettings.findOne();
 
     if (!settings) {
-      // Create if doesn't exist
       settings = await UISettings.create({
         ...DEFAULT_SETTINGS,
         headerColor: headerColor || DEFAULT_SETTINGS.headerColor,
@@ -177,11 +159,9 @@ const updateUISettings = async (req, res) => {
         lastUpdatedBy: req.user._id
       });
     } else {
-      // Update existing settings
       if (headerColor) settings.headerColor = headerColor;
       if (backgroundColor) settings.backgroundColor = backgroundColor;
       if (formPlaceholders) {
-        // Merge with existing placeholders (only update provided fields)
         settings.formPlaceholders = {
           ...settings.formPlaceholders,
           ...formPlaceholders
@@ -217,10 +197,7 @@ const updateUISettings = async (req, res) => {
   }
 };
 
-/**
- * RESET to default settings - ADMIN ONLY
- * Resets all UI settings to their default values
- */
+
 const resetUISettings = async (req, res) => {
   try {
     let settings = await UISettings.findOne();
@@ -231,7 +208,6 @@ const resetUISettings = async (req, res) => {
         lastUpdatedBy: req.user._id
       });
     } else {
-      // Reset all settings to defaults
       settings.headerColor = DEFAULT_SETTINGS.headerColor;
       settings.backgroundColor = DEFAULT_SETTINGS.backgroundColor;
       settings.formPlaceholders = DEFAULT_SETTINGS.formPlaceholders;

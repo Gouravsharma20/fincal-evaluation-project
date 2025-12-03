@@ -43,9 +43,9 @@ const userSchema = mongoose.Schema(
     }],
     isAdmin: {
       type: Boolean,
-      // default: false
+      default: false
     },
-    teamId: { // ADDED: keep teamId on user (since your signup sets it)
+    teamId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Team",
       default: null
@@ -60,14 +60,12 @@ const userSchema = mongoose.Schema(
 );
 
 
-// ------------------ ADDED: pre-save hook to hash password with pepper ------------------
 userSchema.pre("save", async function (next) {
   try {
-    // only hash when password is new or modified
     if (!this.isModified("password")) return next();
 
-    const pepper = process.env.PASSWORD_PEPPER || ""; // ADDED
-    const passwordWithPepper = this.password + pepper; // ADDED
+    const pepper = process.env.PASSWORD_PEPPER || ""; 
+    const passwordWithPepper = this.password + pepper; 
 
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(passwordWithPepper, salt);
@@ -77,7 +75,6 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-// Static Registration Function
 userSchema.statics.register = async function (name, email, password) {
   const exists = await User.findOne({ email })
   if (exists) {
@@ -88,7 +85,6 @@ userSchema.statics.register = async function (name, email, password) {
 }
 
 
-// Static Login Function
 userSchema.statics.login = async function(email, password, ipAddress, userAgent) {
   const user = await User.findOne({ email })
   if (!user) {

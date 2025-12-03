@@ -13,6 +13,7 @@ import Analytics from './Pages/Analytics/Analytics';
 import TeamManagement from './Pages/TeamManagement/TeamManagement';
 import UISettings from './Pages/UISettings/UISettings';
 import Settings from './Pages/Settings/Settings';
+import TeamDashboard from './Pages/TeamDashboard/TeamDashboard.js';
 
 import Sidebar from './Components/Layout/Sidebar/Sidebar';
 
@@ -69,6 +70,8 @@ function AppContent() {
           <div className='app-main'>
             <NavBar/>
             <Routes>
+            <Route path="/dashboard" element={<TeamDashboard />} />
+            <Route path="/messages" element={<Team />} />
             <Route path="/team" element={<Team />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/team/*" element={<Team />} />
