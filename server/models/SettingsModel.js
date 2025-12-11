@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const settingsSchema = new mongoose.Schema({
   resolutionTimeLimit: {
     type: Number,
-    default: 10, 
+    default: 1, 
     required: true,
     min: 1 
   },
@@ -17,7 +17,7 @@ settingsSchema.statics.getInstance = async function() {
   let settings = await this.findOne();
   if (!settings) {
     settings = await this.create({
-      resolutionTimeLimit: 10,
+      resolutionTimeLimit: 1,
       lastUpdatedAt: new Date()
     });
   }

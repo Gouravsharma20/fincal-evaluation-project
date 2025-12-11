@@ -149,26 +149,52 @@ const Messages = () => {
     setFilter(newFilter)
   }
 
+  // const handleOpenTicket = async (ticket) => {
+  //   try {
+  //     const freshTicket = await fetchSingleTicket(ticket._id)
+  //     const finalTicket = freshTicket || ticket
+
+  //     const updatedTicket = {
+  //       ...finalTicket,
+  //       isMissedChat: freshTicket?.isMissedChat ?? ticket.isMissedChat ?? false
+  //     }
+
+  //     setOpenTicket(updatedTicket)
+  //     setSelectedTeamMember(null)
+  //     setTicketStatus(freshTicket?.status || ticket.status || 'unresolved')
+  //   } catch (err) {
+  //     console.error('Error opening ticket:', err)
+  //     setOpenTicket(ticket)
+  //     setSelectedTeamMember(null)
+  //     setTicketStatus(ticket.status || 'unresolved')
+  //   }
+  // }
+
   const handleOpenTicket = async (ticket) => {
-    try {
-      const freshTicket = await fetchSingleTicket(ticket._id)
-      const finalTicket = freshTicket || ticket
+  try {
+    const freshTicket = await fetchSingleTicket(ticket._id)
+    
+    console.log('🔍 Fresh ticket from API:', freshTicket) // DEBUG LINE
+    console.log('🔍 isMissedChat value:', freshTicket?.isMissedChat) // DEBUG LINE
+    console.log('🔍 Full ticket object:', JSON.stringify(freshTicket, null, 2)) // DEBUG LINE
 
-      const updatedTicket = {
-        ...finalTicket,
-        isMissedChat: freshTicket?.isMissedChat ?? ticket.isMissedChat ?? false
-      }
-
-      setOpenTicket(updatedTicket)
-      setSelectedTeamMember(null)
-      setTicketStatus(freshTicket?.status || ticket.status || 'unresolved')
-    } catch (err) {
-      console.error('Error opening ticket:', err)
-      setOpenTicket(ticket)
-      setSelectedTeamMember(null)
-      setTicketStatus(ticket.status || 'unresolved')
+    const updatedTicket = {
+      ...(freshTicket || ticket),
+      isMissedChat: freshTicket?.isMissedChat ?? ticket.isMissedChat ?? false
     }
+
+    console.log('✅ Final updatedTicket isMissedChat:', updatedTicket.isMissedChat) // DEBUG LINE
+
+    setOpenTicket(updatedTicket)
+    setSelectedTeamMember(null)
+    setTicketStatus(freshTicket?.status || ticket.status || 'unresolved')
+  } catch (err) {
+    console.error('Error opening ticket:', err)
+    setOpenTicket(ticket)
+    setSelectedTeamMember(null)
+    setTicketStatus(ticket.status || 'unresolved')
   }
+}
 
   const handleSendMessage = async () => {
     if (!newMessage.trim()) {
