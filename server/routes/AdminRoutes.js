@@ -6,9 +6,8 @@ const adminCtrl = require("../controllers/AdminControler");
 const uiSettingsCtrl = require("../controllers/Uisettingscontroller");
 const analyticsCtrl = require("../controllers/AnalyticsController")
 
-
-router.get("/tickets", authUser, isAdmin, adminCtrl.listAllTickets);
 router.get("/tickets/:id", authUser, isAdmin, adminCtrl.getTicketDetails);
+router.get("/tickets", authUser, isAdmin, adminCtrl.listAllTickets);
 router.post("/tickets/:id/messages", authUser, isAdmin, adminCtrl.adminAddMessage);
 router.post("/tickets/:id/assign", authUser, isAdmin, adminCtrl.assignTicket);
 router.patch("/tickets/:id/resolve", authUser, isAdmin, adminCtrl.resolveTicket);

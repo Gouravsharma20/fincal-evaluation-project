@@ -1,3 +1,60 @@
+// const checkAndMarkMissedChat = (ticket, resolutionTimeLimit) => {
+//   console.log('🔍 [checkAndMarkMissedChat] Starting check for ticket:', ticket._id);
+//   console.log('🔍 [checkAndMarkMissedChat] resolutionTimeLimit:', resolutionTimeLimit, 'minutes');
+  
+//   if (!ticket.messages || ticket.messages.length === 0) {
+//     console.log('❌ [checkAndMarkMissedChat] No messages found');
+//     return false;
+//   }
+
+//   // ✅ Get last user message
+//   const lastUserMessage = ticket.messages
+//     .filter(m => m.senderType === 'user')
+//     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
+//   if (!lastUserMessage) {
+//     console.log('❌ [checkAndMarkMissedChat] No user messages found');
+//     return false;
+//   }
+
+//   console.log('📝 [checkAndMarkMissedChat] Last user message at:', lastUserMessage.createdAt);
+
+//   // ✅ Get last admin message (after the last user message)
+//   const lastAdminMessage = ticket.messages
+//     .filter(m => m.senderType === 'admin' && new Date(m.createdAt) > new Date(lastUserMessage.createdAt))
+//     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
+//   console.log('💬 [checkAndMarkMissedChat] Has admin replied after last user message?', !!lastAdminMessage);
+
+//   // ✅ Calculate time difference
+//   let timeDiffInMinutes;
+  
+//   if (lastAdminMessage) {
+//     // Time between last user message and admin's reply
+//     timeDiffInMinutes = (new Date(lastAdminMessage.createdAt) - new Date(lastUserMessage.createdAt)) / (1000 * 60);
+//     console.log('⏱️ [checkAndMarkMissedChat] Admin replied after:', timeDiffInMinutes.toFixed(2), 'minutes');
+//   } else {
+//     // Time since last user message (no admin reply yet)
+//     timeDiffInMinutes = (Date.now() - new Date(lastUserMessage.createdAt)) / (1000 * 60);
+//     console.log('⏱️ [checkAndMarkMissedChat] Time since last user message (no admin reply):', timeDiffInMinutes.toFixed(2), 'minutes');
+//   }
+
+//   console.log('⏱️ [checkAndMarkMissedChat] Threshold:', resolutionTimeLimit, 'minutes');
+
+//   // ✅ Check if time exceeded
+//   if (timeDiffInMinutes > resolutionTimeLimit) {
+//     console.log('✅ [checkAndMarkMissedChat] MARKING AS MISSED! Time exceeded');
+//     ticket.isMissedChat = true;
+//     return true;
+//   }
+
+//   console.log('⏳ [checkAndMarkMissedChat] NOT marking as missed. Time within limit');
+//   return false;
+// };
+
+
+
+
 const Ticket = require("../models/TicketModel");
 const Analytics = require("../models/AnalyticsModel");
 const Settings = require("../models/SettingsModel");
@@ -61,54 +118,58 @@ const incrementMissedChatsForWeek = async (ticketDate) => {
   );
 };
 
+// ✅ CORRECTED LOGIC
 const checkAndMarkMissedChat = (ticket, resolutionTimeLimit) => {
   console.log('🔍 [checkAndMarkMissedChat] Starting check for ticket:', ticket._id);
   console.log('🔍 [checkAndMarkMissedChat] resolutionTimeLimit:', resolutionTimeLimit, 'minutes');
   
-  if (!ticket.createdAt) {
-    console.log('❌ [checkAndMarkMissedChat] No createdAt found');
+  if (!ticket.messages || ticket.messages.length === 0) {
+    console.log('❌ [checkAndMarkMissedChat] No messages found');
     return false;
   }
 
-  // 🆕 For UNRESOLVED tickets: Check time since creation
-  if (!ticket.resolvedAt) {
-    console.log('📌 [checkAndMarkMissedChat] Ticket is UNRESOLVED');
-    
-    const timeSinceCreation = (Date.now() - ticket.createdAt.getTime()) / (1000 * 60);
-    console.log('⏱️ [checkAndMarkMissedChat] Time since creation:', timeSinceCreation.toFixed(2), 'minutes');
-    console.log('⏱️ [checkAndMarkMissedChat] Limit is:', resolutionTimeLimit, 'minutes');
-    
-    // Check if admin/team has replied
-    const hasAdminOrTeamReplied = ticket.messages.some(
-      msg => msg.senderType === 'admin' || msg.senderType === 'team'
-    );
-    console.log('💬 [checkAndMarkMissedChat] Has admin/team replied?', hasAdminOrTeamReplied);
-    
-    // If time exceeded and no admin/team reply yet, mark as missed
-    if (timeSinceCreation > resolutionTimeLimit && !hasAdminOrTeamReplied) {
-      console.log('✅ [checkAndMarkMissedChat] MARKING AS MISSED! Time exceeded and no reply');
-      ticket.isMissedChat = true;
-      return true;
-    } else {
-      console.log('⏳ [checkAndMarkMissedChat] NOT marking as missed. Time:', timeSinceCreation.toFixed(2), 'vs limit:', resolutionTimeLimit);
-    }
-    
+  // ✅ Get last user message
+  const lastUserMessage = ticket.messages
+    .filter(m => m.senderType === 'user')
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
+  if (!lastUserMessage) {
+    console.log('❌ [checkAndMarkMissedChat] No user messages found');
     return false;
   }
 
-  console.log('📌 [checkAndMarkMissedChat] Ticket is RESOLVED');
+  console.log('📝 [checkAndMarkMissedChat] Last user message at:', lastUserMessage.createdAt);
+
+  // ✅ Get last admin message (after the last user message)
+  const lastAdminMessage = ticket.messages
+    .filter(m => m.senderType === 'admin' && new Date(m.createdAt) > new Date(lastUserMessage.createdAt))
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
+  console.log('💬 [checkAndMarkMissedChat] Has admin replied after last user message?', !!lastAdminMessage);
+
+  // ✅ Calculate time difference
+  let timeDiffInMinutes;
   
-  // 🔄 For RESOLVED tickets: Check resolution time (existing logic)
-  const resolutionTimeMinutes = (ticket.resolvedAt - ticket.createdAt) / (1000 * 60);
-  console.log('⏱️ [checkAndMarkMissedChat] Resolution time:', resolutionTimeMinutes.toFixed(2), 'minutes');
+  if (lastAdminMessage) {
+    // Time between last user message and admin's reply
+    timeDiffInMinutes = (new Date(lastAdminMessage.createdAt) - new Date(lastUserMessage.createdAt)) / (1000 * 60);
+    console.log('⏱️ [checkAndMarkMissedChat] Admin replied after:', timeDiffInMinutes.toFixed(2), 'minutes');
+  } else {
+    // Time since last user message (no admin reply yet)
+    timeDiffInMinutes = (Date.now() - new Date(lastUserMessage.createdAt)) / (1000 * 60);
+    console.log('⏱️ [checkAndMarkMissedChat] Time since last user message (no admin reply):', timeDiffInMinutes.toFixed(2), 'minutes');
+  }
 
-  if (resolutionTimeMinutes > resolutionTimeLimit) {
-    console.log('✅ [checkAndMarkMissedChat] MARKING AS MISSED! Resolution time exceeded');
+  console.log('⏱️ [checkAndMarkMissedChat] Threshold:', resolutionTimeLimit, 'minutes');
+
+  // ✅ Check if time exceeded
+  if (timeDiffInMinutes > resolutionTimeLimit) {
+    console.log('✅ [checkAndMarkMissedChat] MARKING AS MISSED! Time exceeded');
     ticket.isMissedChat = true;
     return true;
   }
 
-  console.log('⏳ [checkAndMarkMissedChat] NOT marking as missed. Resolution time within limit');
+  console.log('⏳ [checkAndMarkMissedChat] NOT marking as missed. Time within limit');
   return false;
 };
 
@@ -126,6 +187,7 @@ const getAllAnalytics = async () => {
   };
 };
 
+// ✅ EXPORT ALL FUNCTIONS
 module.exports = {
   getISOWeek,
   calculateTotalChats,

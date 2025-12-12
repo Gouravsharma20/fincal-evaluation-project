@@ -1,4 +1,7 @@
 
+
+
+
 const Ticket = require("../models/TicketModel");
 const User = require("../models/UserModel");
 const crypto = require('crypto');
@@ -10,30 +13,41 @@ const {
   getAllAnalytics
 } = require("../utils/AnalyticsUtils");
 
-// 🆕 HELPER: Batch update missed tickets
+// ✅ IMPROVED: Batch update using proper logic
 const updateMissedTicketsInBatch = async (resolutionTimeLimit) => {
   try {
-    const cutoffTime = new Date(Date.now() - resolutionTimeLimit * 60 * 1000);
+    console.log('🔄 [Batch Update] Starting batch update with limit:', resolutionTimeLimit, 'minutes');
+    
+    // Get all open tickets that might need updating
+    const tickets = await Ticket.find({
+      status: 'open',
+      isMissedChat: false
+    });
 
-    const result = await Ticket.updateMany(
-      {
-        status: 'open',
-        isMissedChat: false,
-        createdAt: { $lt: cutoffTime },
-        'messages.senderType': { $ne: 'admin' }
-      },
-      {
-        $set: { isMissedChat: true }
+    console.log('🔄 [Batch Update] Found', tickets.length, 'open tickets to check');
+
+    let updatedCount = 0;
+
+    for (const ticket of tickets) {
+      const shouldBeMissed = checkAndMarkMissedChat(ticket, resolutionTimeLimit);
+      
+      if (shouldBeMissed) {
+        ticket.isMissedChat = true;
+        await ticket.save();
+        await incrementMissedChatsForWeek(ticket.createdAt);
+        updatedCount++;
       }
-    );
-
-    if (result.modifiedCount > 0) {
-      console.log(`✅ Marked ${result.modifiedCount} tickets as missed (batch update)`);
     }
 
-    return result.modifiedCount;
+    if (updatedCount > 0) {
+      console.log(`✅ [Batch Update] Marked ${updatedCount} tickets as missed`);
+    } else {
+      console.log(`⏳ [Batch Update] No tickets needed updating`);
+    }
+
+    return updatedCount;
   } catch (err) {
-    console.error('Batch update failed:', err);
+    console.error('❌ [Batch Update] Failed:', err);
     return 0;
   }
 };
@@ -56,12 +70,12 @@ const listAllTickets = async (req, res) => {
       ];
     }
 
-    // 🆕 UPDATE MISSED TICKETS BEFORE FETCHING
+    // ✅ UPDATE MISSED TICKETS BEFORE FETCHING
     try {
       const settings = await Settings.getInstance();
       await updateMissedTicketsInBatch(settings.resolutionTimeLimit);
     } catch (err) {
-      console.warn("Batch update failed (non-critical):", err);
+      console.warn("❌ Batch update failed (non-critical):", err);
     }
 
     const tickets = await Ticket.find(filter)
@@ -95,94 +109,77 @@ const listAllTickets = async (req, res) => {
 
 const getTicketDetails = async (req, res) => {
   console.log('========== TICKET DETAILS CALLED ==========');
-  console.log('Ticket ID:', req.params.id);
+  console.log('🎯 Ticket ID:', req.params.id);
+  console.log('🎯 Request path:', req.path);
+  console.log('🎯 Request method:', req.method);
+
   try {
-    console.log('🎯 etails Fetching ticket:', req.params.id);
-    
     const ticket = await Ticket.findById(req.params.id);
-    if (!ticket) return res.status(404).json({ error: "Ticket not found" });
     
-    console.log('🎯 [etails] Ticket found. Current isMissedChat:', ticket.isMissedChat);
-    console.log('🎯 [etails] Ticket status:', ticket.status);
-    
+    if (!ticket) {
+      console.log('❌ Ticket not found in database');
+      return res.status(404).json({ error: "Ticket not found" });
+    }
+
+    console.log('✅ Ticket found in database');
+    console.log('🎯 Current isMissedChat:', ticket.isMissedChat);
+    console.log('🎯 Ticket status:', ticket.status);
+    console.log('🎯 Created at:', ticket.createdAt);
+    console.log('🎯 Messages count:', ticket.messages?.length || 0);
+
     if (ticket.assignedToType !== "admin" || ticket.assignedToId !== null) {
+      console.log('❌ Ticket not assigned to admin');
       return res.status(403).json({ error: "This ticket is not assigned to you" });
     }
 
-    // 🆕 CHECK AND MARK MISSED CHAT BEFORE RETURNING
-    if (!ticket.isMissedChat && ticket.status !== 'resolved') {
-      console.log('🎯 [etails] Checking if should be marked as missed...');
-      
-      try {
-        const settings = await Settings.getInstance();
-        const resolutionTimeLimit = settings.resolutionTimeLimit;
-        console.log('🎯 [etails] Resolution time limit from settings:', resolutionTimeLimit);
+    // ✅ ALWAYS check and update missed chat status
+    try {
+      const settings = await Settings.getInstance();
+      const resolutionTimeLimit = settings.resolutionTimeLimit;
+      console.log('🎯 Resolution time limit from settings:', resolutionTimeLimit, 'minutes');
 
-        const isMissedNow = checkAndMarkMissedChat(ticket, resolutionTimeLimit);
+      const originalMissedStatus = ticket.isMissedChat;
+      console.log('🎯 Original isMissedChat status:', originalMissedStatus);
 
-        if (isMissedNow) {
-          console.log(`✅ [etails] Saving ticket with isMissedChat=true`);
-          await ticket.save();
-          console.log(`✅ [etails] Ticket saved successfully`);
-        } else {
-          console.log(`⏳ etails] Ticket not marked as missed`);
-        }
-      } catch (analyticsErr) {
-        console.warn("Analytics calculation failed (non-critical):", analyticsErr);
+      // Run the check
+      const shouldBeMissed = checkAndMarkMissedChat(ticket, resolutionTimeLimit);
+      console.log('🎯 checkAndMarkMissedChat returned:', shouldBeMissed);
+
+      // Save if status changed
+      if (shouldBeMissed && !originalMissedStatus) {
+        console.log('✅ Ticket should be marked as missed - SAVING TO DATABASE');
+        ticket.isMissedChat = true;
+        await ticket.save();
+        console.log('✅ Ticket SAVED successfully to database');
+
+        // Increment analytics
+        await incrementMissedChatsForWeek(ticket.createdAt);
+        console.log('✅ Analytics updated');
+      } else if (!shouldBeMissed && originalMissedStatus) {
+        console.log('⚠️ Ticket was marked as missed but should not be - keeping as is');
+      } else if (originalMissedStatus) {
+        console.log('⏭️ Already marked as missed, no change needed');
+      } else {
+        console.log('⏳ Time within limit, not marking as missed');
       }
-    } else {
-      console.log('⏭️ [getTicketDetails] Skipping check - already missed or resolved');
+    } catch (analyticsErr) {
+      console.error("❌ Analytics calculation failed:", analyticsErr);
+      console.error(analyticsErr.stack);
     }
 
-    console.log('🎯 [getTicketDetails] Returning ticket. Final isMissedChat:', ticket.isMissedChat);
+    console.log('🎯 FINAL isMissedChat before returning:', ticket.isMissedChat);
+    console.log('========== RETURNING TICKET TO FRONTEND ==========');
 
     return res.json({
       success: true,
       ticket
     });
   } catch (err) {
-    console.error(err);
+    console.error('❌ Fatal error in getTicketDetails:', err);
+    console.error(err.stack);
     return res.status(500).json({ error: "Server error" });
   }
 };
-
-// const getTicketDetails = async (req, res) => {
-//   try {
-//     const ticket = await Ticket.findById(req.params.id);
-//     if (!ticket) return res.status(404).json({ error: "Ticket not found" });
-//     if (ticket.assignedToType !== "admin" || ticket.assignedToId !== null) {
-//       return res.status(403).json({ error: "This ticket is not assigned to you" });
-//     }
-
-//     // 🆕 CHECK AND MARK MISSED CHAT BEFORE RETURNING (only if not already marked and not resolved)
-//     if (!ticket.isMissedChat && ticket.status !== 'resolved') {
-//       try {
-//         const settings = await Settings.getInstance();
-//         const resolutionTimeLimit = settings.resolutionTimeLimit;
-
-//         const isMissedNow = checkAndMarkMissedChat(ticket, resolutionTimeLimit);
-
-//         if (isMissedNow) {
-//           console.log(`✅ Marking ticket ${ticket._id} as missed chat (on detail fetch)`);
-//           await ticket.save();
-//         }
-//       } catch (analyticsErr) {
-//         console.warn("Analytics calculation failed (non-critical):", analyticsErr);
-//       }
-//     }
-
-//     return res.json({
-//       success: true,
-//       ticket
-//     });
-//   } catch (err) {
-//     console.error(err);
-//     return res.status(500).json({ error: "Server error" });
-//   }
-// };
-
-
-
 
 const adminAddMessage = async (req, res) => {
   try {
@@ -242,7 +239,6 @@ const assignTicket = async (req, res) => {
     ticket.assignedToId = assignedToId;
     ticket.status = "assigned";
 
-
     ticket.messages.push({
       senderType: "admin",
       senderId: req.user._id,
@@ -264,7 +260,6 @@ const assignTicket = async (req, res) => {
     return res.status(500).json({ error: "Server error" });
   }
 };
-
 
 const resolveTicket = async (req, res) => {
   try {
@@ -298,10 +293,10 @@ const resolveTicket = async (req, res) => {
       if (isMissed) {
         await incrementMissedChatsForWeek(ticket.createdAt);
       }
-
     } catch (analyticsErr) {
       console.warn("Analytics calculation failed (non-critical):", analyticsErr);
     }
+    
     await ticket.save();
 
     return res.json({
@@ -316,7 +311,6 @@ const resolveTicket = async (req, res) => {
   }
 };
 
-
 const listAllUsers = async (req, res) => {
   try {
     const users = await User.find({ email: { $ne: "gouravsharma20a@gmail.com" } })
@@ -328,7 +322,6 @@ const listAllUsers = async (req, res) => {
       _id: "6924cdfa002795cf8aea42ed",
       name: "Gourav Sharma",
       email: "gouravsharma20a@gmail.com",
-
     };
 
     const allUsers = [adminUser, ...users];
@@ -343,11 +336,6 @@ const listAllUsers = async (req, res) => {
   }
 };
 
-
-
-
-
-
 const createTeamMember = async (req, res) => {
   try {
     const { name, email, designation } = req.body;
@@ -360,8 +348,6 @@ const createTeamMember = async (req, res) => {
 
     newTeamMember.designation = designation;
     newTeamMember.role = "team_member";
-    await newTeamMember.save();
-
     await newTeamMember.save();
 
     return res.status(201).json({
@@ -383,7 +369,6 @@ const createTeamMember = async (req, res) => {
     return res.status(500).json({ error: "Server error" });
   }
 };
-
 
 const updateTeamMember = async (req, res) => {
   try {
@@ -425,7 +410,6 @@ const updateTeamMember = async (req, res) => {
   }
 };
 
-
 const deleteTeamMember = async (req, res) => {
   try {
     const { id } = req.params;
@@ -435,11 +419,9 @@ const deleteTeamMember = async (req, res) => {
       return res.status(404).json({ error: "Team member not found" });
     }
 
-
     if (teamMember.email === "gouravsharma20a@gmail.com") {
       return res.status(403).json({ error: "Cannot delete admin user" });
     }
-
 
     await User.findByIdAndDelete(id);
 
@@ -453,8 +435,6 @@ const deleteTeamMember = async (req, res) => {
     return res.status(500).json({ error: "Server error" });
   }
 };
-
-
 
 const getSettings = async (req, res) => {
   try {
@@ -472,7 +452,6 @@ const getSettings = async (req, res) => {
     return res.status(500).json({ error: "Server error" });
   }
 };
-
 
 const updateSettings = async (req, res) => {
   try {
@@ -508,7 +487,6 @@ const updateSettings = async (req, res) => {
   }
 };
 
-
 const getAnalytics = async (req, res) => {
   try {
     const analytics = await getAllAnalytics();
@@ -531,7 +509,6 @@ const getAnalytics = async (req, res) => {
     return res.status(500).json({ error: "Server error" });
   }
 };
-
 
 module.exports = {
   listAllTickets,
