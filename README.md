@@ -2,6 +2,29 @@
 
 A comprehensive customer relationship management (CRM) ticket management system built with the MERN stack. Hubly enables businesses to efficiently manage customer support tickets with role-based access control, real-time messaging, and automated missed chat detection.
 
+## 🌐 Live Demo
+
+- **Frontend**: [https://fincal-evaluation-project.vercel.app](https://fincal-evaluation-project.vercel.app)
+- **Backend API**: [https://crm-management-api-c9ax.onrender.com](https://crm-management-api-c9ax.onrender.com)
+
+## 🔑 Admin Access (For Testing)
+
+To explore all admin features immediately, use these credentials:
+
+**Admin Login:**
+- **Email**: `gouravsharma20a@gmail.com`
+- **Password**: `Gourav@1234`
+
+**What you can do with admin access:**
+- ✅ View and manage all tickets in the system
+- ✅ Assign tickets to team members
+- ✅ Manage team member accounts
+- ✅ Configure system settings and thresholds
+- ✅ Access comprehensive analytics dashboard
+- ✅ Test all administrative features
+
+> **Note**: These credentials are provided for demonstration purposes only. Please do not modify critical settings or delete important data.
+
 ## 🚀 Features
 
 ### Core Functionality
@@ -36,6 +59,7 @@ A comprehensive customer relationship management (CRM) ticket management system 
 - Context API for state management
 - Custom CSS styling
 - Responsive design
+- Deployed on **Vercel**
 
 **Backend:**
 - Node.js
@@ -43,10 +67,7 @@ A comprehensive customer relationship management (CRM) ticket management system 
 - MongoDB with Mongoose ODM
 - JWT Authentication
 - Password hashing with pepper for enhanced security
-
-**Deployment:**
-- Frontend: Vercel
-- Backend: Render
+- Deployed on **Render**
 
 ## 📋 Prerequisites
 
@@ -58,7 +79,7 @@ A comprehensive customer relationship management (CRM) ticket management system 
 
 ### Clone the repository
 ```bash
-git clone https://github.com/yourusername/hubly-crm.git
+git clone https://github.com/Gouravsharma20/fincal-evaluation-project.git
 cd hubly-crm
 ```
 
@@ -80,7 +101,7 @@ cd frontend
 npm install
 
 # Create .env file with the following variables
-REACT_APP_API_BASE_URL=your_backend_url
+REACT_APP_API_BASE_URL=https://crm-management-api-c9ax.onrender.com
 ```
 
 ### Run the Application
@@ -98,24 +119,6 @@ npm start
 ```
 
 The application will be available at `http://localhost:3000`
-
-## 🧪 Test Admin Access
-
-To explore the admin features and test the application, you can use the following credentials:
-
-**Admin Login:**
-- **Email:** gouravsharma20a@gmail.com
-- **Password:** Gourav@1234
-
-With admin access, you can:
-- View all tickets in the system
-- Assign tickets to team members
-- Manage team member accounts
-- Configure system settings
-- Access analytics dashboard
-- Test all administrative features
-
-*Note: These credentials are provided for demonstration purposes only. Please do not modify critical settings or delete important data.*
 
 ## 📱 Usage
 
@@ -140,6 +143,7 @@ With admin access, you can:
 6. Configure system settings and thresholds
 
 ## 🗂️ Project Structure
+
 ```
 hubly-crm/
 ├── frontend/
@@ -201,14 +205,21 @@ hubly-crm/
 
 ### Frontend (Vercel)
 1. Connect your GitHub repository to Vercel
-2. Configure environment variables
+2. Configure environment variables:
+   - `REACT_APP_API_BASE_URL=https://crm-management-api-c9ax.onrender.com`
 3. Deploy with automatic builds on push
+4. **Live URL**: [https://fincal-evaluation-project.vercel.app](https://fincal-evaluation-project.vercel.app)
 
 ### Backend (Render)
 1. Create a new Web Service on Render
 2. Connect your GitHub repository
-3. Configure environment variables
+3. Configure environment variables:
+   - `MONGODB_URI`
+   - `JWT_SECRET`
+   - `PASSWORD_PEPPER`
+   - `PORT`
 4. Deploy with automatic deployments
+5. **Live URL**: [https://crm-management-api-c9ax.onrender.com](https://crm-management-api-c9ax.onrender.com)
 
 ## 🤝 Contributing
 
@@ -227,8 +238,10 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 👨‍💻 Author
 
 **Gourav Sharma**
-- GitHub: https://github.com/Gouravsharma20
+
+- GitHub: [@Gouravsharma20](https://github.com/Gouravsharma20)
 - Email: gouravsharma20a@gmail.com
+- Project Repository: [fincal-evaluation-project](https://github.com/Gouravsharma20/fincal-evaluation-project)
 
 ## 🙏 Acknowledgments
 
@@ -238,8 +251,14 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📞 Support
 
-For support, email gouravsharma20a@gmail.com or create an issue in the GitHub repository.
+For support, email gouravsharma20a@gmail.com or create an issue in the [GitHub repository](https://github.com/Gouravsharma20/fincal-evaluation-project/issues).
 
 ---
 
-**Note:** This is a demonstration project. The admin credentials provided above are for testing purposes only. In a production environment, ensure all credentials are properly secured and never commit sensitive information to version control.
+**Note**: This is a demonstration project. The admin credentials provided above are for testing purposes only. In a production environment, ensure all credentials are properly secured and never commit sensitive information to version control.
+
+## 📈 Project Stats
+
+- **Tech Stack**: JavaScript 65.0% | CSS 34.5% | HTML 0.5%
+- **Platform**: Vercel (Frontend) + Render (Backend)
+- **Status**: ✅ Production Ready
