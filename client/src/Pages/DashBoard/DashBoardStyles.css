@@ -32,10 +32,18 @@ body {
 
 
 
+
 .admin-search-header {
   padding: 20px;
   background-color: white;
   border-bottom: 1px solid #e0e0e0;
+}
+
+.dashboard-title {
+  color: #6A6B70; 
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0 0 32px 0; 
 }
 
 
