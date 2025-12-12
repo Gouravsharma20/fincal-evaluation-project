@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useCallback } from 'react'
 import './DashBoardStyles.css'
 import { useAuthContext } from '../../Hooks/useAuthContext'
@@ -135,27 +133,16 @@ const Dashboard = () => {
                     <img src={itemLister} alt="" className="ticket-list-dot" />
                     <h3 className="ticket-id">Ticket# 2023-{String(idx + 1).padStart(5, '0')}</h3>
                   </div>
-
-                  <span className="ticket-posted-time">
-                    Posted at {new Date(ticket.createdAt || Date.now()).toLocaleTimeString('en-US', {
-                      hour: '2-digit', minute: '2-digit', hour12: true
-                    })}
-                  </span>
                 </div>
 
-                
                 <div className="ticket-message-box">
                   <p className="ticket-message">
                     {ticket.messages[ticket.messages.length - 1]?.text}
                   </p>
-
-                  
                 </div>
 
-                
                 <div className="ticket-separator" />
 
-                
                 <div className="ticket-user-section">
                   <img
                     src={`https://ui-avatars.com/api/?name=${encodeURIComponent(ticket.userName || '')}&background=random&color=fff&size=40`}
@@ -169,27 +156,25 @@ const Dashboard = () => {
                     <p className="user-email">{ticket.userEmail || '-'}</p>
                   </div>
 
-                  
+                  <div className="ticket-right-meta">
+                    <span className="ticket-posted-time">
+                      Posted at {new Date(ticket.createdAt || Date.now()).toLocaleTimeString('en-US', {
+                        hour: '2-digit', minute: '2-digit', hour12: true
+                      })}
+                    </span>
 
-
-
-
+                    {ticket.status === 'resolved' ? (
+                      <div className="ticket-status resolved">Resolved</div>
+                    ) : (
+                      <button
+                        type="button"
+                        className="ticket-status open"
+                      >
+                        Open Ticket
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-
-              
-              <div className="ticket-actions">
-                {ticket.status === 'resolved' ? (
-                  <div className="ticket-status resolved">Resolved</div>
-                ) : (
-                  <button
-                    type="button"
-                    className="ticket-status open"
-                    
-                  >
-                    Open Ticket <span className="arrow">→</span>
-                  </button>
-                )}
               </div>
             </div>
           ))}
