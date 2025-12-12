@@ -139,7 +139,6 @@ const Messages = () => {
   useEffect(() => {
     fetchTickets()
     fetchTeamMembers()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -540,51 +539,13 @@ const Messages = () => {
                 <img src={homeIcon} alt="Home" className="home-icon" />
               </div>
 
-              {/* <div className="messages-list">
-                {openTicket.messages && openTicket.messages.length > 0 && (
-                  <>
-                    <div className="msg-date-separator">
-                      <span>
-                        {new Date(openTicket.messages[0].createdAt).toLocaleDateString('en-US', {
-                          day: 'numeric',
-                          month: 'long',
-                          year: 'numeric'
-                        })}
-                      </span>
-                    </div>
-                    {openTicket.messages.map((msg, idx) => (
-                      <div key={idx} className={`msg-item msg-${msg.senderType}`}>
-                        <div className="msg-header">
-                          <img
-                            src={`https://ui-avatars.com/api/?name=${msg.senderType === 'admin' ? 'Admin' : openTicket.userName}&size=32&background=random&color=fff`}
-                            alt="Avatar"
-                            className="msg-avatar"
-                          />
-                          <div className="msg-sender-info">
-                            <span className="msg-sender-name">
-                              {msg.senderType === 'admin' ? `Admin/${openTicket.userName}` : openTicket.userName}
-                            </span>
-                            <span className="msg-timestamp">
-                              {new Date(msg.createdAt).toLocaleTimeString('en-US', {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                hour12: true
-                              })}
-                            </span>
-                          </div>
-                        </div>
-                        <p className="msg-content">{msg.text}</p>
-                      </div>
-                    ))}
-                  </>
-                )}
-              </div> */}
+
 
 
               <div className="messages-list">
                 {openTicket.messages && openTicket.messages.length > 0 && (
                   <>
-                    {/* ✅ Date separator - outside the reversed container */}
+
                     <div className="msg-date-separator">
                       <span>
                         {new Date(openTicket.messages[0].createdAt).toLocaleDateString('en-US', {
@@ -595,7 +556,7 @@ const Messages = () => {
                       </span>
                     </div>
 
-                    {/* ✅ Messages container with reverse */}
+
                     <div className="messages-wrapper">
                       {openTicket.messages.map((msg, idx) => (
                         <div key={idx} className={`msg-item msg-${msg.senderType}`}>
@@ -686,11 +647,20 @@ const Messages = () => {
                   <h3>{openTicket.userName}</h3>
                 </div>
 
+                <h4 className="profile-section-title">Details</h4>
+
                 <div className="profile-details">
                   <div className="detail-row">
                     <img src={nameIcon} alt="Name" className="detail-icon" />
                     <div className="detail-text">
                       <p>{openTicket.userName}</p>
+                    </div>
+                  </div>
+
+                  <div className="detail-row">
+                    <img src={phoneIcon} alt="Phone" className="detail-icon" />
+                    <div className="detail-text">
+                      <p>+{openTicket.userPhoneNumber}</p>
                     </div>
                   </div>
 
@@ -701,12 +671,7 @@ const Messages = () => {
                     </div>
                   </div>
 
-                  <div className="detail-row">
-                    <img src={phoneIcon} alt="Phone" className="detail-icon" />
-                    <div className="detail-text">
-                      <p>+{openTicket.userPhoneNumber}</p>
-                    </div>
-                  </div>
+
                 </div>
               </div>
 
@@ -718,9 +683,18 @@ const Messages = () => {
                       className="team-dropdown-btn"
                       onClick={() => setShowTeamDropdown(!showTeamDropdown)}
                     >
-                      <span className="dropdown-text">
-                        {selectedTeamMember ? selectedTeamMember.name : 'Select Team Member'}
-                      </span>
+                      <div className="team-btn-content">
+                        {teamMembers.length > 0 && (
+                          <img
+                            src={teamMembers[0].avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(teamMembers[0].name)}&background=random&color=fff&size=64`}
+                            alt={teamMembers[0].name}
+                            className="team-btn-avatar"
+                          />
+                        )}
+                        <span className="dropdown-text">
+                          {teamMembers.length > 0 ? teamMembers[0].name : 'Select Team Member'}
+                        </span>
+                      </div>
                       <span className={`dropdown-icon ${showTeamDropdown ? 'open' : ''}`}>▼</span>
                     </button>
                     {showTeamDropdown && (
@@ -778,8 +752,21 @@ const Messages = () => {
                             className={`status-option ${ticketStatus === 'resolved' ? 'active' : ''}`}
                             onClick={() => handleStatusChange()}
                           >
-                            Resolve Ticket
+                            Resolved
                           </button>
+
+
+                          <button
+                            className={`status-option ${ticketStatus === 'unresolved' ? 'active' : ''}`}
+                            onClick={() => setShowStatusDropdown(false)}
+                          >
+                            Unresolved
+                          </button>
+
+
+
+
+
                         </div>
                       )}
                     </div>
@@ -788,9 +775,10 @@ const Messages = () => {
               )}
             </div>
           </div>
-        )}
-      </div>
-    </div>
+        )
+        }
+      </div >
+    </div >
   )
 }
 

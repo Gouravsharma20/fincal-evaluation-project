@@ -75,7 +75,6 @@ const Dashboard = () => {
   return (
     <div className="admin-dashboard">
       <div className="admin-main-content">
-        {/* SEARCH HEADER */}
         <div className="admin-search-header">
           <h2 className="dashboard-title">Dashboard</h2>
           <div className="search-wrapper">
@@ -89,7 +88,6 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* FILTER TABS - styled as links */}
         <div className="filter-tabs-section" role="tablist" aria-label="Ticket filters">
           <button
             type="button"
@@ -123,7 +121,6 @@ const Dashboard = () => {
           </button>
         </div>
 
-        {/* TICKETS LIST */}
         <div className="tickets-list-container">
           {loading && <p className="status-text">Loading tickets...</p>}
           {error && <p className="status-text error-text">Error: {error}</p>}
@@ -132,7 +129,7 @@ const Dashboard = () => {
           {!loading && filteredTickets.map((ticket, idx) => (
             <div key={ticket._id} className="ticket-row">
               <div className="ticket-left-content">
-                {/* HEADER: dot + Ticket ID (left)  — posted time (right) */}
+                
                 <div className="ticket-header-row">
                   <div className="ticket-id-wrap">
                     <img src={itemLister} alt="" className="ticket-list-dot" />
@@ -146,21 +143,19 @@ const Dashboard = () => {
                   </span>
                 </div>
 
-                {/* MESSAGE (redesigned box look) */}
+                
                 <div className="ticket-message-box">
                   <p className="ticket-message">
                     {ticket.messages[ticket.messages.length - 1]?.text}
                   </p>
 
-                  <div className="ticket-meta-right">
-                    {/* If you later want to show an inline time/count, you can use this */}
-                  </div>
+                  
                 </div>
 
-                {/* SEPARATOR */}
+                
                 <div className="ticket-separator" />
 
-                {/* USER INFO (avatar + details) */}
+                
                 <div className="ticket-user-section">
                   <img
                     src={`https://ui-avatars.com/api/?name=${encodeURIComponent(ticket.userName || '')}&background=random&color=fff&size=40`}
@@ -173,10 +168,16 @@ const Dashboard = () => {
                     <p className="user-phone">{ticket.userPhoneNumber ? `+${ticket.userPhoneNumber}` : '-'}</p>
                     <p className="user-email">{ticket.userEmail || '-'}</p>
                   </div>
+
+                  
+
+
+
+
                 </div>
               </div>
 
-              {/* << ADDED: actions column (minimal insertion) */}
+              
               <div className="ticket-actions">
                 {ticket.status === 'resolved' ? (
                   <div className="ticket-status resolved">Resolved</div>
@@ -184,7 +185,7 @@ const Dashboard = () => {
                   <button
                     type="button"
                     className="ticket-status open"
-                    // onClick={() => openTicket(ticket)}  // << OPTIONAL: enable if you have handler
+                    
                   >
                     Open Ticket <span className="arrow">→</span>
                   </button>

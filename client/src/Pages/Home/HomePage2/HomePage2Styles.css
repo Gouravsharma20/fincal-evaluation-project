@@ -1,7 +1,7 @@
 :root{
   --dark: #30404D;
   --muted: #394B59;
-  --card-bg: #f6fbff; /* subtle card background for right side */
+  --card-bg: #f6fbff; 
   --container-padding: 48px;
   --radius: 18px;
 }
@@ -14,7 +14,7 @@
   color: var(--dark);
 }
 
-/* top title and paragraph */
+
 .hp2-top{
   text-align: center;
   margin-bottom: 32px;
@@ -36,7 +36,7 @@
   color: var(--muted);
 }
 
-/* main content card */
+
 .hp2-card{
   display: flex;
   gap: 28px;
@@ -48,7 +48,7 @@
   border: 1px solid rgba(148,165,176,0.1200);
 }
 
-/* left column text */
+
 .hp2-left{
   flex: 1 1 48%;
   padding: 28px;
@@ -71,7 +71,7 @@
   margin-bottom: 22px;
 }
 
-/* smaller features */
+
 .hp2-feature{
   margin-bottom: 16px;
 }
@@ -90,7 +90,7 @@
   line-height: 1.5;
 }
 
-/* right column with image / funnel */
+
 .hp2-right{
   flex: 1 1 52%;
   display: flex;
@@ -105,14 +105,14 @@
   position: relative;
 }
 
-/* advertisement icons at top-right inside card */
+
 .hp2-ad{
   width: 140px;
   display: block;
   margin: 8px auto 18px;
 }
 
-/* frame that contains funnel + dumble images */
+
 .hp2-funnel-frame{
   background: linear-gradient(180deg, rgba(243,248,255,1) 0%, rgba(246,249,255,1) 100%);
   border-radius: 12px;
@@ -124,14 +124,14 @@
   align-items: center;
 }
 
-/* underlying funnel image (the main art) - scale to fit */
+
 .hp2-funnel-img{
   width: 320px;
   display: block;
   pointer-events: none;
 }
 
-/* dumble icons (small circular/arrow PNGs) - positioned over the funnel */
+
 .dumble{
   position: absolute;
   width: 36px;
@@ -144,7 +144,7 @@
   padding: 4px;
 }
 
-/* tune positions - approximate to match screenshot */
+
 .dumble-capture{
   left: 72%;
   top: 36%;
@@ -166,7 +166,7 @@
   height: 36px;
 }
 
-/* labels on right side of funnel */
+
 .funnel-label{
   position: absolute;
   right: -26px;
@@ -187,12 +187,12 @@
   box-shadow: 0 2px 6px rgba(70,90,110,0.1200);
 }
 
-/* each label vertical position */
+
 .label-capture{ top: 30%; }
 .label-nurture{ top: 50%; }
 .label-close{ top: 70%; }
 
-/* smaller screens */
+
 @media (width <= 900px){
   .hp2-card{ flex-direction: column; padding: 18px; }
   .hp2-left{ padding: 14px; }

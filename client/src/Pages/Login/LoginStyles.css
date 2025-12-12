@@ -134,16 +134,16 @@
 .checkbox-field {
   display: flex;
   align-items: flex-start;
-  margin-top: 8px; /* adjust or remove based on look */
+  margin-top: 8px; 
 }
 
 
 .checkbox-field .checkbox-label {
   display: flex;
-  flex-direction: row;        /* put checkbox + text in row */
-  align-items: flex-start;        /* align vertically centered */
+  flex-direction: row;        
+  align-items: flex-start;        
   padding-left: 2px;
-  gap:8px                /* spacing between checkbox & text */
+  gap:8px                
 }
 
 .checkbox-text {

@@ -3,7 +3,7 @@ import { useNavigate,Link } from 'react-router-dom'
 import "./LoginStyles.css"
 import { useLogin } from '../../Hooks/useLogin'
 
-// Images for branding + right-side art
+
 import appLogo from '../../Assets/CommonAssets/appLogo.png'
 import LoginSignUpBoy from "../../Assets/LoginSignUpAssets/LoginSignUpBoy.png"
 
@@ -38,11 +38,10 @@ const Login = () => {
         '--boy-img': `url(${LoginSignUpBoy})`
       }}
     >
-      {/* Top-left small branding logo */}
       <Link to="/" className="brand-logo" />
 
 
-      {/* Left-side form layout */}
+      
       <div className="form-wrapper">
         <form onSubmit={handleSubmit}>
           <h1>Sign in to your Plexify</h1>
@@ -80,7 +79,7 @@ const Login = () => {
         </form>
       </div>
 
-      {/* Footer text */}
+      
       <div className='footer-text'>
         This site is protected by reCAPTCHA and the Google&nbsp;
         <a href='https://policies.google.com/privacy' target='_blank' rel='noopener noreferrer'>Privacy Policy</a>

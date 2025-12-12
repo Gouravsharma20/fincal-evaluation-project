@@ -12,7 +12,6 @@ import Youtube from "../../../Assets/HomeAssets/LastPage/SocialIcons/Youtube.png
 import appLogo from "../../../Assets/CommonAssets/appLogo.png"
 
 const LastPage = () => {
-  // columns data - easy to edit
   const columns = [
     {
       title: 'Product',
@@ -85,7 +84,7 @@ const LastPage = () => {
             </div>
           ))}
 
-          {/* optional small Company column */}
+          
           <div className="lp-column lp-company">
             <h4 className="lp-col-title">Company</h4>
             <ul className="lp-col-list">
@@ -102,7 +101,7 @@ const LastPage = () => {
                 className="lp-social-btn"
                 type="button"
                 aria-label={s.alt}
-                onClick={() => { /* intentionally empty = no redirect */ }}
+                onClick={() => { }}
               >
                 <img src={s.src} alt={s.alt} className="lp-social-img" />
               </button>

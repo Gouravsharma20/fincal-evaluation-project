@@ -19,7 +19,7 @@ import HomePage2 from './HomePage2/HomePage2'
 import HomePage3 from './HomePage3/HomePage3'
 import LastPage from './LastPage/LastPage'
 
-/* ---------- Company Logos Bar ---------- */
+
 const CompanyLogos = () => {
   const logos = [
     { src: AdobeLogo, alt: 'Adobe' },
@@ -55,7 +55,6 @@ const Home = () => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // MOBILE: show ONLY MessageForm on pure white background
   if (isMobile) {
     return (
       <section className="mobile-only-form">
@@ -82,7 +81,7 @@ const Home = () => {
           </div>
         ) : null}
 
-        {/* HERO CONTENT - row layout */}
+        
         <div className="hero-container">
           <div className="hero-left">
             <h1 className="hero-title">
@@ -120,7 +119,7 @@ const Home = () => {
         <CompanyLogos />
       </section>
 
-      {/* Page-2 */}
+      
       <HomePage2 />
       <HomePage3 />
       <LastPage />

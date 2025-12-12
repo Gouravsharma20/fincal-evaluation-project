@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { Line, Pie } from 'react-chartjs-2';
 import {
@@ -11,10 +10,10 @@ import {
   Tooltip,
   Legend,
   ArcElement,
+  Filler,
 } from 'chart.js';
 import axios from '../../config/axiosConfig';
 import './AnalyticsStyles.css';
-
 
 
 ChartJS.register(
@@ -25,7 +24,8 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  ArcElement
+  ArcElement,
+  Filler
 );
 
 const Analytics = () => {
@@ -38,7 +38,6 @@ const Analytics = () => {
       try {
         setLoading(true);
         const response = await axios.get(`/api/admin/analytics`);
-
 
         if (response.data.success) {
           setAnalytics(response.data.analytics);
@@ -68,9 +67,12 @@ const Analytics = () => {
     return <div className="analytics-error">No analytics data available</div>;
   }
 
-  
-  const missedChatsData = analytics.missedChatsPerWeek && analytics.missedChatsPerWeek.length > 0
-    ? analytics.missedChatsPerWeek
+ 
+  const missedChatsData = (analytics?.missedChatsPerWeek?.length > 0)
+    ? analytics.missedChatsPerWeek.map(item => ({
+        week: item.week || item._id || 'Week',
+        missed: item.missedChats || item.missed || item.count || 0
+      }))
     : [
       { week: 'Week 1', missed: 13 },
       { week: 'Week 2', missed: 11 },
@@ -84,7 +86,6 @@ const Analytics = () => {
       { week: 'Week 10', missed: 16 }
     ];
 
-  
   const formatReplyTime = (milliseconds) => {
     if (!milliseconds) return '0 secs';
     const seconds = Math.floor(milliseconds / 1000);
@@ -100,7 +101,6 @@ const Analytics = () => {
     return `${seconds}s`;
   };
 
-  
   const missedChatsChartData = {
     labels: missedChatsData.map(d => d.week),
     datasets: [
@@ -176,7 +176,7 @@ const Analytics = () => {
     },
   };
 
-  
+
   const resolvedChartData = {
     labels: ['Resolved', 'Pending'],
     datasets: [
@@ -219,13 +219,11 @@ const Analytics = () => {
 
   return (
     <div className="analytics-page">
-      
-
       <div className="analytics-header">
         <h1>Analytics</h1>
       </div>
 
-      
+
       <div className="analytics-section">
         <div className="section-header">
           <h2>Missed Chats</h2>
@@ -235,7 +233,6 @@ const Analytics = () => {
           <Line data={missedChatsChartData} options={missedChatsOptions} />
         </div>
       </div>
-
 
       <div className="analytics-section info-section">
         <div className="info-section-content">
@@ -250,8 +247,6 @@ const Analytics = () => {
           </div>
         </div>
       </div>
-
-      
 
       <div className="analytics-section">
         <div className="section-with-chart">
@@ -270,7 +265,7 @@ const Analytics = () => {
         </div>
       </div>
 
-      
+
       <div className="analytics-section info-section">
         <div className="info-section-content">
           <div className="info-left">
