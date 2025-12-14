@@ -225,9 +225,8 @@ const Analytics = () => {
 
 
       <div className="analytics-section">
-        <div className="section-header">
+        <div className="section-headers">
           <h2>Missed Chats</h2>
-          <span className="section-menu">⋯</span>
         </div>
         <div className="chart-container line-chart-container">
           <Line data={missedChatsChartData} options={missedChatsOptions} />

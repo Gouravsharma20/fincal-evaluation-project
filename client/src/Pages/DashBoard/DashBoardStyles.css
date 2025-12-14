@@ -47,17 +47,27 @@ body {
 }
 
 
+.search-wrapper {
+  max-width: 250px !important;
+  position: relative;
+  display: flex;
+  align-items: center;
+};
 
-.search-wrapper { max-width: 600px; }
 
 .search-input-main {
   width: 100%;
-  padding: 12px 16px;
+  padding: 8px 12px 8px 36px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 14px;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.18s;
+  color: #000000;
+}
+
+.search-input-main::placeholder {
+  color: #B6B6B6;
 }
 
 .search-input-main:focus {

@@ -28,6 +28,7 @@ const Messages = () => {
   const [showAssignmentModal, setShowAssignmentModal] = useState(false)
   const [pendingAssignment, setPendingAssignment] = useState(null)
   const [assignmentLoading, setAssignmentLoading] = useState(false)
+  const [showResolveModal, setShowResolveModal] = useState(false)
 
   const { token } = useAuthContext()
 
@@ -123,7 +124,17 @@ const Messages = () => {
       setError('')
       applyFilters(data.tickets || [], filter, searchQuery)
 
-      if (!openTicket && data.tickets && data.tickets.length > 0) {
+
+      if (openTicket && data.tickets && data.tickets.length > 0) {
+        const currentTicket = data.tickets.find(t => t._id === openTicket._id)
+        if (currentTicket) {
+          const freshTicket = await fetchSingleTicket(currentTicket._id)
+          setOpenTicket(freshTicket || currentTicket)
+          setTicketStatus(freshTicket?.status || currentTicket.status || 'unresolved')
+        }
+      }
+
+      else if (!openTicket && data.tickets && data.tickets.length > 0) {
         const freshTicket = await fetchSingleTicket(data.tickets[0]._id)
         setOpenTicket(freshTicket || data.tickets[0])
         setTicketStatus(freshTicket?.status || data.tickets[0].status || 'unresolved')
@@ -151,9 +162,6 @@ const Messages = () => {
     setSearchQuery(e.target.value)
   }
 
-  const handleFilterChange = (newFilter) => {
-    setFilter(newFilter)
-  }
 
   const handleOpenTicket = async (ticket) => {
     try {
@@ -258,8 +266,10 @@ const Messages = () => {
         }
 
         setOpenTicket(finalTicket)
-        setTickets(tickets.map(t => t._id === finalTicket._id ? finalTicket : t))
-        setFilteredTickets(filteredTickets.map(t => t._id === finalTicket._id ? finalTicket : t))
+
+        const newTickets = tickets.map(t => t._id === finalTicket._id ? finalTicket : t)
+        setTickets(newTickets)
+        applyFilters(newTickets, filter, searchQuery)
       }
 
       setNewMessage('')
@@ -332,7 +342,15 @@ const Messages = () => {
     setPendingAssignment(null)
   }
 
+
+
   const handleStatusChange = async () => {
+    if (!openTicket) return
+    setShowResolveModal(true)
+    setShowStatusDropdown(false)
+  }
+
+  const handleConfirmResolve = async () => {
     if (!openTicket) return
 
     try {
@@ -374,7 +392,7 @@ const Messages = () => {
         setTickets(tickets.map(t => t._id === finalTicket._id ? finalTicket : t))
         setFilteredTickets(filteredTickets.map(t => t._id === finalTicket._id ? finalTicket : t))
         setTicketStatus('resolved')
-        setShowStatusDropdown(false)
+        setShowResolveModal(false)
       }
     } catch (err) {
       console.error('Error:', err)
@@ -383,64 +401,47 @@ const Messages = () => {
     }
   }
 
-  const ConfirmationModal = ({ isOpen, memberName }) => {
+  const ConfirmationModal = ({ isOpen, memberName, type = 'assignment' }) => {
     if (!isOpen) return null
+
+    const isResolve = type === 'resolve'
+
     return (
-      <div className="modal-overlay">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h2>Confirm Assignment</h2>
-            <button className="modal-close" onClick={handleCancelAssignment}>×</button>
-          </div>
+      <div className={`modal-overlay`} >
+        <div className={`modal-content `}>
           <div className="modal-body">
             <p className="modal-message">
-              Assign this ticket to <strong>{memberName}</strong>?
+              {isResolve ? 'Chat will be closed' : `Chat would be assigned to ${memberName}?`}
             </p>
           </div>
           <div className="modal-footer">
-            <button className="modal-btn modal-btn-cancel" onClick={handleCancelAssignment} disabled={assignmentLoading}>
+            <button
+              className="modal-btn modal-btn-cancel"
+              onClick={isResolve ? () => setShowResolveModal(false) : handleCancelAssignment}
+              disabled={!isResolve && assignmentLoading}
+            >
               Cancel
             </button>
-            <button className="modal-btn modal-btn-confirm" onClick={handleConfirmAssignment} disabled={assignmentLoading}>
-              {assignmentLoading ? 'Processing...' : 'Confirm'}
+            <button
+              className="modal-btn modal-btn-confirm"
+              onClick={isResolve ? handleConfirmResolve : handleConfirmAssignment}
+              disabled={!isResolve && assignmentLoading}
+            >
+              {!isResolve && assignmentLoading ? 'Processing...' : 'Confirm'}
             </button>
           </div>
         </div>
       </div>
     )
   }
-
   return (
     <div className="admin-dashboard">
-      <ConfirmationModal isOpen={showAssignmentModal} memberName={pendingAssignment?.name} />
+      <ConfirmationModal isOpen={showAssignmentModal} memberName={pendingAssignment?.name} type="assignment" />
+      <ConfirmationModal isOpen={showResolveModal} type="resolve" />
 
       <div className="admin-main-content">
         {!openTicket && (
           <>
-            <div className="admin-search-header">
-              <div className="search-wrapper">
-                <input
-                  type="text"
-                  placeholder="Search for ticket"
-                  value={searchQuery}
-                  onChange={handleSearch}
-                  className="search-input-main"
-                />
-              </div>
-            </div>
-
-            <div className="filter-tabs-section">
-              <button className={`filter-tab ${filter === 'all' ? 'active' : ''}`} onClick={() => handleFilterChange('all')}>
-                All Tickets
-              </button>
-              <button className={`filter-tab ${filter === 'resolved' ? 'active' : ''}`} onClick={() => handleFilterChange('resolved')}>
-                Resolved
-              </button>
-              <button className={`filter-tab ${filter === 'unresolved' ? 'active' : ''}`} onClick={() => handleFilterChange('unresolved')}>
-                Unresolved
-              </button>
-            </div>
-
             <div className="tickets-cards-container">
               {loading && <p className="status-text">Loading tickets...</p>}
               {error && <p className="status-text error-text">Error: {error}</p>}
@@ -490,13 +491,18 @@ const Messages = () => {
           <div className="three-panel-container">
             <div className="panel-left-chats">
               <div className="chats-header">
-                <h2>Contact center</h2>
-                <h4>chats</h4>
+                <h2>Contact Center</h2>
+                <h4>Chats</h4>
               </div>
 
               <div className="chats-list">
                 {filteredTickets.map((ticket, idx) => {
-                  let chatBadgeText = ticket.messages[ticket.messages.length - 1]?.text || 'No message'
+                  const latestMessage = ticket.messages && ticket.messages.length > 0
+                    ? ticket.messages
+                      .slice()
+                      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0]
+                    : null
+                  let chatBadgeText = latestMessage?.text || 'No message'
                   let showBadge = false
                   if (ticket.status === 'resolved') {
                     chatBadgeText = 'Resolved'
@@ -727,7 +733,7 @@ const Messages = () => {
                     )}
                   </div>
 
-                  <div className="status-dropdown-section">
+                  <div className={`status-dropdown-section ${showTeamDropdown ? 'push-down' : ''}`}>
                     <div className="status-dropdown-wrapper">
                       <button
                         className="status-dropdown-btn"

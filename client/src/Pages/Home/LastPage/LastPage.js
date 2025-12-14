@@ -1,7 +1,6 @@
 import React from 'react';
 import './LastPageStyles.css'
 
-
 import Discord from "../../../Assets/HomeAssets/LastPage/SocialIcons/Discord.png";
 import Email from "../../../Assets/HomeAssets/LastPage/SocialIcons/Email.png";
 import Instagram from "../../../Assets/HomeAssets/LastPage/SocialIcons/Instagram.png";
@@ -52,6 +51,12 @@ const LastPage = () => {
         'Terms',
         'Privacy'
       ]
+    },
+    {
+      title: 'Company',
+      items: [
+        'Careers'
+      ]
     }
   ]
 
@@ -83,14 +88,6 @@ const LastPage = () => {
               </ul>
             </div>
           ))}
-
-          
-          <div className="lp-column lp-company">
-            <h4 className="lp-col-title">Company</h4>
-            <ul className="lp-col-list">
-              <li className="lp-col-item" tabIndex={0}>Careers</li>
-            </ul>
-          </div>
         </div>
 
         <div className="lp-social">
@@ -114,9 +111,3 @@ const LastPage = () => {
 }
 
 export default LastPage
-
-
-
-
-
-

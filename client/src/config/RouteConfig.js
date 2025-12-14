@@ -27,6 +27,6 @@ export const ADMIN_ROUTES = [
 
 
 export const TEAM_ROUTES = [
-  // { path: '/team/*', element: Team },
+
   { path: '/settings', element: Settings }
 ]

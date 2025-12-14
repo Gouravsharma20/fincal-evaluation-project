@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import './DashBoardStyles.css'
 import { useAuthContext } from '../../Hooks/useAuthContext'
-import {API_BASE_URL} from '../../config/api'
+import { API_BASE_URL } from '../../config/api'
 import EnvelopeIcon from '../../Assets/DashBoardAssets/envolope.png'
 import itemLister from '../../Assets/DashBoardAssets/itemLister.png'
+import searchMagnifier from '../../Assets/DashBoardAssets/searchMagnifier.png'
 
 const Dashboard = () => {
   const [tickets, setTickets] = useState([])
@@ -62,6 +63,8 @@ const Dashboard = () => {
     applyFilters(tickets, filter, searchQuery)
   }, [tickets, filter, searchQuery])
 
+
+
   const handleSearch = (e) => {
     setSearchQuery(e.target.value)
   }
@@ -76,6 +79,7 @@ const Dashboard = () => {
         <div className="admin-search-header">
           <h2 className="dashboard-title">Dashboard</h2>
           <div className="search-wrapper">
+            <img src={searchMagnifier} alt="" className="search-icon" aria-hidden="true" />
             <input
               type="text"
               placeholder="Search for ticket"
@@ -127,7 +131,7 @@ const Dashboard = () => {
           {!loading && filteredTickets.map((ticket, idx) => (
             <div key={ticket._id} className="ticket-row">
               <div className="ticket-left-content">
-                
+
                 <div className="ticket-header-row">
                   <div className="ticket-id-wrap">
                     <img src={itemLister} alt="" className="ticket-list-dot" />
@@ -137,7 +141,12 @@ const Dashboard = () => {
 
                 <div className="ticket-message-box">
                   <p className="ticket-message">
-                    {ticket.messages[ticket.messages.length - 1]?.text}
+                    {ticket.messages && ticket.messages.length > 0
+                      ? ticket.messages
+                        .slice()
+                        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0]?.text
+                      : 'No messages'
+                    }
                   </p>
                 </div>
 

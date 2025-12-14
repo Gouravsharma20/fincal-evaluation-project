@@ -3,6 +3,8 @@ import axios from "../../config/axiosConfig"
 import "./MessageFormStyles.css"
 import messageButtonImage from "../../Assets/HomeAssets/messageButtonImage.png";
 import hublyIconImage from "../../Assets/CommonAssets/hublyIconImage.png";
+import hublyIconImageOnline from "../../Assets/HomeAssets/hublyIconImageOnline.png";
+
 
 
 const MessageForm = () => {
@@ -27,83 +29,58 @@ const MessageForm = () => {
   };
 
   const handleSendMessage = () => {
-
     if (userMessage.trim()) {
-
-      // SAVE THE INITIAL MESSAGE
       setInitialMessage(userMessage);
-
-      // Add user message to chat
       setMessages(prev => [...prev, {
         type: 'user',
         text: userMessage
       }]);
-
-      // Show form after user sends a message
       setTimeout(() => {
         setShowForm(true);
       }, 300);
-
       setUserMessage("");
     } else {
     }
   };
 
-
-
   const createCustomer = async (e) => {
     e.preventDefault();
-    console.log('🔵 [7] Form submit button clicked');
 
     try {
-
-      // VALIDATE ALL FIELDS ARE FILLED
       if (!customerForm.name.trim()) {
         console.log(' Name is empty');
         alert('Please enter your name');
         return;
       }
-
       if (!customerForm.phoneNumber.trim()) {
         console.log(' Phone number is empty');
         alert('Please enter your phone number');
         return;
       }
-
       if (!customerForm.emailAddress.trim()) {
         console.log(' Email is empty');
         alert('Please enter your email');
         return;
       }
-
-      // BUILD PAYLOAD - EXACTLY AS BACKEND EXPECTS
       const payload = {
         userName: customerForm.name.trim(),
         userPhoneNumber: customerForm.phoneNumber.trim(),
         userEmail: customerForm.emailAddress.trim(),
-        initialMessage: initialMessage // ← THE MESSAGE USER SENT FIRST
+        initialMessage: initialMessage 
       };
 
       setIsLoading(true);
-
-      // SEND TO BACKEND
       const response = await axios.post(
         "/api/tickets",
         payload
       );
-
-      // CHECK IF SUCCESSFUL
       if (response.data.success || response.status === 201) {
         console.log('   Ticket ID:', response.data.ticketId);
         console.log('   Client Secret:', response.data.clientSecret);
-
-        // ADD THANK YOU MESSAGE TO CHAT
         setMessages(prev => [...prev, {
           type: 'bot',
           text: 'Thank You! We\'ll get back to you soon.'
         }]);
-
-        // UPDATE STATE
         setFormSubmitted(true);
         setShowForm(false);
         setCustomerForm({ name: "", phoneNumber: "", emailAddress: "" });
@@ -157,7 +134,6 @@ const MessageForm = () => {
 
   return (
     <>
-      {/* Message Box - Shows by default, can be closed */}
       {!isOpen && showMessageBox && (
         <div className="message-box">
           <img
@@ -174,8 +150,6 @@ const MessageForm = () => {
           </button>
         </div>
       )}
-
-      {/* Chat Button - Shows by default */}
       {!isOpen && (
         <button
           className="chat-button"
@@ -187,15 +161,12 @@ const MessageForm = () => {
           />
         </button>
       )}
-
-      {/* Chat Modal */}
       {isOpen && (
         <div className="chat-modal">
-          {/* Header */}
           <div className="chat-modal-header">
             <div className="header-content">
               <img
-                src={hublyIconImage}
+                src={hublyIconImageOnline}
                 alt="Hubly"
                 className="hubly-icon"
               />
@@ -208,10 +179,7 @@ const MessageForm = () => {
               ✕
             </button>
           </div>
-
-          {/* Messages Area */}
           <div className="messages-container">
-            {/* Display messages */}
             {messages.map((msg, index) => (
               msg.type === 'user' ? (
                 <div key={index} className="user-message-wrapper">
@@ -232,14 +200,11 @@ const MessageForm = () => {
                 </div>
               )
             ))}
-
-            {/* Form as Chat Message - appears after user sends message */}
             {showForm && !formSubmitted && (
               <div className="form-message">
                 <div className="form-title">
                   Introduce Yourself
                 </div>
-
                 <div className="form-group">
                   <label>Your name</label>
                   <input
@@ -251,7 +216,6 @@ const MessageForm = () => {
                     disabled={isLoading}
                   />
                 </div>
-
                 <div className="form-group">
                   <label>Your Phone</label>
                   <input
@@ -263,7 +227,6 @@ const MessageForm = () => {
                     disabled={isLoading}
                   />
                 </div>
-
                 <div className="form-group">
                   <label>Your Email</label>
                   <input
@@ -275,7 +238,6 @@ const MessageForm = () => {
                     disabled={isLoading}
                   />
                 </div>
-
                 <button
                   className="form-submit-btn"
                   onClick={handleSubmit}
@@ -286,8 +248,6 @@ const MessageForm = () => {
               </div>
             )}
           </div>
-
-          {/* Message Input Area */}
           <div className="message-input-container">
             <input
               type="text"
@@ -306,8 +266,6 @@ const MessageForm = () => {
               ➤
             </button>
           </div>
-
-
           <button
             className="floating-close"
             onClick={resetChat}
@@ -316,12 +274,6 @@ const MessageForm = () => {
           >
             ✕
           </button>
-
-
-
-
-
-
         </div>
       )}
     </>

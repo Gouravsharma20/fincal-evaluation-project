@@ -68,7 +68,7 @@ function AppContent() {
         <div className="app-layout">
           <Sidebar />
           <div className='app-main'>
-            <NavBar/>
+            {/* <NavBar/> */}
             <Routes>
             <Route path="/dashboard" element={<TeamDashboard />} />
             <Route path="/messages" element={<Team />} />

@@ -1,28 +1,25 @@
-/* Team Management Styles - Full width white layout (matches screenshot) */
 
-/* Parent wrapper: let the app shell provide background, don't add extra gray */
 .team-management-wrapper {
   width: 100%;
   min-height: 100vh;
-  background-color: transparent; /* <- important: remove gray */
-  padding: 0; /* let top-level app spacing control margins */
+  background-color: transparent; 
+  padding: 0; 
   box-sizing: border-box;
 }
 
-/* Team section becomes full-width white area under app header */
+
 .team-section {
   width: 100%;
   max-width: none;
   margin: 0;
   background-color: #fff;
-  border-radius: 0; /* flat like screenshot */
+  border-radius: 0; 
   padding: 0;
   box-shadow: none;
   border-top: 1px solid rgba(0,0,0,0.0600);
   box-sizing: border-box;
 }
 
-/* Header */
 .team-header {
   padding: 18px 32px;
   border-bottom: 1px solid #e6e9ec;
@@ -36,7 +33,7 @@
   color: #21303a;
 }
 
-/* Error Message */
+
 .error-message {
   display: flex;
   align-items: center;
@@ -56,33 +53,33 @@
   cursor: pointer;
 }
 
-/* Controls: add button aligned to the right under header */
+
 .team-controls {
   display: flex;
-  justify-content: flex-end; /* push Add button to right */
+  justify-content: flex-end; 
   align-items: center;
-  padding: 12px 32px;
+  padding: 12px 32px ;
   background-color: transparent;
-  border-bottom: 1px solid rgba(230,233,236,0.8000);
+  border-bottom: 1px solid #6A6A6A;
   gap: 12px;
 }
 
-/* Hide any search/filter container (we keep markup commented in JS) */
+
 .search-filter-container {
   display: none !important;
 }
 
-/* Add button wrapper to keep it right-aligned */
+
 .add-member-wrapper {
   display: flex;
   justify-content: flex-end;
   align-items: center;
 }
 
-/* Add member button */
+
 .add-member-btn {
   padding: 10px 18px;
-  background-color: #1f3a70; /* slightly muted navy */
+  background-color: #1f3a70; 
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -110,7 +107,7 @@
 .add-member-btn:hover { background-color: #233f81; }
 .add-member-btn:active { transform: translateY(1px); }
 
-/* Loading / Empty states */
+
 .loading-container,
 .empty-state {
   padding: 36px 32px;
@@ -118,36 +115,35 @@
   font-size: 14px;
 }
 
-/* Table wrapper and padding to match header spacing */
+
 .team-table-wrapper {
   overflow-x: auto;
-  padding: 12px 32px 40px;
+  padding: 0px;
   box-sizing: border-box;
 }
 
-/* Table */
+
 .team-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
 }
 
-/* Table header row - thin line and subtle background */
 .team-table thead {
   background-color: transparent;
-  border-bottom: 1px solid rgba(230,233,236,0.9000);
+  border-bottom: 1px solid #6A6A6A;
 }
 
 .team-table th {
   padding: 16px 12px;
   text-align: left;
   font-weight: 600;
-  color: #17313b;
+  color: #184E7F;
   font-size: 13px;
   vertical-align: middle;
 }
 
-/* Table body rows */
+
 .team-table tbody tr {
   border-bottom: 1px solid #eef2f5;
   transition: background-color 0.12s;
@@ -163,7 +159,7 @@
   vertical-align: middle;
 }
 
-/* Columns */
+
 .col-avatar { width: 64px; padding-left: 6px; }
 
 .member-avatar {
@@ -174,20 +170,20 @@
   display: inline-block;
 }
 
-/* Name column */
+
 .col-name { font-weight: 500; color: #102226; }
 
-/* subtle tone for phone / email / role */
+
 .col-phone, .col-email, .col-role { color: #5d6a72; }
 
-/* Actions column - icons right aligned */
+
 .col-actions {
   width: 120px;
   text-align: right;
   padding-right: 8px;
 }
 
-/* small icon buttons */
+
 .action-btn {
   background: none;
   border: none;
@@ -218,10 +214,10 @@
 }
 
 
-/* Modal styles kept similar / no changes needed but ensure z-index high */
+
 .modal-overlay-team { z-index: 1100; }
 
-/* Unauthorized */
+
 .unauthorized {
   display: flex;
   align-items: center;
@@ -235,27 +231,25 @@
 
 
 
-/* ---------- Modal (restore full styles) ---------- */
 
-/* overlay that dims the page and centers the dialog */
 .modal-overlay-team {
   position: fixed;
-  inset: 0; /* top:0; right:0; bottom:0; left:0; */
+  inset: 0;
   background-color: rgba(0,0,0,0.4500);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999; /* high so it sits above sidebar and other UI */
+  z-index: 9999;
   padding: 20px;
 }
 
-/* dialog box inside overlay */
+
 .modal-dialog-team {
   background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.2500);
+  border-radius: 12px; 
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3000); 
   width: 100%;
-  max-width: 520px;
+  max-width: 600px; 
   max-height: 90vh;
   overflow-y: auto;
   transform: translateY(0);
@@ -263,123 +257,145 @@
   position: relative;
 }
 
-/* header inside modal */
+
 .modal-header-team {
-  padding: 18px 20px;
-  border-bottom: 1px solid #eef2f5;
+  padding: 28px 32px 16px;
+  border-bottom: none; 
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column; 
+  align-items: flex-start; 
+  justify-content: flex-start; 
 }
 
-/* title */
+
 .modal-header-team h2 {
-  margin: 0;
-  font-size: 18px;
+  margin: 0 0 12px 0; 
+  font-size: 24px; 
   font-weight: 600;
-  color: #14232b;
+  color: #1a1a1a; 
 }
 
-/* close button */
+
+.modal-description {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+}
+
+
 .modal-close-btn {
-  background: none;
-  border: none;
-  font-size: 22px;
-  line-height: 1;
-  color: #475155;
-  cursor: pointer;
-  width: 36px;
-  height: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
+  display: none; 
 }
-.modal-close-btn:hover { background: rgba(0,0,0,0.0400); color: #0f1720; }
 
-/* content area */
+
 .modal-form {
-  padding: 18px 20px 24px;
-}
-
-/* ensure modal inputs keep their styles */
-.form-input-team,
-.form-select-team {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #d6dde3;
-  border-radius: 8px;
-  background: #fff;
-  box-sizing: border-box;
+  padding: 24px 32px 32px;
 }
 
 
-/* ---------- Modal form / controls (missing pieces) ---------- */
-
-/* form group spacing */
 .form-group-team {
-  margin-bottom: 18px;
+  margin-bottom: 20px; 
   display: block;
 }
 
-/* label */
+
 .form-group-team label {
   display: block;
   margin-bottom: 8px;
-  font-size: 13px;
-  color: #21303a;
-  font-weight: 600;
+  font-size: 14px; 
+  color: #374151; 
+  font-weight: 500; 
 }
 
-/* small hint text under inputs */
+
+.form-input-team,
+.form-select-team {
+  width: 100%;
+  padding: 12px 14px; 
+  border: 1px solid #d1d5db; 
+  border-radius: 8px;
+  background: #fff;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #1f2937;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+
+.form-input-team::placeholder,
+.form-select-team::placeholder {
+  color: #9ca3af;
+}
+
+
+.form-input-team:focus,
+.form-select-team:focus {
+  outline: none;
+  border-color: #2563eb; 
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1000); 
+}
+
+
 .form-hint {
   display: block;
   margin-top: 6px;
   font-size: 12px;
-  color: #68727a;
+  color: #6b7280;
 }
 
-/* action row inside modal (Cancel / Submit) */
+
 .form-actions-team {
   display: flex;
   gap: 12px;
-  padding-top: 18px;
-  border-top: 1px solid #eef2f5;
+  padding-top: 24px; 
+  border-top: none; 
   margin-top: 8px;
-  justify-content: flex-end; /* place buttons to the right */
+  justify-content: flex-end;
 }
 
-/* cancel button */
+
 .btn-cancel-team {
-  background-color: #f3f4f6;
-  color: #374151;
-  border: 1px solid rgba(17,24,39,0.0600);
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  min-width: 100px;
-  transition: background 120ms ease, transform 80ms ease;
-}
-.btn-cancel-team:hover { background-color: #e6e9ee; transform: translateY(-1px); }
-
-/* submit/create button */
-.btn-submit-team {
-  background-color: #1f3a70;
-  color: #fff;
+  background-color: #F6F8FA !important; 
+  color: #AFAFAF;
   border: none;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
+  padding: 12px 28px !important;
+  border-radius: 10px !important;
+  font-size: 15px ;
+  font-weight: 500;
   cursor: pointer;
-  min-width: 120px;
-  transition: background 120ms ease, transform 80ms ease;
+  width: 160px !important;
+  flex-shrink: 0 !important;
+  transition: background 120ms ease, color 120ms ease !important;
 }
-.btn-submit-team:hover { background-color: #233f81; transform: translateY(-1px); }
 
-/* disabled state for submit */
+
+.btn-cancel-team:hover {
+  background-color: #E5E7EB !important;
+}
+
+
+.btn-submit-team {
+  background-color: #1e5a96 !important; 
+  color: #FAFBFC;
+  border: none;
+  padding: 12px 28px !important ; 
+  border-radius: 10px !important; 
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  width:  160px !important;
+  flex-shrink: 0 !important;
+  transition: background 120ms ease, transform 80ms ease !important;
+}
+
+
+.btn-submit-team:hover {
+  background-color: #1A5275 !important;
+  transform: none !important;
+}
+
+
 .btn-submit-team:disabled,
 .btn-submit-team[disabled] {
   opacity: 0.6;
@@ -387,39 +403,7 @@
   transform: none;
 }
 
-/* input / select focus state (stronger outline inside modal) */
-.form-input-team:focus,
-.form-select-team:focus {
-  outline: none;
-  box-shadow: 0 0 0 4px rgba(31,58,112,0.0800);
-  border-color: rgba(31,58,112,0.9000);
-}
 
-/* ensure the modal dialog content doesn't overflow hidden buttons on small screens */
-.modal-dialog-team {
-  padding-bottom: 18px;
-}
-
-/* make the modal close button comfortable to click */
-.modal-close-btn {
-  background: none;
-  border: none;
-  padding: 6px;
-  cursor: pointer;
-  border-radius: 6px;
-}
-
-.modal-close-btn:focus,
-.modal-close-btn:hover { background: rgba(0,0,0,0.0400); }
-
-/* ensure inputs and selects are full width in modal */
-.form-input-team,
-.form-select-team {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Delete Confirmation Modal */
 .delete-modal-overlay {
   position: fixed;
   inset: 0;
@@ -463,7 +447,7 @@
   gap: 12px;
 }
 
-/* Delete button style */
+
 .btn-delete-team {
   background-color: #d62828;
   color: #fff;
@@ -481,22 +465,10 @@
 }
 
 
-/* helper: stack form-actions vertically on very small screens */
-@media (width <= 420px) {
-  .form-actions-team {
-    flex-direction: column-reverse;
-    align-items: stretch;
-  }
-
-  .btn-cancel-team,
-  .btn-submit-team {
-    width: 100%;
-    min-width: 0;
-  }
-}
 
 
-/* Responsive adjustments */
+
+
 @media (width <= 1024px) {
   .team-header { padding: 16px 20px; }
   .team-controls { padding: 10px 20px; }
@@ -507,7 +479,7 @@
 
 @media (width <= 640px) {
   .team-header h1 { font-size: 15px; }
-  .col-phone { display: none; } /* hide phone on very small */
+  .col-phone { display: none; }
   .member-avatar { width: 32px; height: 32px; }
   .col-actions { width: 80px; }
   .team-table-wrapper { padding-bottom: 20px; }

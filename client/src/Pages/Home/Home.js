@@ -3,13 +3,11 @@ import { useAuthContext } from '../../Hooks/useAuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import MessageForm from '../../Components/MessageForm/MessageForm'
 import './HomeStyles.css'
-
 import HeroPhoto from '../../Assets/HomeAssets/HomeTalking.png'
 import MessageCard from '../../Assets/HomeAssets/HomeMessage.png'
 import GraphCard from '../../Assets/HomeAssets/HomeGraph.png'
 import CalendarCard from '../../Assets/HomeAssets/HomeCalendar.png'
 import PlayIcon from '../../Assets/HomeAssets/HomePlay.png'
-
 import AdobeLogo from '../../Assets/HomeAssets/CompanyLogo/AdobeLogo.png'
 import Framer from '../../Assets/HomeAssets/CompanyLogo/Framer.png'
 import AirtableLogo from '../../Assets/HomeAssets/CompanyLogo/AirTable.png'

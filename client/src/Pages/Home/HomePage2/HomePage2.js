@@ -4,9 +4,6 @@ import './HomePage2Styles.css'
 
 import Advertisement from "../../../Assets/HomeAssets/HomePage2/Advertisement.png";
 import AdvertisementLowerFrame from "../../../Assets/HomeAssets/HomePage2/AdvertisementLowerFrame.png";
-import CaptureDumble from "../../../Assets/HomeAssets/HomePage2/CaptcureDumble.png";
-import NurtureDumble from "../../../Assets/HomeAssets/HomePage2/NurtureDumble.png";
-import ClosureDumble from "../../../Assets/HomeAssets/HomePage2/CloseDumble.png";
 
 const HomePage2 = () => {
   return (
@@ -46,27 +43,6 @@ const HomePage2 = () => {
             
             <div className="hp2-funnel-frame">
               <img src={AdvertisementLowerFrame} alt="Frame" className="hp2-funnel-img" />
-
-              
-              <img src={CaptureDumble} alt="Capture point" className="dumble dumble-capture" />
-              <img src={NurtureDumble} alt="Nurture point" className="dumble dumble-nurture" />
-              <img src={ClosureDumble} alt="Close point" className="dumble dumble-close" />
-
-              
-              <div className="funnel-label label-capture">
-                <span>C A P T U R E</span>
-                <div className="label-dot" />
-              </div>
-
-              <div className="funnel-label label-nurture">
-                <span>N U R T U R E</span>
-                <div className="label-dot" />
-              </div>
-
-              <div className="funnel-label label-close">
-                <span>C L O S E</span>
-                <div className="label-dot" />
-              </div>
             </div>
           </div>
         </div>
