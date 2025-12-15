@@ -1,4 +1,4 @@
-/* ---------- base ---------- */
+
 * { box-sizing: border-box; }
 
 .hero-section {
@@ -11,7 +11,7 @@
   padding-top: 24px;
 }
 
-/* container */
+
 .hero-container {
   width: 92%;
   max-width: 1220px;
@@ -21,11 +21,10 @@
   gap: 40px;
   padding: 36px 0 60px;
 
-  /* ensure container is vertically stacked items don't overlap logos */
+
   flex-flow: row nowrap;
 }
 
-/* left column */
 .hero-left { flex: 1; padding-right: 20px; }
 
 .hero-title {
@@ -44,7 +43,7 @@
   margin-bottom: 26px;
 }
 
-/* CTAs */
+
 .hero-cta { display:flex; align-items:center; gap:18px; margin-top:8px; }
 
 .btn-getstarted {
@@ -56,10 +55,10 @@
   font-weight: 700;
   font-size: 16px;
   cursor: pointer;
-  box-shadow: 0 8px 28px rgb(36 71 121 / 12%);
+  box-shadow: 0 8px 28px rgba(36,71,121,0.1200);
   transition: transform .18s ease, box-shadow .18s ease;
 }
-.btn-getstarted:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgb(36 71 121 / 14%); }
+.btn-getstarted:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(36,71,121,0.1400); }
 
 .btn-watch {
   background: none;
@@ -81,10 +80,10 @@
   border-radius: 50%;
   padding: 6px;
   background: #fff;
-  box-shadow: 0 6px 18px rgb(36 71 121 / 8%);
+  box-shadow: 0 6px 18px rgba(36,71,121,0.0800);
 }
 
-/* ---------- right column & overlays ---------- */
+
 .hero-right { flex: 0 0 560px; display:flex; justify-content:center; align-items:center; position:relative; }
 
 .hero-photo {
@@ -92,41 +91,39 @@
   height: 300px;
   position: relative;
   border-radius: 22px;
-  overflow: visible; /* allow overlays to stick out */
+  overflow: visible; 
 }
 
-/* main image */
+
 .hero-main-img {
   width: 80%;
   height: 120%;
   object-fit: cover;
   border-radius: 22px;
-  box-shadow: 0 24px 50px rgb(18 38 63 / 9%);
+  box-shadow: 0 24px 50px rgba(18,38,63,0.0900);
   display:block;
 }
 
-/* overlays shared style */
+
 .overlay {
   position: absolute;
   border-radius: 12px;
-
-  /* box-shadow: 0 18px 40px rgba(18,38,63,0.12); */
   background: #fff;
   will-change: transform;
 }
 
-/* message bubble (top-right) */
+
 .message-card {
   top: -22px;
   right: 8px;
   width: 250px;
   transform: translate(18px, -12px);
-  z-index: 6; /* on top */
+  z-index: 6; 
   border-radius: 12px;
   padding: 8px;
 }
 
-/* graph card (mid-right) */
+
 .graph-card {
   right: 5px;
   bottom: -130px;
@@ -137,38 +134,32 @@
   padding: 0;
 }
 
-/* calendar card (bottom-left) */
+
 .calendar-card {
   left: -32px;
   bottom: -180px;
   width: 220px;
   height: auto;
   transform: translate(-8px, 18px);
-  z-index: 5; /* in front of main, under message */
+  z-index: 5; 
   border-radius: 12px;
   padding: 0;
-
-  /* box-shadow: 0 22px 44px rgba(18, 38, 63, 0.12); */
 }
 
-/* tweak images inside overlays so they don't get rounded twice */
 
-/* .overlay img { width: 100%; height: auto; display:block; border-radius: 10px; } */
 
 
 .overlay {
   position: absolute;
   border-radius: 12px;
-
-  /* box-shadow: 0 18px 40px rgba(18,38,63,0.12); */
-  background: transparent;  /* Changed from #fff to transparent */
+  background: transparent;  
   will-change: transform;
   padding: 0;
-  overflow: hidden;  /* Hide anything that overflows */
+  overflow: hidden;  
 }
 
 
-/* ---------- companies bar (full-width of the hero container, placed at bottom of Page-1) ---------- */
+
 .first-page {
   width:100%;
   flex-basis: 100%;
@@ -180,15 +171,13 @@
 .companies-bar {
   width: 100%;
   background: #EBF1F9;
-  padding: 18px 0;
-  margin-top: 40px; /* space above hero content */
+  padding: 40px 0;
+  margin-top: auto;
   border-radius: 12px;
-  display: flex;              /* ← NEW */
-  flex-direction: column;     /* ← NEW */
+  display: flex;              
+  flex-direction: column;     
   align-items: center;
-  box-shadow: inset 0 1px rgb(255 255 255 / 50%);
-
-  /* By default it will be inside hero-container and stretch to container width */
+  box-shadow: inset 0 1px rgba(255,255,255,0.5000);
 }
 
 .companies-inner {
@@ -210,7 +199,7 @@
   filter: saturate(95%);
 }
 
-/* ---------- responsive ---------- */
+
 @media (width <= 960px) {
   .hero-container { flex-direction: column-reverse; gap: 22px; padding: 32px 20px; }
   .hero-right { width: 100%; flex: 0 0 auto; }
@@ -234,7 +223,7 @@
 .mobile-only-form {
   min-height: 100vh;
   width: 100%;
-  background: #fff !important;   /* PURE white */
+  background: #fff !important;   
   display: flex;
   align-items: center;
   justify-content: center;

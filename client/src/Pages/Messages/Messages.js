@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react'
 import './MessagesStyles.css'
 import { useAuthContext } from '../../Hooks/useAuthContext'
@@ -8,6 +7,7 @@ import nameIcon from '../../Assets/MessagePageAssets/nameIcon.png'
 import emailIcon from '../../Assets/MessagePageAssets/emailIcon.png'
 import phoneIcon from '../../Assets/MessagePageAssets/phoneIcon.png'
 import TicketStatus from '../../Assets/MessagePageAssets/ticketStatus.png'
+import homeIcon from '../../Assets/MessagePageAssets/homeIcon.png'
 
 const Messages = () => {
   const [tickets, setTickets] = useState([])
@@ -28,12 +28,56 @@ const Messages = () => {
   const [showAssignmentModal, setShowAssignmentModal] = useState(false)
   const [pendingAssignment, setPendingAssignment] = useState(null)
   const [assignmentLoading, setAssignmentLoading] = useState(false)
+  const [showResolveModal, setShowResolveModal] = useState(false)
 
   const { token } = useAuthContext()
 
-  // Determine ticket state
   const isTicketAssigned = openTicket?.assignedTo !== null && openTicket?.assignedTo !== undefined
   const isTicketResolved = openTicket?.status === 'resolved'
+
+  const applyFilters = useCallback((ticketsToFilter, filterType, search) => {
+    let filtered = ticketsToFilter
+
+    if (filterType === 'resolved') {
+      filtered = filtered.filter(t => t.status === 'resolved')
+    } else if (filterType === 'unresolved') {
+      filtered = filtered.filter(t => t.status !== 'resolved')
+    }
+
+    if (search.trim()) {
+      filtered = filtered.filter(t =>
+        t.userName.toLowerCase().includes(search.toLowerCase()) ||
+        t.userEmail.toLowerCase().includes(search.toLowerCase()) ||
+        t.userPhoneNumber.includes(search) ||
+        t._id.includes(search)
+      )
+    }
+
+    setFilteredTickets(filtered)
+  }, [])
+
+  const fetchSingleTicket = useCallback(async (ticketId) => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/admin/tickets/${ticketId}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      if (response.ok) {
+        const data = await response.json()
+        const ticket = data.ticket || data
+        return ticket
+      }
+      return null
+    } catch (err) {
+      console.error('Error fetching ticket:', err)
+      return null
+    }
+  }, [token])
 
   const fetchTeamMembers = useCallback(async () => {
     if (!token) return
@@ -59,39 +103,11 @@ const Messages = () => {
     }
   }, [token])
 
-  const fetchSingleTicket = useCallback(async (ticketId) => {
-    try {
-      console.log('🔍 fetchSingleTicket: Fetching ticket', ticketId)
-      const response = await fetch(
-        `${API_BASE_URL}/api/admin/tickets/${ticketId}`,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      )
-      if (response.ok) {
-        const data = await response.json()
-        const ticket = data.ticket || data
-        console.log('🔍 fetchSingleTicket: Success', {
-          ticketId,
-          isMissedChat: ticket?.isMissedChat,
-          hasField: 'isMissedChat' in (ticket || {})
-        })
-        return ticket
-      }
-      return null
-    } catch (err) {
-      console.error('Error fetching ticket:', err)
-      return null
-    }
-  }, [token])
-
   const fetchTickets = useCallback(async () => {
     if (!token) return
 
     setLoading(true)
+
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/tickets`, {
         headers: {
@@ -101,118 +117,85 @@ const Messages = () => {
       })
 
       if (!response.ok) throw new Error('Failed to fetch tickets')
+
       const data = await response.json()
+
       setTickets(data.tickets || [])
       setError('')
       applyFilters(data.tickets || [], filter, searchQuery)
 
-      if (!openTicket && data.tickets && data.tickets.length > 0) {
+
+      if (openTicket && data.tickets && data.tickets.length > 0) {
+        const currentTicket = data.tickets.find(t => t._id === openTicket._id)
+        if (currentTicket) {
+          const freshTicket = await fetchSingleTicket(currentTicket._id)
+          setOpenTicket(freshTicket || currentTicket)
+          setTicketStatus(freshTicket?.status || currentTicket.status || 'unresolved')
+        }
+      }
+
+      else if (!openTicket && data.tickets && data.tickets.length > 0) {
         const freshTicket = await fetchSingleTicket(data.tickets[0]._id)
         setOpenTicket(freshTicket || data.tickets[0])
         setTicketStatus(freshTicket?.status || data.tickets[0].status || 'unresolved')
       }
     } catch (err) {
+      console.error('Error fetching tickets:', err)
       setError(err.message)
     } finally {
       setLoading(false)
     }
-  }, [token, filter, searchQuery, openTicket, fetchSingleTicket])
-
-  const applyFilters = (ticketsToFilter, filterType, search) => {
-    let filtered = ticketsToFilter
-
-    if (filterType === 'resolved') {
-      filtered = filtered.filter(t => t.status === 'resolved')
-    } else if (filterType === 'unresolved') {
-      filtered = filtered.filter(t => t.status !== 'resolved')
-    }
-
-    if (search.trim()) {
-      filtered = filtered.filter(t =>
-        t.userName.toLowerCase().includes(search.toLowerCase()) ||
-        t.userEmail.toLowerCase().includes(search.toLowerCase()) ||
-        t.userPhoneNumber.includes(search) ||
-        t._id.includes(search)
-      )
-    }
-
-    setFilteredTickets(filtered)
-  }
+  }, [token, fetchSingleTicket, filter, searchQuery, openTicket, applyFilters])
 
   useEffect(() => {
     fetchTickets()
     fetchTeamMembers()
-  }, [fetchTickets, fetchTeamMembers])
+  }, [])
 
   useEffect(() => {
-    applyFilters(tickets, filter, searchQuery)
-  }, [filter, searchQuery, tickets])
+    if (tickets.length > 0) {
+      applyFilters(tickets, filter, searchQuery)
+    }
+  }, [filter, searchQuery, tickets, applyFilters])
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value)
   }
 
-  const handleFilterChange = (newFilter) => {
-    setFilter(newFilter)
-  }
 
   const handleOpenTicket = async (ticket) => {
     try {
-      console.log('\n\n')
-      console.log('═══════════════════════════════════════════════════')
-      console.log('🟢 STEP 1: Original ticket from list')
-      console.log('═══════════════════════════════════════════════════')
-      console.log('ticket._id:', ticket._id)
-      console.log('ticket.isMissedChat:', ticket.isMissedChat)
-      console.log('ticket keys:', Object.keys(ticket).slice(0, 15))
+      const response = await fetch(
+        `${API_BASE_URL}/api/admin/tickets/${ticket._id}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      )
 
-      const freshTicket = await fetchSingleTicket(ticket._id)
-      
-      console.log('\n🟢 STEP 2: Fresh ticket from API')
-      console.log('═══════════════════════════════════════════════════')
-      console.log('freshTicket._id:', freshTicket?._id)
-      console.log('freshTicket.isMissedChat:', freshTicket?.isMissedChat)
-      console.log('freshTicket type:', typeof freshTicket)
-      console.log('freshTicket === null:', freshTicket === null)
-      console.log('freshTicket === undefined:', freshTicket === undefined)
-      if (freshTicket) {
-        console.log('freshTicket keys:', Object.keys(freshTicket).slice(0, 15))
+      if (response.ok) {
+        const data = await response.json()
+        const freshTicket = data.ticket || data
+
+        setOpenTicket(freshTicket)
+        setSelectedTeamMember(null)
+        setTicketStatus(freshTicket.status || 'unresolved')
+
+        setTickets(prevTickets =>
+          prevTickets.map(t => t._id === freshTicket._id ? freshTicket : t)
+        )
+        setFilteredTickets(prevFiltered =>
+          prevFiltered.map(t => t._id === freshTicket._id ? freshTicket : t)
+        )
+        return
       }
 
-      const finalTicket = freshTicket || ticket
-
-      console.log('\n🟢 STEP 3: Final ticket (before spread)')
-      console.log('═══════════════════════════════════════════════════')
-      console.log('finalTicket._id:', finalTicket._id)
-      console.log('finalTicket.isMissedChat:', finalTicket.isMissedChat)
-
-      const updatedTicket = {
-        ...finalTicket,
-        isMissedChat: freshTicket?.isMissedChat ?? ticket.isMissedChat ?? false
-      }
-
-      console.log('\n🟢 STEP 4: Updated ticket (after spread and explicit set)')
-      console.log('═══════════════════════════════════════════════════')
-      console.log('updatedTicket._id:', updatedTicket._id)
-      console.log('updatedTicket.isMissedChat:', updatedTicket.isMissedChat)
-      console.log('Has isMissedChat key:', 'isMissedChat' in updatedTicket)
-      console.log('Keys in updatedTicket:', Object.keys(updatedTicket).slice(0, 15))
-
-      setOpenTicket(updatedTicket)
+      setOpenTicket(ticket)
       setSelectedTeamMember(null)
-      setTicketStatus(freshTicket?.status || ticket.status || 'unresolved')
-      
-      // Check state after React processes update
-      setTimeout(() => {
-        console.log('\n🟢 STEP 5: After state update (async check)')
-        console.log('═══════════════════════════════════════════════════')
-        console.log('openTicket (from state):', openTicket)
-        console.log('openTicket?.isMissedChat:', openTicket?.isMissedChat)
-        console.log('updatedTicket.isMissedChat:', updatedTicket.isMissedChat)
-        console.log('Are they equal?', openTicket?.isMissedChat === updatedTicket.isMissedChat)
-        console.log('═══════════════════════════════════════════════════\n')
-      }, 0)
-      
+      setTicketStatus(ticket.status || 'unresolved')
+
     } catch (err) {
       console.error('Error opening ticket:', err)
       setOpenTicket(ticket)
@@ -276,15 +259,17 @@ const Messages = () => {
       if (updatedResponse.ok) {
         const updatedData = await updatedResponse.json()
         const updatedTicket = updatedData.ticket || updatedData
-        
+
         const finalTicket = {
           ...updatedTicket,
           isMissedChat: updatedTicket.isMissedChat ?? openTicket.isMissedChat
         }
-        
+
         setOpenTicket(finalTicket)
-        setTickets(tickets.map(t => t._id === finalTicket._id ? finalTicket : t))
-        setFilteredTickets(filteredTickets.map(t => t._id === finalTicket._id ? finalTicket : t))
+
+        const newTickets = tickets.map(t => t._id === finalTicket._id ? finalTicket : t)
+        setTickets(newTickets)
+        applyFilters(newTickets, filter, searchQuery)
       }
 
       setNewMessage('')
@@ -357,7 +342,15 @@ const Messages = () => {
     setPendingAssignment(null)
   }
 
+
+
   const handleStatusChange = async () => {
+    if (!openTicket) return
+    setShowResolveModal(true)
+    setShowStatusDropdown(false)
+  }
+
+  const handleConfirmResolve = async () => {
     if (!openTicket) return
 
     try {
@@ -389,9 +382,6 @@ const Messages = () => {
         const freshData = await freshResponse.json()
         const freshTicket = freshData.ticket || freshData
 
-        console.log('Resolved ticket data:', freshTicket)
-        console.log('isMissedChat value:', freshTicket.isMissedChat)
-
         const finalTicket = {
           ...freshTicket,
           status: 'resolved',
@@ -402,7 +392,7 @@ const Messages = () => {
         setTickets(tickets.map(t => t._id === finalTicket._id ? finalTicket : t))
         setFilteredTickets(filteredTickets.map(t => t._id === finalTicket._id ? finalTicket : t))
         setTicketStatus('resolved')
-        setShowStatusDropdown(false)
+        setShowResolveModal(false)
       }
     } catch (err) {
       console.error('Error:', err)
@@ -411,64 +401,47 @@ const Messages = () => {
     }
   }
 
-  const ConfirmationModal = ({ isOpen, memberName }) => {
+  const ConfirmationModal = ({ isOpen, memberName, type = 'assignment' }) => {
     if (!isOpen) return null
+
+    const isResolve = type === 'resolve'
+
     return (
-      <div className="modal-overlay">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h2>Confirm Assignment</h2>
-            <button className="modal-close" onClick={handleCancelAssignment}>×</button>
-          </div>
+      <div className={`modal-overlay`} >
+        <div className={`modal-content `}>
           <div className="modal-body">
             <p className="modal-message">
-              Assign this ticket to <strong>{memberName}</strong>?
+              {isResolve ? 'Chat will be closed' : `Chat would be assigned to ${memberName}?`}
             </p>
           </div>
           <div className="modal-footer">
-            <button className="modal-btn modal-btn-cancel" onClick={handleCancelAssignment} disabled={assignmentLoading}>
+            <button
+              className="modal-btn modal-btn-cancel"
+              onClick={isResolve ? () => setShowResolveModal(false) : handleCancelAssignment}
+              disabled={!isResolve && assignmentLoading}
+            >
               Cancel
             </button>
-            <button className="modal-btn modal-btn-confirm" onClick={handleConfirmAssignment} disabled={assignmentLoading}>
-              {assignmentLoading ? 'Processing...' : 'Confirm'}
+            <button
+              className="modal-btn modal-btn-confirm"
+              onClick={isResolve ? handleConfirmResolve : handleConfirmAssignment}
+              disabled={!isResolve && assignmentLoading}
+            >
+              {!isResolve && assignmentLoading ? 'Processing...' : 'Confirm'}
             </button>
           </div>
         </div>
       </div>
     )
   }
-
   return (
     <div className="admin-dashboard">
-      <ConfirmationModal isOpen={showAssignmentModal} memberName={pendingAssignment?.name} />
+      <ConfirmationModal isOpen={showAssignmentModal} memberName={pendingAssignment?.name} type="assignment" />
+      <ConfirmationModal isOpen={showResolveModal} type="resolve" />
 
       <div className="admin-main-content">
         {!openTicket && (
           <>
-            <div className="admin-search-header">
-              <div className="search-wrapper">
-                <input
-                  type="text"
-                  placeholder="Search for ticket"
-                  value={searchQuery}
-                  onChange={handleSearch}
-                  className="search-input-main"
-                />
-              </div>
-            </div>
-
-            <div className="filter-tabs-section">
-              <button className={`filter-tab ${filter === 'all' ? 'active' : ''}`} onClick={() => handleFilterChange('all')}>
-                All Tickets
-              </button>
-              <button className={`filter-tab ${filter === 'resolved' ? 'active' : ''}`} onClick={() => handleFilterChange('resolved')}>
-                Resolved
-              </button>
-              <button className={`filter-tab ${filter === 'unresolved' ? 'active' : ''}`} onClick={() => handleFilterChange('unresolved')}>
-                Unresolved
-              </button>
-            </div>
-
             <div className="tickets-cards-container">
               {loading && <p className="status-text">Loading tickets...</p>}
               {error && <p className="status-text error-text">Error: {error}</p>}
@@ -516,15 +489,20 @@ const Messages = () => {
 
         {openTicket && (
           <div className="three-panel-container">
-            {/* LEFT PANEL - CHATS */}
             <div className="panel-left-chats">
               <div className="chats-header">
-                <h3>Chats</h3>
+                <h2>Contact Center</h2>
+                <h4>Chats</h4>
               </div>
 
               <div className="chats-list">
                 {filteredTickets.map((ticket, idx) => {
-                  let chatBadgeText = ticket.messages[ticket.messages.length - 1]?.text || 'No message'
+                  const latestMessage = ticket.messages && ticket.messages.length > 0
+                    ? ticket.messages
+                      .slice()
+                      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0]
+                    : null
+                  let chatBadgeText = latestMessage?.text || 'No message'
                   let showBadge = false
                   if (ticket.status === 'resolved') {
                     chatBadgeText = 'Resolved'
@@ -561,25 +539,19 @@ const Messages = () => {
               </div>
             </div>
 
-            {/* CENTER PANEL - MESSAGES */}
             <div className="panel-chat">
               <div className="panel-header">
                 <p>Ticket#2025-{openTicket._id.slice(0, 5)}</p>
+                <img src={homeIcon} alt="Home" className="home-icon" />
               </div>
 
-              {/* 🔍 DEBUG: Render check */}
-              {console.log('🎨 RENDER TIME:', {
-                'openTicket._id': openTicket?._id,
-                'openTicket.isMissedChat': openTicket?.isMissedChat,
-                'isTicketResolved': isTicketResolved,
-                'type of isMissedChat': typeof openTicket?.isMissedChat,
-                'strictEquality': openTicket?.isMissedChat === true,
-                'truthyCheck': openTicket?.isMissedChat ? 'true' : 'false'
-              })}
+
+
 
               <div className="messages-list">
                 {openTicket.messages && openTicket.messages.length > 0 && (
                   <>
+
                     <div className="msg-date-separator">
                       <span>
                         {new Date(openTicket.messages[0].createdAt).toLocaleDateString('en-US', {
@@ -589,50 +561,48 @@ const Messages = () => {
                         })}
                       </span>
                     </div>
-                    {openTicket.messages.map((msg, idx) => (
-                      <div key={idx} className={`msg-item msg-${msg.senderType}`}>
-                        <div className="msg-header">
-                          <img
-                            src={`https://ui-avatars.com/api/?name=${msg.senderType === 'admin' ? 'Admin' : openTicket.userName}&size=32&background=random&color=fff`}
-                            alt="Avatar"
-                            className="msg-avatar"
-                          />
-                          <div className="msg-sender-info">
-                            <span className="msg-sender-name">
-                              {msg.senderType === 'admin' ? `Admin/${openTicket.userName}` : openTicket.userName}
-                            </span>
-                            <span className="msg-timestamp">
-                              {new Date(msg.createdAt).toLocaleTimeString('en-US', {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                hour12: true
-                              })}
-                            </span>
+
+
+                    <div className="messages-wrapper">
+                      {openTicket.messages.map((msg, idx) => (
+                        <div key={idx} className={`msg-item msg-${msg.senderType}`}>
+                          <div className="msg-header">
+                            <img
+                              src={`https://ui-avatars.com/api/?name=${msg.senderType === 'admin' ? 'Admin' : openTicket.userName}&size=32&background=random&color=fff`}
+                              alt="Avatar"
+                              className="msg-avatar"
+                            />
+                            <div className="msg-sender-info">
+                              <span className="msg-sender-name">
+                                {msg.senderType === 'admin' ? `Admin` : openTicket.userName}
+                              </span>
+                              <span className="msg-timestamp">
+                                {new Date(msg.createdAt).toLocaleTimeString('en-US', {
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                  hour12: true
+                                })}
+                              </span>
+                            </div>
                           </div>
+                          <p className="msg-content">{msg.text}</p>
                         </div>
-                        <p className="msg-content">{msg.text}</p>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </>
                 )}
               </div>
 
-              {/* ✅ INDICATOR - MOVED OUTSIDE messages condition */}
+
+
               {openTicket?.isMissedChat === true && (
-                <div className="missed-chat-indicator" style={{
-                  backgroundColor: '#fff3cd',
-                  border: '2px solid #ffc107',
-                  padding: '15px',
-                  borderRadius: '5px',
-                  marginTop: '10px'
-                }}>
-                  <p style={{ color: '#856404', margin: 0, fontWeight: 'bold' }}>
+                <div className="missed-chat-indicator">
+                  <p className="missed-chat-text">
                     {isTicketResolved ? 'This was a missed chat' : 'Replying to missed chat'}
                   </p>
                 </div>
               )}
 
-              {/* Message Input Area */}
               {isTicketResolved ? (
                 <div className="message-reply-box resolved-state">
                   <div className="no-access-message">
@@ -672,10 +642,8 @@ const Messages = () => {
               )}
             </div>
 
-            {/* RIGHT PANEL - PROFILE */}
             <div className="panel-profile">
               <div className="customer-profile-section">
-
                 <div className="profile-header">
                   <img
                     src={`https://ui-avatars.com/api/?name=${openTicket.userName}&size=120&background=random&color=fff`}
@@ -684,6 +652,8 @@ const Messages = () => {
                   />
                   <h3>{openTicket.userName}</h3>
                 </div>
+
+                <h4 className="profile-section-title">Details</h4>
 
                 <div className="profile-details">
                   <div className="detail-row">
@@ -694,69 +664,76 @@ const Messages = () => {
                   </div>
 
                   <div className="detail-row">
+                    <img src={phoneIcon} alt="Phone" className="detail-icon" />
+                    <div className="detail-text">
+                      <p>+{openTicket.userPhoneNumber}</p>
+                    </div>
+                  </div>
+
+                  <div className="detail-row">
                     <img src={emailIcon} alt="Email" className="detail-icon" />
                     <div className="detail-text">
                       <p>{openTicket.userEmail}</p>
                     </div>
                   </div>
 
-                  <div className="detail-row">
-                    <img src={phoneIcon} alt="Phone" className="detail-icon" />
-                    <div className="detail-text">
-                      <p>+{openTicket.userPhoneNumber}</p>
-                    </div>
-                  </div>
+
                 </div>
               </div>
 
               {!isTicketAssigned && !isTicketResolved && (
-                <>
-                  <div className="team-assignment-section">
-                    <h3 className="section-heading">Teammates</h3>
-                    <div className="team-dropdown-wrapper">
-                      <button
-                        className="team-dropdown-btn"
-                        onClick={() => setShowTeamDropdown(!showTeamDropdown)}
-                      >
+                <div className="team-assignment-section">
+                  <h3 className="section-heading">Teammates</h3>
+                  <div className="team-dropdown-wrapper">
+                    <button
+                      className="team-dropdown-btn"
+                      onClick={() => setShowTeamDropdown(!showTeamDropdown)}
+                    >
+                      <div className="team-btn-content">
+                        {teamMembers.length > 0 && (
+                          <img
+                            src={teamMembers[0].avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(teamMembers[0].name)}&background=random&color=fff&size=64`}
+                            alt={teamMembers[0].name}
+                            className="team-btn-avatar"
+                          />
+                        )}
                         <span className="dropdown-text">
-                          {selectedTeamMember ? selectedTeamMember.name : 'Select Team Member'}
+                          {teamMembers.length > 0 ? teamMembers[0].name : 'Select Team Member'}
                         </span>
-                        <span className={`dropdown-icon ${showTeamDropdown ? 'open' : ''}`}>▼</span>
-                      </button>
-                      {showTeamDropdown && (
-                        <div className="team-dropdown-menu">
-                          {loadingTeamMembers ? (
-                            <div className="team-option"><span>Loading...</span></div>
-                          ) : teamMembers.length === 0 ? (
-                            <div className="team-option"><span>No members</span></div>
-                          ) : (
-
-                            teamMembers.map(member => (
-                              <button key={member._id}
-                                className={`team-option ${selectedTeamMember?._id === member._id ? 'selected' : ''}`}
-                                onClick={() => handleTeamMemberClick(member)}
-                                type="button"
-                              >
-                                <div className="team-option-left">
-                                  <img
-                                    src={member.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random&color=fff&size=64`}
-                                    alt={member.name}
-                                    className="team-option-avatar"
-                                    loading="lazy"
-                                  />
-                                  <span className="team-option-name">{member.name}</span>
-                                </div>
-                                <span className="assign-icon">→</span>
-                              </button>
-                            ))
-                          )}
-                        </div>
-                      )}
-                    </div>
+                      </div>
+                      <span className={`dropdown-icon ${showTeamDropdown ? 'open' : ''}`}>▼</span>
+                    </button>
+                    {showTeamDropdown && (
+                      <div className="team-dropdown-menu">
+                        {loadingTeamMembers ? (
+                          <div className="team-option"><span>Loading...</span></div>
+                        ) : teamMembers.length === 0 ? (
+                          <div className="team-option"><span>No members</span></div>
+                        ) : (
+                          teamMembers.map(member => (
+                            <button key={member._id}
+                              className={`team-option ${selectedTeamMember?._id === member._id ? 'selected' : ''}`}
+                              onClick={() => handleTeamMemberClick(member)}
+                              type="button"
+                            >
+                              <div className="team-option-left">
+                                <img
+                                  src={member.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random&color=fff&size=64`}
+                                  alt={member.name}
+                                  className="team-option-avatar"
+                                  loading="lazy"
+                                />
+                                <span className="team-option-name">{member.name}</span>
+                              </div>
+                              <span className="assign-icon">→</span>
+                            </button>
+                          ))
+                        )}
+                      </div>
+                    )}
                   </div>
 
-                  <div className="status-dropdown-section">
-                    <h3 className="section-heading">Ticket Status</h3>
+                  <div className={`status-dropdown-section ${showTeamDropdown ? 'push-down' : ''}`}>
                     <div className="status-dropdown-wrapper">
                       <button
                         className="status-dropdown-btn"
@@ -772,30 +749,42 @@ const Messages = () => {
                             {ticketStatus.charAt(0).toUpperCase() + ticketStatus.slice(1)}
                           </span>
                         </div>
-
                         <span className={`dropdown-icon ${showStatusDropdown ? 'open' : ''}`}>▼</span>
                       </button>
 
                       {showStatusDropdown && (
                         <div className="status-dropdown-menu">
-
                           <button
                             className={`status-option ${ticketStatus === 'resolved' ? 'active' : ''}`}
                             onClick={() => handleStatusChange()}
                           >
-                            Resolve Ticket
+                            Resolved
                           </button>
+
+
+                          <button
+                            className={`status-option ${ticketStatus === 'unresolved' ? 'active' : ''}`}
+                            onClick={() => setShowStatusDropdown(false)}
+                          >
+                            Unresolved
+                          </button>
+
+
+
+
+
                         </div>
                       )}
                     </div>
                   </div>
-                </>
+                </div>
               )}
             </div>
           </div>
-        )}
-      </div>
-    </div>
+        )
+        }
+      </div >
+    </div >
   )
 }
 

@@ -1,13 +1,7 @@
-// utils/analyticsUtils.js
 const Ticket = require("../models/TicketModel");
 const Analytics = require("../models/AnalyticsModel");
 const Settings = require("../models/SettingsModel");
 
-/**
- * Get ISO week number and year from a date
- * @param {Date} date
- * @returns {Object} { week, year }
- */
 const getISOWeek = (date) => {
   const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
   const dayNum = d.getUTCDay() || 7;
@@ -17,25 +11,15 @@ const getISOWeek = (date) => {
   return { week: weekNum, year: d.getUTCFullYear() };
 };
 
-/**
- * Calculate total number of tickets
- * @returns {Promise<number>}
- */
 const calculateTotalChats = async () => {
   return await Ticket.countDocuments();
 };
 
-/**
- * Calculate average reply time (in minutes, floored)
- * Average resolution time = sum of (resolvedAt - createdAt) / count of resolved tickets
- * @returns {Promise<number>}
- */
 const calculateAverageReplyTime = async () => {
   const resolvedTickets = await Ticket.find({ status: "resolved" })
     .select({ createdAt: 1, resolvedAt: 1 });
 
   if (resolvedTickets.length === 0) return 0;
-
 
   const totalMilliseconds = resolvedTickets.reduce((sum, ticket) => {
     const milliseconds = (ticket.resolvedAt - ticket.createdAt);
@@ -46,10 +30,6 @@ const calculateAverageReplyTime = async () => {
   return Math.floor(average);
 };
 
-/**
- * Calculate resolved tickets percentage
- * @returns {Promise<number>}
- */
 const calculateResolvedTicketsPercentage = async () => {
   const total = await Ticket.countDocuments();
   const resolved = await Ticket.countDocuments({ status: "resolved" });
@@ -60,52 +40,53 @@ const calculateResolvedTicketsPercentage = async () => {
   return Math.floor(percentage);
 };
 
-/**
- * Get missed chats data for last 10 weeks
- * @returns {Promise<Array>}
- */
 const getMissedChatsLast10Weeks = async () => {
-  // Get last 10 weeks of data
   const analyticsData = await Analytics.find()
     .sort({ year: -1, week: -1 })
     .limit(10);
-
-  // Reverse to show chronologically (oldest to newest)
   return analyticsData.reverse().map(item => ({
-    week: `Week ${item.week}`,  // ✅ Format: "Week 1", "Week 2", etc.
+    week: `Week ${item.week}`,  
     year: item.year,
     missedChatsCount: item.missedChatsCount
   }));
 };
 
-/**
- * Increment missed chats count for a specific week
- * Called when a ticket is marked as isMissedChat: true
- * @param {Date} ticketDate - The date when the ticket was created/resolved
- * @returns {Promise<void>}
- */
 const incrementMissedChatsForWeek = async (ticketDate) => {
   const { week, year } = getISOWeek(ticketDate);
 
   await Analytics.updateOne(
     { week, year },
     { $inc: { missedChatsCount: 1 }, lastUpdatedAt: new Date() },
-    { upsert: true } // Create if doesn't exist
+    { upsert: true } 
   );
 };
 
-/**
- * Mark ticket as missed chat if it exceeds resolution time limit
- * @param {Object} ticket - Ticket document
- * @param {number} resolutionTimeLimit - Time limit in minutes
- * @returns {boolean} - true if marked as missed, false otherwise
- */
 const checkAndMarkMissedChat = (ticket, resolutionTimeLimit) => {
-  if (!ticket.resolvedAt || !ticket.createdAt) return false;
+  if (!ticket.messages || ticket.messages.length === 0) {
+    return false;
+  }
 
-  const resolutionTimeMinutes = (ticket.resolvedAt - ticket.createdAt) / (1000 * 60);
+  const lastUserMessage = ticket.messages
+    .filter(m => m.senderType === 'user')
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
-  if (resolutionTimeMinutes > resolutionTimeLimit) {
+  if (!lastUserMessage) {
+    return false;
+  }
+
+  const lastAdminMessage = ticket.messages
+    .filter(m => m.senderType === 'admin' && new Date(m.createdAt) > new Date(lastUserMessage.createdAt))
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
+  let timeDiffInMinutes;
+  
+  if (lastAdminMessage) {
+    timeDiffInMinutes = (new Date(lastAdminMessage.createdAt) - new Date(lastUserMessage.createdAt)) / (1000 * 60);
+  } else {
+    timeDiffInMinutes = (Date.now() - new Date(lastUserMessage.createdAt)) / (1000 * 60);
+  }
+
+  if (timeDiffInMinutes > resolutionTimeLimit) {
     ticket.isMissedChat = true;
     return true;
   }
@@ -113,10 +94,6 @@ const checkAndMarkMissedChat = (ticket, resolutionTimeLimit) => {
   return false;
 };
 
-/**
- * Get all analytics data for dashboard
- * @returns {Promise<Object>}
- */
 const getAllAnalytics = async () => {
   const totalChats = await calculateTotalChats();
   const averageReplyTime = await calculateAverageReplyTime();

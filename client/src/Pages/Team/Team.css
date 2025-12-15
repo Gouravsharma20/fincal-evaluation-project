@@ -87,14 +87,14 @@
 .ticket-card-box {
   background-color: white;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1000);
   overflow: hidden;
   transition: all 0.3s;
   cursor: pointer;
 }
 
 .ticket-card-box:hover {
-  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1500);
   transform: translateY(-2px);
 }
 
@@ -528,7 +528,7 @@
 .reply-textarea:focus {
   outline: none;
   border-color: #1976d2;
-  box-shadow: 0 0 0 3px rgb(25 118 210 / 10%);
+  box-shadow: 0 0 0 3px rgba(25,118,210,0.1000);
 }
 
 .reply-textarea::placeholder {
@@ -554,7 +554,7 @@
 }
 
 .reply-send-btn:hover:not(:disabled) {
-  background: rgb(25 118 210 / 10%);
+  background: rgba(25,118,210,0.1000);
   transform: scale(1.1);
 }
 
@@ -589,84 +589,40 @@
   background-color: white;
 }
 
-/* 
-.profile-header {
-  text-align: center;
-  padding: 20px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.profile-avatar-large {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  border: 3px solid #1976d2;
-  object-fit: cover;
-  margin-bottom: 12px;
-}
-
-.profile-header h3 {
-  margin: 12px 0 0 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-} */
 
 
-/* PROFILE HEADER: make avatar + name appear in a row (left-aligned) */
+
 .profile-header {
   display: flex;
   flex-direction: row;
-
-  /* row instead of column */
   align-items: center;
-
-  /* vertically center avatar and name */
   gap: 12px;
-
-  /* space between avatar and text */
   padding: 12px 16px;
-
-  /* compact top padding like the reference */
   border-bottom: 1px solid #eaeef1;
   text-align: left;
-
-  /* left align text */
   background: transparent;
-
-  /* keep panel bg */
   position: sticky;
-
-  /* keep header pinned */
   top: 0;
   z-index: 2;
 }
 
-/* small header avatar (not the 100px hero avatar) */
+
 .profile-avatar-large {
   width: 36px;
-
-  /* small circular avatar as in reference */
   height: 36px;
   border-radius: 50%;
   border: 1px solid #e6edf2;
-
-  /* subtle ring */
   object-fit: cover;
   margin-bottom: 0;
-
-  /* remove large bottom margin */
   flex-shrink: 0;
 }
 
-/* Name styling when on a single row */
+
 .profile-header h3 {
   margin: 0;
   font-size: 14px;
   font-weight: 600;
   color: #939598;
-
-  /* darker primary text */
   line-height: 1;
 }
 
@@ -678,40 +634,26 @@
 
 .detail-row {
   background: #fff;
-
-  /* white pill */
   border: 1px solid #e8eef1;
-
-  /* soft pale border */
   border-radius: 18px;
-
-  /* pill shape */
   padding: 10px 12px;
-
-  /* vertical + horizontal padding */
   display: flex;
   align-items: center;
   gap: 12px;
-
-  /* space between icon and text */
   margin: 0;
-
-  /* remove big stacked margins */
   box-shadow: none;
-
-  /* remove heavy shadow if present */
   transition: border-color .15s, box-shadow .15s;
 
 }
 
 .detail-row:hover {
   border-color: #dbeffc;
-  box-shadow: 0 4px 12px rgb(11 22 40 / 4%);
+  box-shadow: 0 4px 12px rgba(11,22,40,0.0400);
 }
 
 .detail-row:focus-within {
   border-color: #cfe4ff;
-  box-shadow: 0 6px 20px rgb(31 111 235 / 8%);
+  box-shadow: 0 6px 20px rgba(31,111,235,0.0800);
   outline: none;
 }
 
@@ -768,23 +710,12 @@
   background-color: #fff3e0;
   color: #e65100;
 }
-
-
-
-/* .team-assignment-section {
-  padding: 20px;
-  border-bottom: 1px solid #e0e0e0;
-} */
-
 .team-assignment-section {
   padding: 12px 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-
-
-/* recently changer */
 
 .section-heading {
   color: #1f6feb;
@@ -793,8 +724,6 @@
   margin: 8px 0 12px;
   padding-left: 4px;
 }
-
-
 
 .team-dropdown-wrapper {
   position: relative;
@@ -844,24 +773,9 @@
   max-height: 200px;
   overflow-y: auto;
   z-index: 100;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1000);
 }
 
-/* .team-option {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 8px 12px;
-    width: 100%;
-    background: transparent;
-    border: none;
-    border-radius: 12px;
-  }
-
-
-
-  /* team-option: rounded row with avatar + name */
 .team-option {
   display: flex;
   align-items: center;
@@ -873,8 +787,6 @@
   border: none;
   border-radius: 12px;
   box-sizing: border-box;
-
-  /* transition: background .15s, transform .08s; */
 }
 
 .team-option:hover {
@@ -999,7 +911,7 @@
   border-radius: 6px;
   margin-top: 4px;
   z-index: 100;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1000);
 }
 
 .status-option {
@@ -1028,7 +940,7 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgb(0 0 0 / 50%);
+  background-color: rgba(0,0,0,0.5000);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1038,7 +950,7 @@
 .modal-content {
   background-color: white;
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgb(0 0 0 / 20%);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2000);
   max-width: 500px;
   width: 90%;
   overflow: hidden;

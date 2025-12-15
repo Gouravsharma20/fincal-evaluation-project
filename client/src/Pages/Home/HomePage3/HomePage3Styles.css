@@ -4,8 +4,8 @@
   --muted: #98A8B3;
   --cta-blue: #244779;
   --card-bg: #fff;
-  --card-border: rgb(46 60 74 / 6%);
-  --card-shadow: 0 10px 20px rgb(46 60 74 / 6%);
+  --card-border: rgba(46,60,74,0.0600);
+  --card-shadow: 0 10px 20px rgba(46,60,74,0.0600);
 }
 
 .hp3-section{
@@ -41,7 +41,7 @@
   line-height: 1.6;
 }
 
-/* Cards container */
+
 .hp3-cards{
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -49,7 +49,7 @@
   margin-top: 28px;
 }
 
-/* Card */
+
 .hp3-plan-card{
   background: var(--card-bg);
   border-radius: 14px;
@@ -62,7 +62,7 @@
   min-height: 540px;
 }
 
-/* Title + description */
+
 .hp3-plan-title{
   color: var(--text-500);
   font-size: 28px;
@@ -77,7 +77,7 @@
   line-height: 1.5;
 }
 
-/* Price row */
+
 .hp3-price-row{
   display: flex;
   align-items: baseline;
@@ -97,7 +97,7 @@
   font-size: 14px;
 }
 
-/* what's included title */
+
 .hp3-whats{
   margin-top: 18px;
   margin-bottom: 10px;
@@ -105,7 +105,7 @@
   color: var(--text-500);
 }
 
-/* features */
+
 .hp3-features{
   list-style: none;
   padding: 0;
@@ -121,7 +121,7 @@
   font-size: 14px;
 }
 
-/* small check icon */
+
 .hp3-check{
   width: 20px;
   height: 20px;
@@ -129,7 +129,7 @@
   flex-shrink: 0;
 }
 
-/* CTA button */
+
 .hp3-cta{
   width: 100%;
   text-decoration: none;
@@ -140,7 +140,7 @@
   width: 100%;
   border-radius: 30px;
   padding: 16px 20px;
-  border: 1.5px solid rgb(36 71 121 / 12%);
+  border: 1.5px solid rgba(36,71,121,0.1200);
   background: transparent;
   color: var(--cta-blue);
   font-weight: 700;
@@ -149,7 +149,7 @@
   font-size: 14px;
 }
 
-/* small screens */
+
 @media (width <= 900px){
   .hp3-cards{
     grid-template-columns: 1fr;

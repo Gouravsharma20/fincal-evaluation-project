@@ -1,7 +1,6 @@
 import React from 'react';
 import './LastPageStyles.css'
 
-
 import Discord from "../../../Assets/HomeAssets/LastPage/SocialIcons/Discord.png";
 import Email from "../../../Assets/HomeAssets/LastPage/SocialIcons/Email.png";
 import Instagram from "../../../Assets/HomeAssets/LastPage/SocialIcons/Instagram.png";
@@ -12,7 +11,6 @@ import Youtube from "../../../Assets/HomeAssets/LastPage/SocialIcons/Youtube.png
 import appLogo from "../../../Assets/CommonAssets/appLogo.png"
 
 const LastPage = () => {
-  // columns data - easy to edit
   const columns = [
     {
       title: 'Product',
@@ -53,6 +51,12 @@ const LastPage = () => {
         'Terms',
         'Privacy'
       ]
+    },
+    {
+      title: 'Company',
+      items: [
+        'Careers'
+      ]
     }
   ]
 
@@ -84,14 +88,6 @@ const LastPage = () => {
               </ul>
             </div>
           ))}
-
-          {/* optional small Company column */}
-          <div className="lp-column lp-company">
-            <h4 className="lp-col-title">Company</h4>
-            <ul className="lp-col-list">
-              <li className="lp-col-item" tabIndex={0}>Careers</li>
-            </ul>
-          </div>
         </div>
 
         <div className="lp-social">
@@ -102,7 +98,7 @@ const LastPage = () => {
                 className="lp-social-btn"
                 type="button"
                 aria-label={s.alt}
-                onClick={() => { /* intentionally empty = no redirect */ }}
+                onClick={() => { }}
               >
                 <img src={s.src} alt={s.alt} className="lp-social-img" />
               </button>
@@ -115,9 +111,3 @@ const LastPage = () => {
 }
 
 export default LastPage
-
-
-
-
-
-

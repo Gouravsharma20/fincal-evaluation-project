@@ -3,13 +3,11 @@ import { useAuthContext } from '../../Hooks/useAuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import MessageForm from '../../Components/MessageForm/MessageForm'
 import './HomeStyles.css'
-
 import HeroPhoto from '../../Assets/HomeAssets/HomeTalking.png'
 import MessageCard from '../../Assets/HomeAssets/HomeMessage.png'
 import GraphCard from '../../Assets/HomeAssets/HomeGraph.png'
 import CalendarCard from '../../Assets/HomeAssets/HomeCalendar.png'
 import PlayIcon from '../../Assets/HomeAssets/HomePlay.png'
-
 import AdobeLogo from '../../Assets/HomeAssets/CompanyLogo/AdobeLogo.png'
 import Framer from '../../Assets/HomeAssets/CompanyLogo/Framer.png'
 import AirtableLogo from '../../Assets/HomeAssets/CompanyLogo/AirTable.png'
@@ -19,7 +17,7 @@ import HomePage2 from './HomePage2/HomePage2'
 import HomePage3 from './HomePage3/HomePage3'
 import LastPage from './LastPage/LastPage'
 
-/* ---------- Company Logos Bar ---------- */
+
 const CompanyLogos = () => {
   const logos = [
     { src: AdobeLogo, alt: 'Adobe' },
@@ -55,7 +53,6 @@ const Home = () => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // MOBILE: show ONLY MessageForm on pure white background
   if (isMobile) {
     return (
       <section className="mobile-only-form">
@@ -82,7 +79,7 @@ const Home = () => {
           </div>
         ) : null}
 
-        {/* HERO CONTENT - row layout */}
+        
         <div className="hero-container">
           <div className="hero-left">
             <h1 className="hero-title">
@@ -120,7 +117,7 @@ const Home = () => {
         <CompanyLogos />
       </section>
 
-      {/* Page-2 */}
+      
       <HomePage2 />
       <HomePage3 />
       <LastPage />

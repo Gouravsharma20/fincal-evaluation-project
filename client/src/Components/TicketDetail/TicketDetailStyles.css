@@ -13,7 +13,7 @@
   background: white;
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1000);
   border-left: 4px solid #007bff;
 }
 
@@ -72,7 +72,7 @@
   background: white;
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1000);
   flex: 1;
   overflow: hidden;
   display: flex;
@@ -202,7 +202,7 @@
 .add-message-form textarea:focus {
   outline: none;
   border-color: #007bff;
-  box-shadow: 0 0 0 3px rgb(0 123 255 / 25%);
+  box-shadow: 0 0 0 3px rgba(0,123,255,0.2500);
 }
 
 .internal-checkbox {
@@ -260,7 +260,7 @@
   background: white;
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1000);
 }
 
 .admin-messages,
@@ -322,7 +322,7 @@
 .assign-panel input:focus {
   outline: none;
   border-color: #007bff;
-  box-shadow: 0 0 0 3px rgb(0 123 255 / 25%);
+  box-shadow: 0 0 0 3px rgba(0,123,255,0.2500);
 }
 
 /* RESPONSIVE */

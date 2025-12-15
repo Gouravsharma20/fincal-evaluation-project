@@ -1,20 +1,40 @@
-// controllers/adminController.js
 const Ticket = require("../models/TicketModel");
 const User = require("../models/UserModel");
 const crypto = require('crypto');
 const bcrypt = require('bcrypt')
-const Settings = require("../models/SettingsModel");              // ✅ ADD THIS LINE
-const {                                                           // ✅ ADD THIS LINE
-  checkAndMarkMissedChat,                                        // ✅ ADD THIS LINE
-  incrementMissedChatsForWeek,                                   // ✅ ADD THIS LINE
-  getAllAnalytics                                                // ✅ ADD THIS LINE
-} = require("../utils/AnalyticsUtils");                          // ✅ ADD THIS LINE
+const Settings = require("../models/SettingsModel");
+const {
+  checkAndMarkMissedChat,
+  incrementMissedChatsForWeek,
+  getAllAnalytics
+} = require("../utils/AnalyticsUtils");
 
+const updateMissedTicketsInBatch = async (resolutionTimeLimit) => {
+  try {
+    const tickets = await Ticket.find({
+      status: 'open',
+      isMissedChat: false
+    });
 
-/**
- * listTickets (admin) - paginated
- */
+    let updatedCount = 0;
 
+    for (const ticket of tickets) {
+      const shouldBeMissed = checkAndMarkMissedChat(ticket, resolutionTimeLimit);
+      
+      if (shouldBeMissed) {
+        ticket.isMissedChat = true;
+        await ticket.save();
+        await incrementMissedChatsForWeek(ticket.createdAt);
+        updatedCount++;
+      }
+    }
+
+    return updatedCount;
+  } catch (err) {
+    console.error('Batch update failed:', err);
+    return 0;
+  }
+};
 
 const listAllTickets = async (req, res) => {
   try {
@@ -32,6 +52,13 @@ const listAllTickets = async (req, res) => {
         { userEmail: new RegExp(q, "i") },
         { userPhoneNumber: new RegExp(q, "i") }
       ];
+    }
+
+    try {
+      const settings = await Settings.getInstance();
+      await updateMissedTicketsInBatch(settings.resolutionTimeLimit);
+    } catch (err) {
+      console.warn("Batch update failed:", err);
     }
 
     const tickets = await Ticket.find(filter)
@@ -63,31 +90,44 @@ const listAllTickets = async (req, res) => {
   }
 };
 
-
 const getTicketDetails = async (req, res) => {
   try {
     const ticket = await Ticket.findById(req.params.id);
-    if (!ticket) return res.status(404).json({ error: "Ticket not found" });
+    
+    if (!ticket) {
+      return res.status(404).json({ error: "Ticket not found" });
+    }
 
-    // ADD THIS: Verify ticket is assigned to admin
     if (ticket.assignedToType !== "admin" || ticket.assignedToId !== null) {
       return res.status(403).json({ error: "This ticket is not assigned to you" });
     }
 
+    try {
+      const settings = await Settings.getInstance();
+      const resolutionTimeLimit = settings.resolutionTimeLimit;
+      const originalMissedStatus = ticket.isMissedChat;
+
+      const shouldBeMissed = checkAndMarkMissedChat(ticket, resolutionTimeLimit);
+
+      if (shouldBeMissed && !originalMissedStatus) {
+        ticket.isMissedChat = true;
+        await ticket.save();
+        await incrementMissedChatsForWeek(ticket.createdAt);
+      }
+    } catch (analyticsErr) {
+      console.error("Analytics calculation failed:", analyticsErr);
+    }
+
     return res.json({
-      success: true,  // ADD THIS
+      success: true,
       ticket
     });
   } catch (err) {
-    console.error(err);
+    console.error('Error in getTicketDetails:', err);
     return res.status(500).json({ error: "Server error" });
   }
 };
 
-/**
- * adminAddMessage - called under isAdmin (Gourav injected)
- * body: { text, internal }
- */
 const adminAddMessage = async (req, res) => {
   try {
     const { text, internal = false } = req.body;
@@ -108,7 +148,7 @@ const adminAddMessage = async (req, res) => {
       createdAt: Date.now()
     });
     if (!internal) {
-      ticket.status = "in_progress";  // ADD THIS
+      ticket.status = "in_progress";
     }
     ticket.lastMessageAt = Date.now();
     await ticket.save();
@@ -146,7 +186,6 @@ const assignTicket = async (req, res) => {
     ticket.assignedToId = assignedToId;
     ticket.status = "assigned";
 
-
     ticket.messages.push({
       senderType: "admin",
       senderId: req.user._id,
@@ -169,7 +208,6 @@ const assignTicket = async (req, res) => {
   }
 };
 
-
 const resolveTicket = async (req, res) => {
   try {
     const { resolutionNote } = req.body;
@@ -184,7 +222,7 @@ const resolveTicket = async (req, res) => {
     }
 
     if (!ticket.clientSecret) {
-      ticket.clientSecret = crypto.randomBytes(16).toString('hex'); // 32 hex chars
+      ticket.clientSecret = crypto.randomBytes(16).toString('hex');
     }
 
     ticket.status = "resolved";
@@ -199,15 +237,14 @@ const resolveTicket = async (req, res) => {
 
       const isMissed = checkAndMarkMissedChat(ticket, resolutionTimeLimit);
 
-      // If missed, increment the analytics counter for that week
       if (isMissed) {
         await incrementMissedChatsForWeek(ticket.createdAt);
       }
-
     } catch (analyticsErr) {
-      console.warn("Analytics calculation failed (non-critical):", analyticsErr);
+      console.warn("Analytics calculation failed:", analyticsErr);
     }
-     await ticket.save();
+    
+    await ticket.save();
 
     return res.json({
       success: true,
@@ -221,7 +258,6 @@ const resolveTicket = async (req, res) => {
   }
 };
 
-
 const listAllUsers = async (req, res) => {
   try {
     const users = await User.find({ email: { $ne: "gouravsharma20a@gmail.com" } })
@@ -233,7 +269,6 @@ const listAllUsers = async (req, res) => {
       _id: "6924cdfa002795cf8aea42ed",
       name: "Gourav Sharma",
       email: "gouravsharma20a@gmail.com",
-
     };
 
     const allUsers = [adminUser, ...users];
@@ -248,16 +283,10 @@ const listAllUsers = async (req, res) => {
   }
 };
 
-
-
-
-
-
 const createTeamMember = async (req, res) => {
   try {
     const { name, email, designation } = req.body;
 
-    // Validation
     if (!name || !email || !designation) {
       return res.status(400).json({ error: "name, email, and designation are required" });
     }
@@ -266,8 +295,6 @@ const createTeamMember = async (req, res) => {
 
     newTeamMember.designation = designation;
     newTeamMember.role = "team_member";
-    await newTeamMember.save();
-
     await newTeamMember.save();
 
     return res.status(201).json({
@@ -290,17 +317,11 @@ const createTeamMember = async (req, res) => {
   }
 };
 
-/**
- * updateTeamMember (admin) - Update team member details
- * params: id
- * body: { name, designation } (email cannot be updated for security)
- */
 const updateTeamMember = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, designation } = req.body;
 
-    // Validation
     if (!name && !designation) {
       return res.status(400).json({ error: "At least one field (name or designation) is required to update" });
     }
@@ -310,12 +331,10 @@ const updateTeamMember = async (req, res) => {
       return res.status(404).json({ error: "Team member not found" });
     }
 
-    // Prevent updating admin
     if (teamMember.email === "gouravsharma20a@gmail.com") {
       return res.status(403).json({ error: "Cannot update admin user" });
     }
 
-    // Update fields
     if (name) teamMember.name = name;
     if (designation) teamMember.designation = designation;
 
@@ -338,10 +357,6 @@ const updateTeamMember = async (req, res) => {
   }
 };
 
-/**
- * deleteTeamMember (admin) - Delete a team member
- * params: id
- */
 const deleteTeamMember = async (req, res) => {
   try {
     const { id } = req.params;
@@ -351,12 +366,10 @@ const deleteTeamMember = async (req, res) => {
       return res.status(404).json({ error: "Team member not found" });
     }
 
-    // Prevent deleting admin
     if (teamMember.email === "gouravsharma20a@gmail.com") {
       return res.status(403).json({ error: "Cannot delete admin user" });
     }
 
-    // Delete team member
     await User.findByIdAndDelete(id);
 
     return res.json({
@@ -370,12 +383,7 @@ const deleteTeamMember = async (req, res) => {
   }
 };
 
-
-// / ✅ STEP 4: ADD THREE NEW FUNCTIONS (Lines 328-415) - ALL NEW
-/**
- * getSettings - Get global resolution time limit settings
- */
-const getSettings = async (req, res) => {                        // ✅ NEW FUNCTION
+const getSettings = async (req, res) => {
   try {
     const settings = await Settings.getInstance();
     return res.json({
@@ -392,8 +400,7 @@ const getSettings = async (req, res) => {                        // ✅ NEW FUNC
   }
 };
 
-
-const updateSettings = async (req, res) => {                     // ✅ NEW FUNCTION
+const updateSettings = async (req, res) => {
   try {
     const { resolutionTimeLimit } = req.body;
 
@@ -427,8 +434,7 @@ const updateSettings = async (req, res) => {                     // ✅ NEW FUNC
   }
 };
 
-// * getAnalytics - Get all analytics data
-const getAnalytics = async (req, res) => {                       // ✅ NEW FUNCTION
+const getAnalytics = async (req, res) => {
   try {
     const analytics = await getAllAnalytics();
 
@@ -451,16 +457,15 @@ const getAnalytics = async (req, res) => {                       // ✅ NEW FUNC
   }
 };
 
-
 module.exports = {
   listAllTickets,
   getTicketDetails,
   adminAddMessage,
   assignTicket,
   resolveTicket,
-  getSettings,              
-  updateSettings,       
-  getAnalytics,  
+  getSettings,
+  updateSettings,
+  getAnalytics,
   listAllUsers,
   createTeamMember,
   updateTeamMember,

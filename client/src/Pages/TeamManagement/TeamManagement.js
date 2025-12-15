@@ -19,21 +19,18 @@ const TeamManagement = () => {
     designation: ''
   });
 
-  // delete modal state
+
   const [deleteConfirm, setDeleteConfirm] = useState({
     open: false,
     id: null,
     name: ""
   });
-  // loading state for delete action
+
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  // ---- Search/filter states (commented-out per request) ----
-  // const [searchTerm, setSearchTerm] = useState('');
-  // const [filterDesignation, setFilterDesignation] = useState('all');
-  // ----------------------------------------------------------
 
-  // Fetch team members
+
+
   const fetchTeamMembers = useCallback(
     async () => {
       setLoading(true);
@@ -62,17 +59,17 @@ const TeamManagement = () => {
     }, [token]
   );
 
-  // Initial fetch on mount
+
   useEffect(() => {
     fetchTeamMembers();
   }, [fetchTeamMembers]);
 
-  // Check admin access - after all hooks
+
   if (!user || !user.isAdmin) {
     return <div className="unauthorized">Admin access only</div>;
   }
 
-  // Handle form submission (Create or Update)
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -121,7 +118,7 @@ const TeamManagement = () => {
     }
   };
 
-  // Handle delete (now only performs deletion — confirmation opens modal)
+
   const handleDelete = async () => {
     const id = deleteConfirm.id;
     if (!id) return;
@@ -152,7 +149,7 @@ const TeamManagement = () => {
     }
   };
 
-  // Handle edit
+
   const handleEdit = (member) => {
     setFormData({
       name: member.name,
@@ -163,7 +160,7 @@ const TeamManagement = () => {
     setShowModal(true);
   };
 
-  // Handle open new member modal
+
   const handleOpenNewMember = () => {
     resetForm();
     setShowModal(true);
@@ -179,9 +176,7 @@ const TeamManagement = () => {
     setEditingId(null);
   };
 
-  // ------------------
-  // Use full list (no search/filter) per request
-  // ------------------
+
   const filteredMembers = teamMembers;
 
   return (
@@ -191,7 +186,7 @@ const TeamManagement = () => {
           <h1>Team</h1>
         </div>
 
-        {/* Error Message */}
+
         {error && (
           <div className="error-message">
             <span>{error}</span>
@@ -199,12 +194,9 @@ const TeamManagement = () => {
           </div>
         )}
 
-        {/* Controls Section */}
-        <div className="team-controls ">
-          {/* kept empty — add button moved into table area */}
-        </div>
+        
 
-        {/* Loading State */}
+
         {loading ? (
           <div className="loading-container">
             <p>Loading team members...</p>
@@ -266,7 +258,7 @@ const TeamManagement = () => {
               </tbody>
             </table>
 
-            {/* Add button placed inside table area so it shows below rows (adjust via CSS) */}
+
             <div className="add-member-wrapper table-add-btn">
               <button className="add-member-btn" onClick={handleOpenNewMember}>
                 <span className="plus-icon">+</span> Add Team members
@@ -275,7 +267,7 @@ const TeamManagement = () => {
           </div>
         )}
 
-        {/* Delete Confirmation Modal — moved inside return so it renders */}
+
         {deleteConfirm.open && (
           <div className="delete-modal-overlay">
             <div className="delete-modal" role="dialog" aria-modal="true" aria-labelledby="delete-modal-title">
@@ -306,22 +298,24 @@ const TeamManagement = () => {
           </div>
         )}
 
-        {/* Modal for Create/Edit */}
+
         {showModal && (
           <div className="modal-overlay-team" onClick={() => setShowModal(false)}>
             <div className="modal-dialog-team" onClick={(e) => e.stopPropagation()}>
               <div className="modal-header-team">
-                <h2>{editingId ? 'Edit Team Member' : 'Add New Team Member'}</h2>
-                <button className="modal-close-btn" onClick={() => setShowModal(false)}>×</button>
+                <h2>{editingId ? 'Edit Team Member' : 'Add Team members'}</h2>
+                <p className="modal-description">
+                  Talk with colleagues in a group chat. Messages in this group are only visible to it's participants. New teammates may only be invited by the administrators.
+                </p>
               </div>
 
               <form onSubmit={handleSubmit} className="modal-form">
                 <div className="form-group-team">
-                  <label htmlFor="name">Full Name</label>
+                  <label htmlFor="name">User name</label>
                   <input
                     id="name"
                     type="text"
-                    placeholder="Enter full name"
+                    placeholder="User name"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="form-input-team"
@@ -330,11 +324,11 @@ const TeamManagement = () => {
                 </div>
 
                 <div className="form-group-team">
-                  <label htmlFor="email">Email Address</label>
+                  <label htmlFor="email">Email ID</label>
                   <input
                     id="email"
                     type="email"
-                    placeholder="Enter email address"
+                    placeholder="Email ID"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="form-input-team"
@@ -367,7 +361,7 @@ const TeamManagement = () => {
                     Cancel
                   </button>
                   <button type="submit" className="btn-submit-team">
-                    {editingId ? 'Update Member' : 'Create Member'}
+                    {editingId ? 'Update Member' : 'Save'}
                   </button>
                 </div>
               </form>

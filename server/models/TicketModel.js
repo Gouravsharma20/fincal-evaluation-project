@@ -3,9 +3,9 @@ const mongoose = require("mongoose");
 
 const messageSchema = new mongoose.Schema({
   senderType: { type: String, enum: ["user", "admin", "team"], required: true },
-  senderId: { type: String, default: null }, // optional: userId/adminId/teamId
+  senderId: { type: String, default: null }, 
   text: { type: String, required: true, trim: true },
-  internal: { type: Boolean, default: false }, // internal note (admins/teams only)
+  internal: { type: Boolean, default: false }, 
   createdAt: { type: Date, default: Date.now }
 }, { _id: true });
 
@@ -44,22 +44,18 @@ const ticketSchema = new mongoose.Schema({
     unique: false
   },
 
-  // conversation messages
-  messages: { type: [messageSchema], default: [] },
 
-  // ownership & assignment: by default admin owns new tickets
+  messages: { type: [messageSchema], default: [] },
   status: { type: String, enum: ["open", "assigned", "in_progress", "resolved", "closed"], default: "open" },
   assignedToType: { type: String, enum: ["admin", "team", null], default: "admin" },
-  assignedToId: { type: String, default: null }, // e.g. teamId or adminId
+  assignedToId: { type: String, default: null }, 
 
-  // resolution
   resolvedBy: { type: String, default: null },
   resolvedAt: { type: Date, default: null },
   resolutionNote: { type: String, default: "" },
   isMissedChat: { type: Boolean, default: false },
 
-  // meta
-  consentAt: { type: Date, default: null }, // store when user allowed messages
+  consentAt: { type: Date, default: null }, 
   lastMessageAt: { type: Date, default: Date.now },
 
 }, { timestamps: true });

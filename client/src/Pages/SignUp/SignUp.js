@@ -2,8 +2,6 @@ import { useState } from 'react'
 import { useNavigate,Link } from 'react-router-dom'
 import "../Login/LoginStyles.css"
 import { useSignUp } from '../../Hooks/useSignUp'
-
-// Add the image imports so SignUp uses the same images as Login
 import appLogo from '../../Assets/CommonAssets/appLogo.png'
 import LoginSignUpBoy from "../../Assets/LoginSignUpAssets/LoginSignUpBoy.png"
 
@@ -51,11 +49,7 @@ const SignUp = () => {
                 '--boy-img': `url(${LoginSignUpBoy})`
             }}
         >
-            {/* Top-left branding logo */}
             <Link to="/" className="brand-logo" />
-
-
-            {/* Left aligned form area */}
             <div className="form-wrapper">
                 <form onSubmit={handleSubmit}>
                     <h1>Create your Plexify Account</h1>
@@ -133,8 +127,6 @@ const SignUp = () => {
                     </p>
                 </form>
             </div>
-
-            {/* Footer text */}
             <div className='footer-text'>
                 This site is protected by reCAPTCHA and the Google&nbsp;
                 <a href='https://policies.google.com/privacy' target='_blank' rel='noopener noreferrer'>Privacy Policy</a>

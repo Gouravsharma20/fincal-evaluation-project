@@ -1,14 +1,15 @@
+
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthContext } from '../../Hooks/useAuthContext'
 import './SettingsStyles.css'
-import {API_BASE_URL} from '../../config/api'
+import { API_BASE_URL } from '../../config/api'
 
 const Settings = () => {
   const navigate = useNavigate()
   const { user, token, dispatch } = useAuthContext()
 
-  // Form States
+
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
@@ -17,13 +18,13 @@ const Settings = () => {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
-  // Modal States
+
   const [showConfirmModal, setShowConfirmModal] = useState(false)
-  const [confirmationType, setConfirmationType] = useState(null) // 'name' or 'password'
+  const [confirmationType, setConfirmationType] = useState(null)
   const [pendingChanges, setPendingChanges] = useState(null)
   const [modalLoading, setModalLoading] = useState(false)
 
-  // Initialize form with user data
+
   useEffect(() => {
     if (user) {
       const nameParts = user.name ? user.name.split(' ') : ['', '']
@@ -42,10 +43,10 @@ const Settings = () => {
     e.preventDefault()
     clearMessages()
 
-    // Validate name change
-    if (firstName !== (user?.name?.split(' ')[0] || '') || 
-        lastName !== (user?.name?.split(' ').slice(1).join(' ') || '')) {
-      
+
+    if (firstName !== (user?.name?.split(' ')[0] || '') ||
+      lastName !== (user?.name?.split(' ').slice(1).join(' ') || '')) {
+
       if (!firstName.trim() || !lastName.trim()) {
         setError('First name and last name are required')
         return
@@ -62,7 +63,7 @@ const Settings = () => {
       return
     }
 
-    // Validate password change
+
     if (password.trim() || confirmPassword.trim()) {
       if (!password.trim() || !confirmPassword.trim()) {
         setError('Both password fields are required')
@@ -97,32 +98,22 @@ const Settings = () => {
     setModalLoading(true)
 
     try {
-      // Get user ID - try different possible formats
       const userId = user.id || user._id || user.userId
-      
+
       if (!userId) {
         throw new Error('User ID not found. Please logout and login again.')
       }
 
-      const endpoint = pendingChanges.type === 'name' 
+      const endpoint = pendingChanges.type === 'name'
         ? `${API_BASE_URL}/api/user/${userId}/profile/name`
         : `${API_BASE_URL}/api/user/${userId}/profile/password`
 
-      // Send newPassword and confirmPassword for password updates
       const body = pendingChanges.type === 'name'
         ? { name: pendingChanges.newValue }
-        : { 
-            newPassword: pendingChanges.newValue,
-            confirmPassword: pendingChanges.newValue
-          }
-
-      console.log('🔵 Update Request:')
-      console.log('  Type:', pendingChanges.type)
-      console.log('  Endpoint:', endpoint)
-      console.log('  User ID:', userId)
-      console.log('  User object:', user)
-      console.log('  Token exists:', !!token)
-      console.log('  Body:', body)
+        : {
+          newPassword: pendingChanges.newValue,
+          confirmPassword: pendingChanges.newValue
+        }
 
       const response = await fetch(endpoint, {
         method: 'PUT',
@@ -133,41 +124,41 @@ const Settings = () => {
         body: JSON.stringify(body)
       })
 
-      console.log('📥 Response received:')
-      console.log('  Status:', response.status)
-      console.log('  OK:', response.ok)
 
       const data = await response.json()
-      console.log('  Response data:', data)
 
       if (!response.ok) {
-        console.log('❌ Error response:', data)
         throw new Error(data.message || data.error || `Failed to update ${pendingChanges.type}`)
       }
 
-      console.log('✅ Update successful:', data)
 
-      // Show success message
       setSuccess(`${pendingChanges.type === 'name' ? 'Name' : 'Password'} updated successfully!`)
-      
-      // Clear modal and form
+
+
       setShowConfirmModal(false)
       setPendingChanges(null)
 
-      // Auto logout after 2 seconds
-      setTimeout(() => {
-        setPassword('')
-        setConfirmPassword('')
-        
-        // Dispatch logout action
-        dispatch({ type: 'LOGOUT' })
-        
-        // Redirect to login
-        navigate('/login', { replace: true })
-      }, 2000)
+      if (pendingChanges.type === 'password') {
+        setTimeout(() => {
+          setPassword('')
+          setConfirmPassword('')
+
+
+          dispatch({ type: 'LOGOUT' })
+
+
+          navigate('/login', { replace: true })
+        }, 2000)
+
+      } else {
+        setTimeout(() => {
+          setSuccess('')
+        }, 3000)
+      }
+
 
     } catch (err) {
-      console.error('❌ Error updating profile:', err)
+      console.error('Error updating profile:', err)
       setError(err.message || 'Failed to update profile. Please try again.')
     } finally {
       setModalLoading(false)
@@ -180,9 +171,6 @@ const Settings = () => {
     setConfirmationType(null)
   }
 
-  // =====================================================
-  // CONFIRMATION MODAL COMPONENT
-  // =====================================================
   const ConfirmationModal = ({ isOpen, type, pendingData }) => {
     if (!isOpen) return null
 
@@ -193,8 +181,8 @@ const Settings = () => {
         <div className="modal-content settings-modal">
           <div className="modal-header">
             <h2>Confirm {isNameChange ? 'Name' : 'Password'} Change</h2>
-            <button 
-              className="modal-close" 
+            <button
+              className="modal-close"
               onClick={handleCancelModal}
               disabled={modalLoading}
             >
@@ -215,22 +203,22 @@ const Settings = () => {
                   Are you sure you want to change your password?
                 </p>
                 <p className="modal-warning">
-                  ⚠️ You will be logged out immediately after this change and will need to login again with your new password.
+                  You will be logged out immediately after this change and will need to login again with your new password.
                 </p>
               </div>
             )}
           </div>
 
           <div className="modal-footer">
-            <button 
-              className="modal-btn modal-btn-cancel" 
+            <button
+              className="modal-btn modal-btn-cancel"
               onClick={handleCancelModal}
               disabled={modalLoading}
             >
               Cancel
             </button>
-            <button 
-              className="modal-btn modal-btn-confirm" 
+            <button
+              className="modal-btn modal-btn-confirm"
               onClick={handleConfirmChange}
               disabled={modalLoading}
             >
@@ -244,9 +232,8 @@ const Settings = () => {
 
   return (
     <div className="settings-container">
-      {/* Confirmation Modal */}
-      <ConfirmationModal 
-        isOpen={showConfirmModal} 
+      <ConfirmationModal
+        isOpen={showConfirmModal}
         type={confirmationType}
         pendingData={pendingChanges}
       />
@@ -254,30 +241,26 @@ const Settings = () => {
       <div className="settings-content">
         <div className="settings-header">
           <h1>Settings</h1>
-          <p className="settings-subtitle">Manage your profile and account settings</p>
         </div>
 
-        {/* Error Alert */}
         {error && (
           <div className="alert alert-error">
             <span className="alert-icon">✕</span>
             <span className="alert-message">{error}</span>
-            <button 
-              className="alert-close" 
+            <button
+              className="alert-close"
               onClick={() => setError('')}
             >
               ×
             </button>
           </div>
         )}
-
-        {/* Success Alert */}
         {success && (
           <div className="alert alert-success">
             <span className="alert-icon">✓</span>
             <span className="alert-message">{success}</span>
-            <button 
-              className="alert-close" 
+            <button
+              className="alert-close"
               onClick={() => setSuccess('')}
             >
               ×
@@ -285,17 +268,15 @@ const Settings = () => {
           </div>
         )}
 
-        {/* Edit Profile Section */}
         <div className="settings-section">
           <div className="section-header">
             <h2>Edit Profile</h2>
           </div>
 
           <form className="settings-form" onSubmit={handleSaveClick}>
-            {/* First Name */}
             <div className="form-group">
               <label htmlFor="firstName" className="form-label">
-                First Name
+                First name
               </label>
               <input
                 type="text"
@@ -307,10 +288,9 @@ const Settings = () => {
               />
             </div>
 
-            {/* Last Name */}
             <div className="form-group">
               <label htmlFor="lastName" className="form-label">
-                Last Name
+                Last name
               </label>
               <input
                 type="text"
@@ -322,69 +302,70 @@ const Settings = () => {
               />
             </div>
 
-            {/* Email (Non-editable) */}
             <div className="form-group">
               <label htmlFor="email" className="form-label">
                 Email
               </label>
-              <input
-                type="email"
-                id="email"
-                className="form-input disabled"
-                value={email}
-                disabled
-                title="Email cannot be changed"
-              />
-              <span className="form-helper">Email cannot be changed</span>
+              <div className="input-with-info">
+                <input
+                  type="email"
+                  id="email"
+                  className="form-input disabled"
+                  value={email}
+                  disabled
+                  title="Email cannot be changed"
+                />
+                <div className="info-icon" data-tooltip="Email cannot be changed">
+                  <span>i</span>
+                </div>
+              </div>
             </div>
 
-            {/* Password */}
             <div className="form-group">
               <label htmlFor="password" className="form-label">
                 Password
               </label>
-              <input
-                type="password"
-                id="password"
-                className="form-input"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter new password (leave blank to keep current)"
-              />
-              <span className="form-helper">Minimum 8 characters</span>
+              <div className="input-with-info">
+                <input
+                  type="password"
+                  id="password"
+                  className="form-input"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="************"
+                />
+                <div className="info-icon" data-tooltip="Minimum 8 characters">
+                  <span>i</span>
+                </div>
+              </div>
             </div>
 
-            {/* Confirm Password */}
             <div className="form-group">
               <label htmlFor="confirmPassword" className="form-label">
                 Confirm Password
               </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                className="form-input"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Confirm new password"
-              />
+              <div className="input-with-info">
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  className="form-input"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="************"
+                />
+                <div className="info-icon" data-tooltip="User will logged out immediately">
+                  <span>i</span>
+                </div>
+              </div>
             </div>
 
-            {/* Warning Message */}
-            {(password.trim() || confirmPassword.trim()) && (
-              <div className="form-warning">
-                <span className="warning-icon">⚠️</span>
-                <span>User will be logged out immediately after password change</span>
-              </div>
-            )}
-
-            {/* Submit Button */}
             <div className="form-actions">
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="btn btn-primary"
                 disabled={modalLoading}
               >
-                {modalLoading ? 'Saving...' : 'Save Changes'}
+                {modalLoading ? 'Saving...' : 'Save'}
               </button>
             </div>
           </form>

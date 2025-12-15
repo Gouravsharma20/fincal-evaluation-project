@@ -51,7 +51,6 @@ const changePassword = async (req, res) => {
     const { newPassword, confirmPassword } = req.body;
     const userId = req.user._id;
 
-    // Validation
     if (!newPassword || !confirmPassword) {
       return res.status(400).json({ error: "New password and confirm password are required" });
     }
@@ -64,13 +63,11 @@ const changePassword = async (req, res) => {
       return res.status(400).json({ error: "Passwords do not match" });
     }
 
-    // Get user from database
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Update password (pre-save hook will hash it automatically with pepper)
     user.password = newPassword;
     await user.save();
 

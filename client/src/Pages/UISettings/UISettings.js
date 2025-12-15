@@ -29,13 +29,12 @@ const UISettings = () => {
   const [savingState, setSavingState] = useState(null)
   const debounceTimer = useRef(null)
 
-  // Fetch settings on component mount
   useEffect(() => {
     fetchSettings()
     fetchTimerSettings()
   }, [])
 
-  // Debounced auto-save on settings change
+
   const saveSettingsToBackend = useCallback(async () => {
     try {
       setSavingState('saving')
@@ -54,7 +53,6 @@ const UISettings = () => {
     }
   }, [settings])
 
-  // Debounce effect
   useEffect(() => {
     if (debounceTimer.current) {
       clearTimeout(debounceTimer.current)
@@ -95,8 +93,6 @@ const UISettings = () => {
     try {
       setTimerSaveState('saving')
       const minutesValue = parseInt(timerMinutes, 10)
-
-      // Validate input
       if (isNaN(minutesValue) || minutesValue < 1 || minutesValue > 1440) {
         setTimerSaveState('error')
         setTimeout(() => setTimerSaveState(null), 3000)
@@ -165,16 +161,14 @@ const UISettings = () => {
   }
 
   const handleTimerMinuteChange = (value) => {
-    // Only allow numbers
     if (value === '' || /^\d+$/.test(value)) {
-      // Limit max to 1440 minutes (24 hours)
       if (value === '' || parseInt(value, 10) <= 1440) {
         setTimerMinutes(value)
       }
     }
   }
 
-  // Authorization check
+
   if (!user || !user.isAdmin) {
     return <div className="ui-unauthorized">Admin access only</div>
   }
@@ -185,18 +179,9 @@ const UISettings = () => {
 
   return (
     <div className="ui-settings-wrapper">
-      {/* Left Side - Chat Widget Display */}
       <div className="ui-settings-left">
-        {/* Chat Bot Label */}
         <div className="ui-chat-bot-label">Chat Bot</div>
-
-        {/* ═══════════════════════════════════════════════════════════════════ */}
-        {/* CHAT WIDGET PREVIEW */}
-        {/* ═══════════════════════════════════════════════════════════════════ */}
-
-        {/* Chat Modal - Full chat widget preview */}
         <div className="ui-chat-modal">
-          {/* Header */}
           <div className="ui-chat-modal-header" style={{ backgroundColor: settings.headerColor }}>
             <div className="ui-header-content">
               <img src={hublyIconImage} alt="Hubly" className="ui-hubly-icon" />
@@ -204,22 +189,16 @@ const UISettings = () => {
             </div>
             <button className="ui-close-btn">✕</button>
           </div>
-
-          {/* Messages Container - SINGLE CONTAINER WITH ALL CONTENT */}
           <div className="ui-messages-container">
-            {/* Welcome Message */}
             <div className="ui-bot-message-wrapper">
               <div className="ui-bot-message">
                 {settings.welcomeMessage}
               </div>
             </div>
 
-            {/* ═══════════════════════════════════════════════════════════════════ */}
-            {/* Introduction Form Preview - Inside Messages Container */}
-            {/* ═══════════════════════════════════════════════════════════════════ */}
             <div className="ui-form-preview-container">
               <div className="ui-form-preview" style={{ backgroundColor: settings.backgroundColor }}>
-                {/* Name Field */}
+
                 <div className="ui-form-group">
                   <label className="ui-form-label">Your name</label>
                   <input
@@ -230,7 +209,7 @@ const UISettings = () => {
                   />
                 </div>
 
-                {/* Phone Field */}
+
                 <div className="ui-form-group">
                   <label className="ui-form-label">Your Phone</label>
                   <input
@@ -241,7 +220,7 @@ const UISettings = () => {
                   />
                 </div>
 
-                {/* Email Field */}
+
                 <div className="ui-form-group">
                   <label className="ui-form-label">Your Email</label>
                   <input
@@ -252,7 +231,7 @@ const UISettings = () => {
                   />
                 </div>
 
-                {/* Submit Button */}
+
                 <button
                   className="ui-form-submit-btn"
                   style={{ backgroundColor: settings.headerColor }}
@@ -263,14 +242,14 @@ const UISettings = () => {
               </div>
             </div>
 
-            {/* Success/Custom Message */}
+
             <div className="ui-bot-message-wrapper">
               <div className="ui-bot-message">
                 {settings.customMessage}
               </div>
             </div>
 
-            {/* Input Area */}
+
             <div className="ui-message-input-container">
               <input
                 type="text"
@@ -285,14 +264,13 @@ const UISettings = () => {
           </div>
         </div>
 
-        {/* Message Box - Shows welcome message */}
+
         <div className="ui-message-box">
           <button className="ui-message-box-close">✕</button>
           <img src={hublyIconImage} alt="Hubly" className="ui-message-box-icon" />
           {settings.welcomeMessage}
         </div>
 
-        {/* Saving Indicator */}
         {savingState && (
           <div className={`ui-saving-indicator ${savingState}`}>
             {savingState === 'saving' && '💾 Saving...'}
@@ -302,10 +280,9 @@ const UISettings = () => {
         )}
       </div>
 
-      {/* Right Side - Settings Panel */}
+
       <div className="ui-settings-right">
         <div className="ui-settings-scroll-container">
-          {/* 1. Header Color */}
           <div className="ui-setting-card">
             <h3 className="ui-card-title">Header Color</h3>
             <div className="ui-color-preset-group">
@@ -337,7 +314,6 @@ const UISettings = () => {
             </div>
           </div>
 
-          {/* 2. Background Color */}
           <div className="ui-setting-card">
             <h3 className="ui-card-title">Custom Background Color</h3>
             <div className="ui-color-preset-group">
@@ -369,11 +345,8 @@ const UISettings = () => {
             </div>
           </div>
 
-          {/* 3. INTRODUCTION FORM SECTION */}
           <div className="ui-setting-card">
             <h3 className="ui-card-title">Introduction Form</h3>
-
-            {/* Name Placeholder */}
             <div>
               <label className="ui-form-label">Name Placeholder</label>
               <input
@@ -390,8 +363,6 @@ const UISettings = () => {
               />
               <small className="ui-char-count">{settings.formPlaceholders.namePlaceholder.length}/100</small>
             </div>
-
-            {/* Phone Placeholder */}
             <div>
               <label className="ui-form-label">Phone Placeholder</label>
               <input
@@ -408,8 +379,6 @@ const UISettings = () => {
               />
               <small className="ui-char-count">{settings.formPlaceholders.phonePlaceholder.length}/100</small>
             </div>
-
-            {/* Email Placeholder */}
             <div>
               <label className="ui-form-label">Email Placeholder</label>
               <input
@@ -426,8 +395,6 @@ const UISettings = () => {
               />
               <small className="ui-char-count">{settings.formPlaceholders.emailPlaceholder.length}/100</small>
             </div>
-
-            {/* Button Text */}
             <div>
               <label className="ui-form-label">Button Text</label>
               <input
@@ -445,8 +412,6 @@ const UISettings = () => {
               <small className="ui-char-count">{settings.formPlaceholders.buttonText.length}/100</small>
             </div>
           </div>
-
-          {/* 4. Welcome Message (For Message Box) */}
           <div className="ui-setting-card">
             <h3 className="ui-card-title">Welcome Message</h3>
             <div className="ui-message-box-header">
@@ -465,8 +430,6 @@ const UISettings = () => {
               placeholder="Enter welcome message for message box"
             />
           </div>
-
-          {/* 5. Custom Success Message */}
           <div className="ui-setting-card">
             <h3 className="ui-card-title">Success Message</h3>
             <div className="ui-message-box-header">
@@ -485,8 +448,6 @@ const UISettings = () => {
               placeholder="Enter success message"
             />
           </div>
-
-          {/* 6. Missed Chat Timer */}
           <div className="ui-setting-card">
             <h3 className="ui-card-title">Missed chat timer</h3>
             <div className="ui-timer-toggle">
@@ -522,8 +483,6 @@ const UISettings = () => {
                   </div>
                   <small className="ui-timer-hint">Min: 1 minute | Max: 1440 minutes (24 hours)</small>
                 </div>
-
-                {/* Save Button and Status */}
                 <div className="ui-timer-action">
                   <button
                     className="ui-timer-save-btn"

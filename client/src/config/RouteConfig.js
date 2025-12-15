@@ -1,8 +1,3 @@
-// src/config/routeConfig.js
-// ==========================================
-// ZERO LOGIC CHANGES - Just organizing routes
-// These are the EXACT same routes from your App.js
-// ==========================================
 
 import Home from '../Pages/Home/Home'
 import Login from '../Pages/Auth/Login/Login'
@@ -32,6 +27,6 @@ export const ADMIN_ROUTES = [
 
 
 export const TEAM_ROUTES = [
-  // { path: '/team/*', element: Team },
+
   { path: '/settings', element: Settings }
 ]
